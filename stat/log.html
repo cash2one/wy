@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>日志上报</title>
+  <!--[if lt IE 9]>
+  <script type="text/javascript"
+  src="https://webzj.reg.163.com/webapp/javascript/page/json3.js"></script>
+  <![endif]-->
+  <script>
+  (function(win, cdnImages) {
+    var CDN_TIMEOUT = 3000,
+        CDN_COOKIES = '_t_cdn',
+        CDN_UPLOAD_URL = '/test.pd',
+        JS_ERROR_UPLOAD_URL = '/upload.pb';
+    var dom = document;
+    var userAgent = navigator.userAgent;
+    var escape = win.escape, unescape = win.unescape;
+    var addEvent;
+    if (window.attachEvent) {
+      addEvent = function(elem, evt, fn) {
+        elem.attachEvent('on' + evt, fn);
+      };
+    } else {
+      addEvent = function(elem, evt, fn) {
+        elem.addEventListener(evt, fn, false);
+      };
+    }
+
+    // 上报页面加载速度
+    var loadingTracer = {
+      startTime : +new Date,
+      sendLog : function(isloaded, duration){
+        var url = addCacheAtUrl('http://xyq-tracer.cbg.163.com/1.gif');
+        var params = {
+          log : 'loading_tracer',
+          loaded : isloaded,
+          duration : duration
+        };
+        loadImage(addParamsAtUrl(url, params), function() {
+          loadingTracer = null;
+        });
+      }
+    }
+
+    addEvent(win, "beforeunload", function(){
+      if (!loadingTracer) {
+        return;
+      }
+      var duration = +new Date - loadingTracer.startTime;
+      clearTimeout(loadingTracer.timer);
+      loadingTracer.sendLog(0, duration);
+    });
+
+    addEvent(win, "load", function(){
+      var duration = +new Date - loadingTracer.startTime;
+      loadingTracer.timer = setTimeout(function(){
+        loadingTracer.sendLog(1, duration);
+      }, 100);
+    });
+
+    // 错误上报，上报过，就不该上报了
+    var errorUploadMap = {};
+    addEvent(win, 'error', function(e, url, lineno) {
+      var error = {
+        fi: url || e.filename || e.name,
+        no: lineno || e.lineno || e.number,
+		    ms: e.message || e,
+        ua: userAgent
+      };
+      var key = error.fi + error.no;
+
+      if (errorUploadMap[key]) {
+        return;
+      }
+      errorUploadMap[key] = 1;
+      var errorUrl = addParamsAtUrl(JS_ERROR_UPLOAD_URL, error);
+      loadImage(errorUrl);
+    });
+
+    // http://xx.yy.com/index + { v: 123 } --> http://xx.yy.com/index?v=123
+    // http://xx.yy.com/index?a=1 + { b: 2 } --> http://xx.yy.com/index?a=1&b=2
+    function addParamsAtUrl(url, params) {
+      var paramList = [];
+
+      if (params) {
+        for (var key in params) {
+          params.hasOwnProperty(key)
+            && paramList.push(key + '=' + escape(params[key]));
+        }
+        url += (url.indexOf('?') >= 0 ? '&' : '?') + paramList.join('&');
+      }
+
+      return url;
+    }
+
+    // http://xx.yy.com/ --> http://xx.yy.com/?v=2837823
+    function addCacheAtUrl(url) {
+      return addParamsAtUrl(url, { v: +new Date });
+    }
+
+    function loadImage(src, callback, timeout) {
+      var image = new Image();
+      var isSuccess = true;
+      var timer;
+      var finish = function() {
+        clearTimeout(timer);
+        image.onload = image.onerror = image.onabort = null;
+        callback && callback(isSuccess);
+        try {
+          image = doCallback = null;
+          delete image;
+          delete doCallback;
+        } catch (e) { }
+      };
+      var fail = function() {
+        isSuccess = false;
+        finish();
+      };
+      timer = timeout && setTimeout(fail, timeout);
+
+      image.onload = finish;
+      image.onerror = fail;
+
+      image.src = src;
+    }
+
+    function writeCookie(key, value, day) {
+      var res = key + '=' + escape(value) + ';path=/;'
+      if (day) {
+        var date = new Date;
+        date.setDate(date.getDate() + day);
+        res += 'expires=' + date.toUTCString();
+      }
+      dom.cookie = res;
+    }
+
+    function readCookie(key) {
+      var cookie = dom.cookie;
+      var arr = cookie.match(new RegExp('\\b' + key + '=([^;]*)'));
+      return arr ? arr[1] : arr;
+    }
+
+    // 检测 cdn 图片可用性，如果一定时间内，没有返回，则当作错误
+    if (!readCookie(CDN_COOKIES)) {
+      cdnImages = cdnImages || [];
+
+      for (var i = 0, max = cdnImages.length; i < max; i++) {
+        var cdnUrl = addCacheAtUrl(cdnImages[i] + '/test.png');
+        loadImage(cdnUrl, function(isSuccess) {
+          if (!isSuccess) {
+            var uploadUrl = addParamsAtUrl(CDN_UPLOAD_URL, { say: 'hi' });
+            loadImage(uploadUrl, function() {
+              writeCookie(CDN_COOKIES, 1);
+            });
+          }
+        }, CDN_TIMEOUT);
+      } // end for
+    }
+    // 检查 cdn
+  })(window, ['http://localhost:8080/']);
+  </script>
+</head>
+<body>
+
+</body>
+</html>

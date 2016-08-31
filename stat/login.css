@@ -1,0 +1,13 @@
+.u-loginbtn {
+  -webkit-transition: background .2s ease;
+  transition: background .2s ease;
+  background: #ca5252;
+}
+
+.u-loginbtn:hover {
+  background: #ff4d4d;
+}
+
+.m-unlogin, .m-footer {
+  display: none;
+}

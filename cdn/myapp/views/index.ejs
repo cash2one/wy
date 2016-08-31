@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <script>
+var StyleStart = "#";
+var EquipDescRed = "#R";
+var EquipDescGreen = "#G";
+var EquipDescBlue = "#B";
+var EquipDescBlack = "#K";
+var EquipDescYellow = "#Y";
+var EquipDescWhite = "#W";
+var EquipDescBlink = "#b";
+var EquipDescUnderline = "#u";
+var EquipDescNormal = "#n";
+var XyqCssSetting = {
+  "#R": "equip_desc_red",
+  "#G": "equip_desc_green",
+  "#B": "equip_desc_blue",
+  "#K": "equip_desc_black",
+  "#Y": "equip_desc_yellow",
+  "#W": "equip_desc_white",
+  "#b": "equip_desc_blink",
+  "#u": "equip_desc_underline",
+  "#n": "equip_desc_white"
+};
+
+// #r ���У� #c �Զ�����ɫ
+function parse_style_info2(str, defaultCssKey) {
+  defaultCssKey = defaultCssKey || 'Y';
+
+  var list = str.match(/(^|#)[^#]+/g);
+  var res = [];
+
+  for (var i = 0, max = list.length; i < max; i++) {
+    var item = list[i];
+    item = item.replace(/#(\w{7}|\w{1})(.*)|([^#]*)/, function(str, key, word, awrd) {
+      var all = '', cls, color;
+      if (awrd) {
+        word = awrd;
+      } else if (key === 'r') {
+        key = null;
+        all += '<br/>';
+      } else if (key.length > 1) {
+        // #cDDFFEE ֮����
+        color = '#' + key.substring(1);
+      }
+
+      if (word) {
+        if (color) {
+          all += '<span style="color:'+ color +'">'+ word +'</span>';
+        } else {
+          // ����û��������ɫ��ʹ����һ�����µ���ɫ
+          defaultCssKey = key || defaultCssKey;
+          cls = XyqCssSetting['#' + defaultCssKey];
+          all += '<span class="'+ cls +'">'+ word +'</span>'
+        }
+      }
+      return all;
+    });
+
+    res.push(item);
+  }
+
+  return res.join('');
+}
+
+
+var CommonStyleSet = [EquipDescRed, EquipDescGreen, EquipDescBlue, EquipDescBlack, EquipDescYellow, EquipDescWhite];
+var SepicalStyleSet = [EquipDescBlink, EquipDescUnderline];
+var ColorLen = 6;
+function get_label_head_with_class(class_name) {
+  return "<span class='" + class_name + "'>";
+}
+function get_label_head_with_color(color_value) {
+  return "<span style='color:#" + color_value + "'>";
+}
+function get_label_tail() {
+  return "</span>";
+}
+function has_element(el_array, el) {
+  for (i in el_array) {
+      if (el_array[i] == el) {
+          return true;
+      }
+  }
+  return false;
+}
+var ClassStyle = 0;
+var ColorStyle = 1;
+function parse_style_info(equip_desc, DefaultCss) {
+  DefaultCss = (typeof (DefaultCss) == "undefined") ? "#Y" : DefaultCss
+  var result = get_label_head_with_class(XyqCssSetting[DefaultCss]);
+  last_common_style = {
+      "kind": ClassStyle,
+      "value": DefaultCss
+  };
+  spcial_class_stack = [];
+  var i = 0;
+  var length = equip_desc.length;
+  while (i < length) {
+      if (equip_desc.substring(i, i + 1) != StyleStart) {
+          result += equip_desc.substring(i, i + 1);
+          i = i + 1;
+          continue;
+      }
+      if (i == length - 1) {
+          i = i + 1;
+          break;
+      }
+      if (equip_desc.substring(i + 1, i + 1 + 1) == "#") {
+          result += "#";
+          i = i + 1 + 1;
+          continue;
+      }
+      if (equip_desc.substring(i + 1, i + 1 + 1) == "r") {
+          result += "<br>";
+          i = i + 1 + 1;
+          continue;
+      }
+      if (equip_desc.substring(i + 1, i + 1 + 1) == "c") {
+          result += get_label_tail();
+          color_start = i + 1 + 1;
+          var color_value = equip_desc.substring(color_start, color_start + ColorLen);
+          result += get_label_head_with_color(color_value);
+          i = i + 1 + ColorLen + 1;
+          last_common_style["kind"] = ColorStyle;
+          last_common_style["value"] = color_value;
+          continue;
+      }
+      class_label = equip_desc.substring(i, i + 2);
+      if (has_element(CommonStyleSet, class_label)) {
+          result += get_label_tail();
+          result += get_label_head_with_class(XyqCssSetting[class_label]);
+          i = i + 1 + 1;
+          last_common_style["kind"] = ClassStyle;
+          last_common_style["value"] = class_label;
+          continue
+      } else if (has_element(SepicalStyleSet, class_label)) {
+          if (has_element(spcial_class_stack, class_label)) {
+              i = i + 1 + 1;
+              continue;
+          }
+          result += get_label_tail();
+          result += get_label_head_with_class(XyqCssSetting[class_label]);
+          if (last_common_style["kind"] == ClassStyle) {
+              result += get_label_head_with_class(XyqCssSetting[last_common_style["value"]]);
+          } else {
+              result += get_label_head_with_color(last_common_style["value"]);
+          }
+          spcial_class_stack += [class_label];
+          i = i + 1 + 1;
+          continue;
+      } else if (class_label == EquipDescNormal) {
+          result += get_label_tail()
+          for (var j = 0; j < spcial_class_stack.length; j++) {
+              result += get_label_tail()
+          }
+          result += get_label_head_with_class(XyqCssSetting[DefaultCss])
+          spcial_class_stack = [];
+          i = i + 1 + 1;
+      } else {
+          i = i + 1;
+          continue;
+      }
+  }
+  result += get_label_tail();
+  for (var j = 0; j < spcial_class_stack.length; j++) {
+      result += get_label_tail();
+  }
+  return result;
+}
+
+  </script>
+</head>
+<body>
+  <h1><%= title %></h1>
+  <p>Welcome to <%= title %></p>
+
+  <script src="/javascripts/index.js"></script>
+  <script src="https://webzj.reg.163.com/webapp/javascript/message.js?123"></script>
+</body>
+</html>

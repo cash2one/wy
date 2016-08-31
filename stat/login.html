@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>登录测试</title>
+</head>
+<body>
+
+<div id="urs-login-box">
+
+</div>
+
+<!--[if lt IE 9]>
+<script type="text/javascript"
+src="https://webzj.reg.163.com/webapp/javascript/page/json3.js"></script>
+<![endif]-->
+<script>
+  document.write(unescape('%3cscript src="https://webzj.reg.163.com/webapp/javascript/message.js?v'+ new Date/1 +'"%3E%3C/script%3E'));
+</script>
+<script>
+  var _config = {
+    includeBox: 'urs-login-box',
+    skin: 1,
+    cssDomain: 'http://localhost:8080/',
+    cssFiles: 'login.css'
+  };
+
+  var urs = new URS(_config);
+  urs.logincb = function(username){
+    // Do Something
+  };
+  console.log(URS);
+</script>
+</body>
+</html>

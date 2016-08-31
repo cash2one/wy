@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>统计测试</title>
+  <link href="./index.css" rel="stylesheet" />
+  <script src="./jquery.js"></script>
+</head>
+<body>
+  <div>
+    <h1>生成二维码吧:</h1>
+    <div id="qrcode" title="http://www.baidu.com/"></div>
+  </div>
+  <script src="./qrcode.js"></script>
+  <script>
+    var qrcode = document.getElementById('qrcode');
+    qrcode = new QRCode(qrcode, {
+      text: 'http://www.baidu.com/',
+      width: 160,
+      height: 160,
+      // colorDark: '#000000',
+      // colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  </script>
+
+
+  <a id="button" href="#">点击统计</a>
+  <script>
+    function addEvent(elem, evt, fn) {
+      if (window.addEventListener) {
+        elem.addEventListener(evt, fn, false);
+      } else {
+        elem.attachEvent('on' + evt, fn);
+      }
+    }
+    var $button = document.getElementById('button');
+    addEvent($button, 'click', function(e) {
+      console.log('按钮点击了');
+
+      e.stopPropagation ? e.stopPropagation() : (e.cancelBubble = true);
+      e.preventDefault ? e.preventDefault() : (e.returnValue = false);
+    });
+
+    addEvent(document, 'mouseup', function(e) {
+      console.log('文档点击了');
+    });
+  </script>
+
+
+  <ul class="pos">
+    <li>位置1</li>
+    <li style="margin-left: 300px;">位置2</li>
+    <li style="margin-left: 500px;">位置3</li>
+    <li style="margin-left: 700px;">位置4</li>
+    <li style="margin-left: 900px;">位置5</li>
+  </ul>
+  <div class="solidTip">
+    内容啊!!!!
+  </div>
+  <script>
+    var $pos = $('.pos'),
+        $tip = $('.solidTip');
+    $pos.on('mouseenter', 'li', function() {
+      $tip.stop(1, 1).fadeIn(120);
+      fix_pos($(this));
+    })
+    .on('mouseleave', 'li', function() {
+      $tip.stop(1, 1).fadeOut(120);
+    });
+
+    function fix_pos($li, fixer) {
+      fixer = $.extend({ top: 10, left: 10 }, fixer || {});
+
+      var height = (100 + Math.random() * 300);
+      $tip.height(height);
+      var width = $tip.outerWidth();
+      var height = $tip.outerHeight();
+
+      // 修正 $tip 相对于 $li 的位置
+      var css = { top: 0, left: 0 };
+      var area = $.extend(
+        $li.offset(), {
+          width: $li.outerWidth(),
+          height: $li.outerHeight()
+        }
+      );
+      var $win = $(window);
+      var win = {
+        top: $win.scrollTop(),
+        left: $win.scrollLeft(),
+        width: $win.width(),
+        height: $win.height()
+      };
+
+      // 修正左右的位置
+      var left;
+      if (area.left + area.width + width > win.width + win.left) {
+        left = area.left - width - fixer.left;
+      } else {
+        left = area.left + area.width + fixer.left;
+      }
+      css.left = left;
+
+      // 修正上下的位置
+      var top;
+      if (height >= win.height) {
+        // 对齐顶部
+        top = win.top + fixer.top;
+      } else if (height > win.height && height - win.height <= fixer.top) {
+        // 居中对齐
+        top = win.top + (height - win.height) / 2;
+      } else {
+        if (area.top + height <= win.height + win.top) {
+          // 顶部对齐
+          top = area.top;
+        } else if (area.top + area.height - height >= win.top) {
+          // 底部对齐
+          top = area.top + area.height - height;
+        } else {
+          // 页面居中
+          top = win.top + (win.height - height) / 2;
+        }
+      }
+      css.top = top;
+
+      $tip.css(css);
+    }
+  </script>
+
+
+<script src="./ntes.js"></script>
+</body>
+</html>
