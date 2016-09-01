@@ -23,11 +23,19 @@ src="https://webzj.reg.163.com/webapp/javascript/page/json3.js"></script>
     skin: 1,
     cssDomain: 'http://localhost:8080/',
     cssFiles: 'login.css'
+
+    // host: "open.163.com",
+    // page: "login",
+    // product: "open",
+    // promark: "hQvjXOs",
+    // single: 0,
+    // skin: "1"
   };
 
   var urs = new URS(_config);
   urs.logincb = function(username){
     // Do Something
+    console.log('do something...');
   };
   console.log(URS);
 </script>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>网易 NIE 学习</title>
+  <script src="http://res.nie.netease.com/comm/js/jquery(mixNIE).1.11.js"></script>
+</head>
+<body>
+<div id="NIE-share2">
+  <!-- 分享测试 -->
+</div>
+
+<script>
+  // 会请求约定好的一个组件库，把分享相关的内容，下载回来，然后再进行回调
+  nie.use(["nie.util.shareV5"], function() {
+    var share = nie.util.share;
+    console.log(share);
+  });
+
+  // 定义之后，加载require的内容后，会被立刻执行
+  nie.define('mod1', function() {
+    var video = nie.require('nie.util.videoV2');
+    console.log('xxxx', video);
+    return {
+      video: video
+    };
+  });
+
+  // 如果需要运行 mod1 的函数，则需要一个运行入口..
+  nie.define('main', function() {
+    var mod1 = nie.require('mod1');
+    console.log('main', mod1);
+    return null;
+  });
+</script>
+</body>
+</html>

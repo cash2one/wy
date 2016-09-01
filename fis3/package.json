@@ -1,0 +1,25 @@
+{
+  "name": "fis3-learn",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "da宗熊",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-core": "^6.14.0",
+    "babel-plugin-syntax-flow": "^6.13.0",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-flow-strip-types": "^6.14.0",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "fis-parser-babelcore": "^2.1.1",
+    "fis-parser-less": "^0.1.3",
+    "fis-parser-nunjucks2html": "0.0.1",
+    "fis-postprocessor-autoprefixer": "0.0.5",
+    "fis3": "^3.4.22",
+    "less-plugin-autoprefix": "^1.5.1"
+  }
+}
