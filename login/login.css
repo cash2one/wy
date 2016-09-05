@@ -1,0 +1,20 @@
+.g-bd { background: transparent; width: 100%; margin: 0 auto; border-radius: 0; }
+.m-cnt { padding: 0; }
+.m-header { display: none; }
+.m-footer { display: none; }
+.m-unlogin { display: none; }
+.slidebox .ScapTcha .statusTxt { left: -3px; }
+.loginbox { margin-bottom: 0; }
+
+.f-bgcolor { background-color: #ca5252; }
+.btncolor {
+  background: #920933;
+  color:#fff;
+  -webkit-transition: background .2s ease;
+  transition: background .2s ease;
+}
+.btncolor:hover { background: #a80034; }
+
+.w-exception { width: 100%; height: auto; }
+.w-exception .cnt { padding: 0; }
+.w-exception .cnt .note { font-size: 18px; line-height: 20px; margin: 15px 0 20px 0; }
