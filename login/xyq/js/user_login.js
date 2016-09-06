@@ -1,14 +1,4 @@
-/*
- *
- */
-
- // TODO 登录成功后，写入 serverName: Cookie.write("cur_servername", encodeURIComponent($("server_name").value));
- // TODO 成功登录前，需要删除 Cookie.dispose("is_user_login"); Cookie.dispose("login_user_nickname");
- // TODO LoginRequiresCaptcha === true，才需要验证码，否则不需要
-
-// qrcode_login_init(CgiRootUrl, HttpsCgiRootUrl, {size: [156, 156]});
-
-// 重写 message 的机制
+// rewrite method 'message'
 var old_qrcode_login_message = QRCodeLogin.prototype.message;
 QRCodeLogin.implement('message', function(msg){
 	var $qrcode = $('qrcode');
@@ -96,7 +86,6 @@ function submit_by_form(options) {
   document.getElementsByTagName('body')[0].appendChild(form);
 
   form.submit();
-  // alert(form.innerHTML)
 }
 
 
@@ -132,3 +121,25 @@ function login_tab_init() {
     }, 200);
 	});
 }
+
+// login by "URS"
+;(function() {
+	var _urs_config = {
+		product: 'cbg',
+		promark: 'aqpOBwV',
+		host: 'cbg.163.com',
+		productkey: '3000b2c1af6521e4f59de10be01b09c6',
+		isHttps: 0,
+		skin: 1,
+		lazyCheck: 1,
+		placeholder: { account: '用户名，如name@example.com' },
+		includeBox: 'urs-login-box',
+		cssDomain: 'http://localhost:8080/',
+		cssFiles: 'login.css',
+		frameSize: { width: 350, height: 230 }
+	};
+	var urs = new URS(_urs_config);
+	urs.logincb = function(username){
+		alert('登录成功');
+	};
+})();
