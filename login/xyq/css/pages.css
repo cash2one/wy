@@ -62,7 +62,7 @@
 .qrCodeImageContainer {width: 166px; height: 166px; margin: 0 auto 0 auto; text-align: left;}
 .qrCodeImage {background-color: white; position: relative;}
 
-.loginWindow { min-height: 395px; _height: 395px; }
+.loginWindow { min-height: 402px; _height: 402px; }
 .loginContainer {
   width: 450px;
   margin: 0 auto;
@@ -77,7 +77,7 @@
 }
 .loginTab { overflow: hidden; width: 100%; font-size: 18px; border-radius: 5px 5px 0 0; }
 .loginTab .item {
-  float: right; width: 50%; padding: 15px 0; text-align: center; cursor: pointer;
+  float: right; width: 50%; padding: 18px 0; text-align: center; cursor: pointer;
   background-color: #d5d9dc;
   background-image: -webkit-linear-gradient(135deg, #cccccc 25%, #d1d6d9 25%, #d1d6d9 75%, #cccccc 75%, #cccccc),
     -webkit-linear-gradient(135deg, #cccccc 25%, #d1d6d9 25%, #d1d6d9 75%, #cccccc 75%, #cccccc);
@@ -87,14 +87,14 @@
 }
 .loginTab .active { background: transparent; cursor: default; }
 .loginTabContent { width: 350px; margin: 0 auto; }
-.serverInfo { padding: 15px 0; color: #666; }
+.serverInfo { font-size: 14px; padding: 15px 0; color: #666; }
 .serverInfo .reselect{ float: right; color: #0380b9; }
 .serverInfo .reselect:hover { color: #a80034; }
-.loginOthers { margin-top: 10px; }
+.loginOthers { font-size: 14px; margin-top: 12px; }
 .loginOthers a { color: #0380b9; }
 .loginOthers a:hover { color: #a80034; }
 .loginOthers .forget { color: #999; float: right; }
-.qrcodeContent .qrTip { padding-top: 25px; text-align: center; color: #666; }
+.qrcodeContent .qrTip { font-size: 14px; padding-top: 25px; text-align: center; color: #666; }
 .qrcodeContent .qrTip .em { color: #ec3d3d; }
 .qrcodeContent .qrWrapper { position: relative; width: 156px; margin: 15px auto 0 auto; padding: 5px; background: #fff; }
 .qrcodeContent .qrImage { width: 156px; height: 156px; }

@@ -2,10 +2,14 @@
 var old_qrcode_login_message = QRCodeLogin.prototype.message;
 QRCodeLogin.implement('message', function(msg){
 	var $qrcode = $('qrcode');
-	if (msg.indexOf('超时') >= 0) {
+	if (msg.indexOf('二维码过期') >= 0) {
     var $refresh = new Element('div', {
       html: '<div class="refreshBG"></div><div class="refreshCnt"><span class="text">二维码已失效</span><a href="javascript:qrcode_manual_update();" class="refreshBt">点击刷新</a></div>'
     });
+		if ($qrcode.childNodes.length > 0 && $qrcode.childNodes[0].nodeType === 3) {
+			$qrcode.set('html', '');
+		}
+		$qrcode.getChildren('div').destroy();
     $qrcode.appendChild($refresh);
 	} else {
 		$qrcode.set('html', msg);
@@ -43,7 +47,7 @@ function anonymous_search() {
 
     var serverId = $("server_id").value;
     var serverName = $("server_name").value;
-    var nextUrl = getPara('return_url')
+    var nextUrl = getPara('return_url');
     if (!nextUrl && StaticFileConfig["is_using"]) {
       nextUrl = StaticFileConfig["res_root"] + "/" + serverId + "/buy_equip_list/equip_list1.html";
     } else {
@@ -115,31 +119,12 @@ function login_tab_init() {
   		$$('.loginTabContent .tabContent').each(function($el) {
   			$el.setStyle('display', $el.hasClass('tabContent' + index) ? '' : 'none');
   		});
+			qrcode_set_polling_status(index == 1);
 
-      var fn = el.get('data-event-active');
+			var oneFnKey = 'data-event-active';
+      var fn = el.get(oneFnKey);
   		fn && window[fn] && window[fn]();
+			el.set(oneFnKey, '');
     }, 200);
 	});
 }
-
-// login by "URS"
-;(function() {
-	var _urs_config = {
-		product: 'cbg',
-		promark: 'aqpOBwV',
-		host: 'cbg.163.com',
-		productkey: '3000b2c1af6521e4f59de10be01b09c6',
-		isHttps: 0,
-		skin: 1,
-		lazyCheck: 1,
-		placeholder: { account: '用户名，如name@example.com' },
-		includeBox: 'urs-login-box',
-		cssDomain: 'http://localhost:8080/',
-		cssFiles: 'login.css',
-		frameSize: { width: 350, height: 230 }
-	};
-	var urs = new URS(_urs_config);
-	urs.logincb = function(username){
-		alert('登录成功');
-	};
-})();
