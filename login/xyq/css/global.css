@@ -1,0 +1,122 @@
+/*初始化浏览器默认值*/
+body,div,p,form,ul,ol,dl,dt,dd,h1,h2,h3,h4,h5,h6 {padding:0; margin:0;}
+html { _overflow-x:hidden;}
+body {font: 12px/1.2em "宋体",Arial; background-color:#184A5E;color:#000;}
+h1,h2,h3,h4,h5,h6 {font-size:12px; font-weight:normal;}
+ul,ol {list-style:none;}
+input,textarea,button {font-size:1em; font-family:"宋体",Arial; margin:0; padding:2px; vertical-align:middle;}
+label {cursor:pointer;}
+input[type="radio"],input[type="checkbox"] {margin:0 3px;}/*for modern browsers*/
+img {border:none; vertical-align:middle;}
+table {border-collapse:collapse;}
+td,th {text-align:center;}
+
+/* 全局链接*/
+a:link {color:#3366CC;text-decoration:none;}
+a:visited {color:#1C7497;text-decoration:none;}
+a:hover {color:#2ACCFB; text-decoration:underline;}
+a:active {color: #C39DFF;}
+
+
+/*自定义公用样式*/
+.cGreen, a.cGreen {color:#009900;}
+.cWhite, a.cWhite{color:#fff;}
+.cGray, a.cGray {color:#999;}
+.cDGray, a.cDGray {color:#666;}
+.cBlack, a.cBlack {color:#000;}
+.cRed, a.cRed {color:#FF0000;}
+.cDRed, a.cDRed {color:#c00;}
+.cYellow, a.cYellow{color:#ff0;}
+.cDYellow, a.cDYellow {color:#CD6A06;}
+.cBlue, a.cBlue {color:#3366CC;}
+.cDBlue, a.cDBlue {color: #00f }
+.cPink, a.cPink {color: #ec5f66;}
+
+.equip_desc_red {
+    color: #FF0000;
+}
+.equip_desc_green {
+    color: #00FF00;
+}
+.equip_desc_blue {
+    color: #C1C1FF;
+}
+.equip_desc_black {
+    color: #000000;
+}
+.equip_desc_yellow {
+    color: #FFFF00;
+}
+.equip_desc_white {
+    color: #FFFFFF;
+}
+.equip_desc_blink {
+    text-decoration: blink;
+}
+.equip_desc_underline {
+    text-decoration: underline;
+}
+
+a.underLine,a.underLine:visited {text-decoration:underline;}
+
+.aWhite a:link,.aWhite a:visited{color:#fff;}
+.aWhite a:hover,.aWhite a:active{color:#ff0;}
+
+.aYellow a:link,.aYellow a:visited{color:#C4B06D;}
+.aYellow a:hover,.aYellow a:active{color:#FFFF00;}
+
+.border {border:1px solid #ccc;}
+
+.f12px {font-size:12px;}
+.f14px {font-size:14px;}
+.fB {font-weight:bold;}
+.fNomal {font-weight:normal;}
+
+.blank6 {height:6px; overflow:hidden; font-size:0; line-height:0;}
+.blank9 {height:9px; overflow:hidden; font-size:0; line-height:0;}
+.blank12 {height:12px; overflow:hidden; font-size:0; line-height:0;}
+.blank24 {height:24px; overflow:hidden; font-size:0; line-height:0;}
+
+.hasLayout {clear:both; overflow:hidden; _zoom:1;}
+
+.textCenter {text-align:center;}
+.textLeft,table tr .textLeft {text-align:left;}
+.textRight,table tr .textRight {text-align:right;}
+table tr td.vTop {vertical-align:top;}
+
+.error {font-weight:normal; text-align:left; color:#f00; padding:6px 0;}
+
+.txt1 {background-color:#fff; border:1px solid #c3c5de; padding:4px;}
+.txt2 {}
+.txt1:focus {border-color:#688baf;}
+
+.btn1 {height:24px; line-height:18px; text-align:center; padding:0 6px; background-color:#920933;color:#fff;cursor:pointer; font-size:12px; font-weight:normal; border:1px solid #DB5F1B; border:1px solid #590821;}
+
+
+
+a.btn1 {width:auto; height:auto; padding:0 18px; line-height:23px; display:inline-block;}
+a.btn1:link,a.btn1:visited {color:#fff;}
+.btn1:hover,a.btn1:hover,a.btn1:active {color:#ff0; text-decoration:none; background-color:#a80034;}
+
+.up,.down {width:13px; height:13px; border:none; cursor:pointer; background:url(../images/up.png) no-repeat;}
+.down {background-image:url(../images/down.png);}
+
+.areaTop {background:url(../images/areatop.png) no-repeat; height:8px; margin:9px auto 0; overflow:hidden; width:960px;}
+.areaBtm {background:url(../images/areabtm.png) no-repeat; height:8px; margin:0 auto; overflow:hidden; width:960px;}
+.area {background:url(../images/areabg.png) repeat-y; width:960px; margin:0 auto;}
+
+.pages {text-align:right;padding:1px 0;}
+.pages a {padding:2px 6px 3px;margin:0 3px; display:inline-block;padding:3px 6px; vertical-align:middle;background-color:#EDEDF4; border:1px solid #9EA0BF;}
+.pages a:hover {text-decoration:none; border:1px solid #000; background-color:#fff; color:#1C7497;}
+.pages a.on {color:#fff; font-weight:bold;background-color:#9EA0BF;}
+
+.footer {line-height:21px; text-align:center; color:#9B9B9B;}
+.footer a:link,.footer a:visited {color:#9B9B9B;}
+.footer a:hover,.footer a:active {}
+
+.hidden {display: none;}
+.vam {vertical-align: middle;}
+.vama * {vertical-align: middle;}
+.fl {float: left;}
+.fr {float: right;}
+.toe {overflow:hidden; word-wrap:normal; white-space:nowrap; text-overflow:ellipsis;}

@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<meta http-equiv="content-language" content="zh-cn" />
+<meta name="Author" content="NetEase" />
+<meta name="keywords" content="藏宝阁,梦幻西游,交易平台,梦幻,网易,网易游戏交易平台,网易游戏" />
+<meta name="description" content="网易游戏梦幻西游官方线下交易平台,每一笔交易都与游戏数据对应，支持多种支付方式。买号选装备，上网易游戏藏宝阁。安全：系统监控，自动交易。方便：多种支付，立等可取" />
+<meta name="robots" content="index, follow" />
+<meta name="googlebot" content="index, follow" />
+<title>藏宝阁|梦幻站</title>
+<link href="http://res.xyq.cbg.163.com/css/global.css?v=0111" rel="stylesheet" type="text/css" media="all" />
+<link href="http://res.xyq.cbg.163.com/css/pages.css?v=0221" rel="stylesheet" type="text/css" media="all" />
+<script type="text/javascript" src="http://res.xyq.cbg.163.com/js/mootools-core-1.3.2.js"></script>
+<script type="text/javascript" src="http://res.xyq.cbg.163.com/advertise/ad_data/cbg_bottom_ad.js"></script>
+<script type="text/javascript" src="http://res.xyq.cbg.163.com/js/util.js?v=0528"></script>
+<script type="text/javascript">
+	window.addEvent('domready', function() {
+		var obj = new SelectServer();
+		obj.show();
+	});
+</script>
+</head>
+
+<body>
+<script type="text/javascript" src="http://res.xyq.cbg.163.com/js/select_server_v1.js"></script>
+<script type="text/javascript" src="http://res.xyq.cbg.163.com/js/server_list_data.js"></script>
+
+<div id="area_list_templ" style="display:none">
+<!--
+<table class="serverArea" cellspacing="4" cellpadding="4">
+	<% for (var i=0; i < AreaRowNum; i++){ %>
+	<tr>
+			<% for (var j=0; j < TableColNum; j++) { %>
+					<% var el_id = i * TableColNum + j + 1; %>
+					<td id="area_pos_<%= el_id%>">
+						<a href="#" id="area_pos_<%= el_id%>_a"></a>
+					</td>
+			<% } %>	
+	</tr>
+	<% } %>
+</table>
+-->
+</div>
+
+<div id="server_list_templ" style="display:none">
+<!--
+<%
+	var RowNum = 2;
+	var ColumnNum = 7; 
+%>
+<table class="serverArea serverName" cellspacing="4" cellpadding="4">
+	<% for (var i=0; i < ServerRowNum; i++){ %>
+	<tr>
+		<% for (var j=0; j < TableColNum; j++){ %>
+			<% var el_id = i * TableColNum + j + 1; %>
+			<td id="server_pos_<%= el_id%>">
+				<a href="#" id="server_pos_<%= el_id%>_a"></a>
+			</td>
+		<% } %>
+	</tr>
+	<% } %>
+</table>
+-->
+</div>
+
+<div class="areaTop"></div>
+<div class="header area hasLayout">
+	<div class="logo">
+		<h1><a href="/" title="梦幻西游藏宝阁首页">梦幻西游藏宝阁</a></h1>
+	</div>
+	<a href="http://xyq.cbg.163.com/app/?from=cbgtoplink" class="mobileLink" target="_blank" style="top: 56px;">手机版下载</a>
+</div>
+<div class="areaBtm"></div>
+
+<div class="areaTop"></div>
+<div class="server area hasLayout">
+	<div class="col1">
+		<div class="blockTitle">
+			<h3 class="f14px">选择服务器</h3>
+		</div>
+		<div class="blockCont">
+			<div id="area_list_panel"></div>
+			<div class="blank12"></div>
+			<div id="server_list_panel"></div>
+			<div style="padding-left:2px; padding-top:10px;">
+				<a href="/cgi-bin/xyq_overall_search.py?act=show_search_role_form" class="f14px">角色搜索</a>
+				<a href="/cgi-bin/equipquery.py?act=show_overall_search_equip" class="f14px">跨服购买<img src="http://res.xyq.cbg.163.com/images/new.gif" alt="new" /></a>
+			</div>	
+		</div>
+	</div>
+	<div class="col2">
+		<div class="blockTitle"><h3 class="f14px">藏宝阁公告</h3></div>
+		<div class="blockCont" style="padding:12px 6px">
+			<iframe src="http://xyq.163.com/news/cbg_news.html" frameborder="0" width="245" height="168" scrolling="no"></iframe>
+		</div>
+		<div class="blank12"></div>
+		<div class="blockTitle"><h3 class="f14px">帮助指引</h3></div>
+		<div class="blockCont" style="padding:12px 9px">
+			<iframe src="/help/cbg_index_help.html" frameborder="0" width="245" height="112" scrolling="no"></iframe>
+		</div>
+	</div>
+
+</div>
+<div class="areaBtm"></div>
+
+
+
+
+
+
+
+<!--页脚-->
+<div class="areaTop"></div>
+<div class="footer area">
+	手机藏宝阁地址：m.cbg.163.com
+	<br />
+	<script type="text/javascript">
+		__NIE_copyRight_siteName="xyq";
+		__NIE_copyRight_whiteStyle=true;
+	</script>
+	<script language="JavaScript" type="text/javascript" src="http://res.nie.netease.com/comm/NIE_copyRight/NIE_copyRight.js"></script>
+	<br />
+</div>
+<div class="areaBtm"></div>
+<div class="blank12"></div>
+
+<script src="http://analytics.163.com/ntes.js" type="text/javascript"></script>
+<script type="text/javascript">
+	_ntes_nacc = "cbgxyq"; //站点ID。
+	neteaseTracker();
+</script>
+
+</body>
+</html>
+

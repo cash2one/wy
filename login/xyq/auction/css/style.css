@@ -1,0 +1,109 @@
+*{padding:0;margin:0;}
+body{
+	font-family: 'Microsoft Yahei';
+	font-size: 14px;
+}
+.page{
+	width: 640px;
+	background: url(../img/bg.jpg) repeat-y top center;
+	margin: 0 auto;
+	/* font-size: 1.4em; */
+}
+
+.page-in{
+	padding-bottom: 200px;
+	background: url(../img/bg_b.jpg) no-repeat center bottom;
+}
+.page-inset{
+	background: url(../img/bg_h.jpg) no-repeat center top;
+}
+
+.header{
+	color: #fff5b3;
+	padding: 154px 152px 55px 84px;
+}
+.header p{
+	font-size: 1.28em;
+	line-height: 1.6em;
+}
+
+.intro{
+	font-size: 1.71em;
+	color: #ecdc6d;
+	padding: 11px 65px;
+	line-height: 1.8em;
+}
+
+.section{
+	position: relative;
+	width: 552px;
+	margin: 0 36px 0 52px;
+}
+.section_bg{
+	background: url(../img/bg_section.jpg) no-repeat center 28px;
+}
+.section .tlt{
+	height: 44px;
+	line-height: 38px;
+	color: #e6bf57;
+	font-size: 1.71em;
+	background: url(../img/tlt_bg.png) no-repeat;
+	padding-left: 32px;
+	font-weight: bold;
+}
+.section .content{
+	padding: 10px;
+}
+.section .content p{
+	font-size: 1.71em;
+	line-height: 1.8em;
+	padding-left: 32px;
+	color: #ffe5a4;
+}
+.section .content .txt{	
+	color: #FFF;
+	background: url(../img/star.png) no-repeat;	
+}
+.section img{
+	max-width: 1000%;
+}
+.section .step img{
+	position: absolute;
+	top:10px;
+	left: -52px;
+}
+.section .step{
+	position: relative;
+	padding-top: 400px;
+}
+.section a{
+	display: inline-block;
+	width: 144px;
+	height: 52px;
+	background: url(../img/btn.jpg) no-repeat;
+	margin:10px 0;
+}
+.section a.z-active{
+	background: url(../img/btn.jpg) no-repeat 0 -52px;
+}
+.section .step a{
+	position: absolute;
+	top: 320px;
+	left: 50%;
+	margin-left:-72px;
+}
+.section .step_m{
+	text-align: center;
+}
+.section .step_m img{
+	margin: 15px 82px 15px 0;
+}
+.section .i-xkx{
+	position: absolute;
+	top:-98px;
+	right:-36px;
+	display: block;
+	width: 160px;
+	height: 405px;
+	background: url(../img/xkx.png) no-repeat;
+}

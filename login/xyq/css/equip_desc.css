@@ -1,0 +1,31 @@
+.equip_desc_red {
+	color: #FF0000;
+}
+
+.equip_desc_green{
+	color: #00ff00;
+}
+
+.equip_desc_blue{
+	color: #c1c1ff;
+}
+
+.equip_desc_black{
+	color: #000000;
+}
+
+.equip_desc_yellow{
+	color: #FFFF00; 
+}
+
+.equip_desc_white{
+	color: #FFFFFF; 
+}
+
+.equip_desc_blink{
+	text-decoration:blink;
+}
+
+.equip_desc_underline{
+	text-decoration:underline;
+}

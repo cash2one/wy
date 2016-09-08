@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>藏宝阁拍卖终端</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="viewport" content="width=640,maximum-scale=1,target-densitydpi=320,user-scalable=no">
+<link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+<div class="page">
+	<div class="page-in">
+		<div class="page-inset">
+			<div class="header">
+				<p>卖家把官方认为是稀缺的物品摆在藏宝阁拍卖行,更<br>容易以高价卖出，同时买家不用担心稀缺<br>
+				的物品再被别人一刀秒掉，能大胆的跟<br>别人竞价，获取自己心仪的物品</p>
+			</div>
+			<div class="intro">
+				<p>手机拍卖功能火速完善中，目前仅支持竞拍商品浏览及转拍卖功能，感兴趣的玩家可暂时登录网页版藏宝阁参与拍卖哟</p>
+			</div>
+			<div class="section">
+				<p class="tlt">参与拍卖对我有什么好处？</p>
+				<div class="content">
+					<p class="txt">卖家：增加曝光，卖的更快、更高价！</p>
+					<p class="txt">案例：李磊寄售了一高价值商品，将其转为拍卖商品并设置起拍价为4000元，为期4天的拍卖期内，广大的人民群众对其商品进行了猛烈的出价，一番厮杀后最终被玩家韩梅梅以6000元拍下！扣除卖家信息费（推广期免收溢价分成），李磊最终可得5700元，比普通出售多赚1900元！</p>
+					<p class="txt">买家：更容易买到心仪物品！</p>
+				</div>
+			</div>
+			<div class="section section_bg">
+				<p class="tlt">卖家拍卖流程</p>
+				<div class="step">
+					<img src="img/maijia.jpg">
+					<a class="" href="javascript:;" onClick="fClick(this,'maiContent')"></a>
+				</div>
+				<div id="maiContent" class="content" style="display: none;">
+					<p class="txt">打开藏宝阁，看到转拍卖或在“我的物品”点击转拍卖即可跳转到拍卖设置页面；</p>
+					<p class="txt">设置物品竞价，起拍价设置，拍卖结束时间统一对齐公示期结束时间。参与拍卖的物品不会出现在游戏内置的藏宝阁中；</p>
+					<p class="txt">竞价设置后，可到“我是卖家”中查看物品的竞价情况，对于没有被出价的物品，卖方可以进行下架和改价操作；</p>
+					<p class="txt">物品成功拍出后，藏宝阁网页端将有站内信进行通知，同现在普通成交一致；</p>
+					<p class="txt">物品拍卖失败情况：</p>
+					<p>a) 超过拍卖时限，没有人出价，则物品自动转为普通寄售；</p>
+					<p>b) 超过拍卖时限，有人出价，但买方毁约没有在规定时限内支付款项，则物品以次高价进入抢付阶段；</p>
+					<p>c) 抢付阶段还没有人出价，则物品流拍，自动下架；卖家可以到我的物品中重新上架物品，也可以到游戏内取回物品</p>
+				</div>
+			</div>
+			<div class="section section_bg">
+				<p class="tlt">卖家收入细则</p>
+				<div class="content">
+					<p>卖家收入=起拍价+卖家溢价分成-卖家信息费</p>
+					<p class="txt">起拍价：卖家设定的商品起拍价格</p>
+					<p class="txt">卖家溢价分成：按照3：7（官方：卖家）的比例收取（推广期免收）</p>
+					<p class="txt">卖家信息费：成交价的5%[0，1000]</p>
+				</div>
+			</div>
+			<div class="section section_bg">
+				<p class="tlt">买家拍卖流程</p>
+				<div class="step_m">
+					<img src="img/majia.jpg">
+					<span class="i-xkx"></span>
+					<a class="" href="javascript:;" onClick="fClick(this,'maContent')"></a>
+				</div>
+				<div id="maContent" class="content" style="display: none;">
+					<p class="txt">打开藏宝阁，查看拍卖商品；</p>
+					<p class="txt">关于出价，进入商品详情页，买家可以设置本轮跟拍价格和设置自动跟价，出价需要提前交纳一定比例的保证金；</p>
+					<p class="txt">关于抢购没有完成支付的竞价物品，中标的人没有在限时时间内完成支付， 则物品会以次高价进入到抢付列表中，玩家可以在这个时候去捡漏；</p>
+					<p class="txt">买家可以在我的藏宝阁->拍卖商品里面查看拍卖商品的进度；</p>
+					<p class="txt">买家拍卖成功后，将收到站内通知付款，付款是有实效性的，时间以玩家藏宝阁->拍卖物品栏中为准请玩家务必在规定时间内完成付款操作，否则官方就要没收您缴纳的保证金了；</p>
+					<p class="txt">完成支付后，玩家可以到游戏内取出物品</p>
+				</div>
+			</div>
+			<div class="section section_bg">
+				<p class="tlt">买家收费细则</p>
+				<div class="content">
+					<p>买家收费=跨服服务费+成交价</p>
+					<p class="txt">跨服服务费：<br/>跨服服务费为商品的成交价×8%+150元(最低300元，最高2000元)</p>
+					<p class="txt">保证金：统一收取100元，将在竞拍结束后退还（中标者可使用保证金充抵尾款，中标不支付将没收保证金）</p>
+					<p class="txt">成交价：拍卖商品最终竞得的价格</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	function fClick(btn,content){
+		var className = btn.getAttribute('class');
+		if(className.indexOf('z-active')>-1){
+			btn.setAttribute('class','');
+			document.getElementById(content).style.display = 'none';
+		}else{
+			btn.setAttribute('class','z-active');
+			document.getElementById(content).style.display = 'block';
+		}
+	}
+</script>
+</body>
+</html>

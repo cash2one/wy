@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>梦幻藏宝阁 - 手机版</title>
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<meta name="author" content="网易，NetEase Inc." />
+	<meta name="copyright" content="网易，NetEase Inc." />
+	<meta name="viewport" content="width=480,maximum-scale=2.0"/>
+	<script type="text/javascript">
+		var ua = navigator.userAgent.toLowerCase();
+		var is_iphone = ua.match(/iphone/i) == "iphone";
+		function launchApp(){
+			var url = "netease-xyqcbg://openmain/";
+			location.href = url;
+		}
+		function gotoAppPage(){
+			if(is_iphone)
+				location.href = 'https://itunes.apple.com/cn/app/meng-huan-xi-you2cang-bao-ge/id580051673?mt=8';
+			else
+				location.href = 'http://xyq.cbg.163.com/app/';
+		}
+		window.onload = function(){
+			launchApp();
+			setTimeout(gotoAppPage, 250);
+		}
+	</script>
+</head>
+
+<body>
+</body>
+</html>
