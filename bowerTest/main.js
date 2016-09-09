@@ -4,6 +4,7 @@ G.xxx = function(){
 };
 G.yyy = function() {
 	console.log('y2y2y2');
+};
 G.zzz = function() {
 	console.log('zzzz');
-}
+};
