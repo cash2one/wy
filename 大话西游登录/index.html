@@ -131,13 +131,14 @@ window.addEvent('domready', function() {
 						lazyCheck: 1,
 						placeholder: { account: '用户名，如name@example.com' },
 						includeBox: 'urs-login-box',
-						cssDomain: 'http://localhost:8080/',
+						cssDomain: 'http://localhost/',
 						cssFiles: 'urs-login.css',
 						frameSize: { width: 350, height: 230 },
-						needMobileLogin: true
+						needMobileLogin: 0
 					};
 					var urs = new URS(_urs_config);
 					urs.logincb = function(username){
+						alert('xxxx');
 						// TODO 登录成功后，执行的回调
 						// 下面内容，是从梦幻西游拷贝过来的:
 						alert('登录成功:' + username);
