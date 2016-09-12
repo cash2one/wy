@@ -1,0 +1,17 @@
+{
+  "name": "error-log-changer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "da宗熊",
+  "license": "MIT",
+  "dependencies": {
+    "fs-extra": "^0.30.0",
+    "line-reader": "^0.4.0",
+    "nunjucks": "^2.5.0",
+    "open": "0.0.5"
+  }
+}
