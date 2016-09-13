@@ -1,0 +1,31 @@
+// ²Î¿¼: http://www.cnblogs.com/dwfbenben/archive/2012/03/15/2398741.html
+(function(){
+	if(window.localStorage){
+		return;
+	}
+	var IELocalStorageType = new Class({
+		initialize: function(){
+			var tagid = 'local_data_tag';
+			this.dataTag = $(tagid);
+			if(!this.dataTag){
+				this.dataTag = new Element('div', {
+					id: tagid,
+					styles:{display:'none',behavior: 'url(#default#userData)'}
+				});
+				$(document.body).grab(this.dataTag);
+			}
+			this.filename = 'oXMLUserData';
+		},
+
+		getItem: function(key){
+			this.dataTag.load(this.filename);
+			return this.dataTag.getAttribute(key);
+		},
+
+		setItem: function(key, value){
+			this.dataTag.setAttribute(key, value);
+			this.dataTag.save(this.filename);
+		}
+	});
+	window.localStorage = new IELocalStorageType();
+})();
