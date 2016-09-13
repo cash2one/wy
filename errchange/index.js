@@ -1,5 +1,7 @@
 'use strict';
 
+const fs = require('fs');
+
 const nunjucks = require('nunjucks');
 const lineReader = require('line-reader');
 const result = [];
