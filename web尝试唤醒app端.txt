@@ -1,0 +1,93 @@
+在iOS上，要增加一个APP的大Banner，其实只需要在<head>标签内增加一个<meta>标签即可，格式如：
+<meta name='apple-itunes-app' content='app-id=你的APP-ID'>
+比如加一个百度贴吧的Native APP大Banner，用下面这串儿代码：
+<meta name='apple-itunes-app' content='app-id=477927812'>
+
+
+
+!function() {
+  var createIframe = (function(){
+    var iframe;
+    return function(){
+        if(iframe){
+            return iframe;
+        }else{
+            iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+            return iframe;      
+        }
+    }
+  })();
+  
+  var userAgent = navigator.userAgent;
+  function isIOS() {
+    return !!userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+  }
+  function isAndroid() {
+    return userAgent.indexOf('Android') > -1 || userAgent.indexOf('Adr') > -1;;
+  }
+  function isChrome() {
+    return userAgent.indexOf("Chrome") !== -1;
+  }
+  
+  var openApp = function(localUrl, callback){
+    var openIframe = createIframe();
+    if (isIOS()) {
+        //判断是否是ios,具体的判断函数自行百度
+        window.location.href = localUrl;
+        var loadDateTime = Date.now();
+        setTimeout(function () {
+            var timeOutDateTime = Date.now();
+            if (timeOutDateTime - loadDateTime < 1000) {
+              callback && callback();
+            }
+        }, 25);
+    } else if (isAndroid()) {
+        //判断是否是android，具体的判断函数自行百度
+        if (isChrome()) {
+            //chrome浏览器用iframe打不开得直接去打开，算一个坑
+            window.location.href = localUrl;
+        } else {
+            //抛出你的scheme
+            openIframe.src = localUrl;
+        }
+        setTimeout(function () {
+          callback && callback();
+        }, 500);
+    } else {
+        //主要是给winphone的用户准备的,实际都没测过，现在winphone不好找啊
+        openIframe.src = localUrl;
+        setTimeout(function () {
+            callback && callback();
+        }, 500);
+    }
+  };
+
+	function makeAppUrl() {
+		var re = /[\?&]([^=&#]+)(?:=?([^&#]*))/g;
+		function decode(s) {
+			return decodeURIComponent(s.replace(/\+/g, " "));
+		}
+
+		var url = document.location.search;
+
+		var params = {};
+		var match;
+		while (match = re.exec(url))
+			params[decode(match[1])] = decode(match[2] || '');
+
+		// 站内信
+		if (params.s && params.m && params.r)
+			return 'netease-xyqcbg://show_msg/?serverid=' + params.s + '&msgid=' + params.m + '&roleid=' + params.r;
+	}
+
+	var app_url = 'weixin://dl/scan';// makeAppUrl();
+	if (app_url) {
+		openApp(app_url, function() {
+			location.href = "m.html";
+		});
+	} else {
+		alert("参数错误");
+	}
+}();
