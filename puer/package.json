@@ -1,0 +1,17 @@
+{
+  "name": "pat-puer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "data.js",
+  "dependencies": {
+    "fs-extra": "^0.30.0",
+    "iconv-lite": "^0.4.13",
+    "nunjucks": "^2.5.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "da宗熊",
+  "license": "MIT"
+}
