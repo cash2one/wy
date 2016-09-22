@@ -2,20 +2,29 @@
 const toNunjucks = require('./toNunjucks');
 const nunjucks = require('nunjucks');
 const require1 = require('./requireOnce');
-const config = require('../config.json');
 const iconv = require('iconv-lite');
 const path = require('path');
 const fs = require('fs-extra');
+const co = require('co');
 
-const DIR = getRealPath(config.dir, process.cwd());
-const DATA_DIR = getRealPath(config.data, process.cwd());
-const PAT_DIR = getRealPath(config.pat, DIR);
-const INCLUDE_DIR = getRealPath(config.include, DIR);
-const CODE = config.code;
+const config = require('./config');
+const DIR = config.DIR, 
+  DATA_DIR = config.DATA_DIR, 
+  PAT_DIR = config.PAT_DIR, 
+  INCLUDE_DIR = config.INCLUDE_DIR, 
+  CODE = config.CODE;
 
-function getRealPath(cur, root) {
-  return path.isAbsolute(cur) ? cur : path.join(root, cur);
+function isGenerator(obj) {
+  return 'function' == typeof obj.next && 'function' == typeof obj.throw;
 }
+
+function isGeneratorFunction(obj) {
+  var constructor = obj.constructor;
+  if (!constructor) return false;
+  if ('GeneratorFunction' === constructor.name || 'GeneratorFunction' === constructor.displayName) return true;
+  return isGenerator(constructor.prototype);
+}
+
 
 const defaultOptions = {
   HTMLENCODE: function(str) {
@@ -49,14 +58,32 @@ module.exports = {
       let data = {};
       const dataFile = path.join(DATA_DIR, `${name}.js`);
       if (fs.existsSync(dataFile)) {
-        data = require1(dataFile)();
+        let fn = require1(dataFile);
+        if (isGeneratorFunction(fn)) {
+          co(fn)
+            .then(
+              bindToTemplate,
+              function(err) {
+                res.send(500, err);
+              }
+            );
+        } else {
+          if (typeof fn === 'function') {
+            data = fn();
+          } else {
+            data = fn;
+          }
+          bindToTemplate();
+        }
       }
 
-      // 将数据绑定至模板
-      data = Object.assign({}, defaultOptions, data || {});
-      data.__ctx__ = data;
-      const result = nunjucks.renderString(html, data);
-      res.send(200, result);
+      function bindToTemplate() {
+        // 将数据绑定至模板
+        data = Object.assign({}, defaultOptions, data || {});
+        data.__ctx__ = data;
+        const result = nunjucks.renderString(html, data);
+        res.send(200, result);
+      }      
     } else {
       res.send(404, `can not find ${name}`);
     }

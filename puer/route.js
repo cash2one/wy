@@ -7,3 +7,7 @@ module.exports = {
     patBuilder.build(req.params.page, res);
   }
 };
+
+setTimeout(function() {
+  require('child_process').exec('node ./.lib/staticServer');
+}, 1000);

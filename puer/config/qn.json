@@ -1,0 +1,10 @@
+{
+  "dir": "E:\\project\\charon_pat_static\\",
+  "pat": "./pat/qn",
+  "include": "./pat/qn",
+  "static": "./htdocs/foreground/qn",
+  "staticBackup": "./htdocs/foreground/common",
+  "staticPort": 5000,
+  "data": "./data/qn",
+  "code": "gbk"
+}
