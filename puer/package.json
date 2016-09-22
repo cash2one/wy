@@ -4,9 +4,13 @@
   "description": "",
   "main": "data.js",
   "dependencies": {
+    "co": "^4.6.0",
     "fs-extra": "^0.30.0",
     "iconv-lite": "^0.4.13",
-    "nunjucks": "^2.5.2"
+    "mockjs": "^1.0.1-beta3",
+    "nunjucks": "^2.5.2",
+    "puer": "^1.1.1",
+    "urllib": "^2.15.0"
   },
   "devDependencies": {},
   "scripts": {
