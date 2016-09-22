@@ -1,4 +1,4 @@
-// ²Î¿¼: http://www.cnblogs.com/dwfbenben/archive/2012/03/15/2398741.html
+// å‚è€ƒ: http://www.cnblogs.com/dwfbenben/archive/2012/03/15/2398741.html
 (function(){
 	if(window.localStorage){
 		return;

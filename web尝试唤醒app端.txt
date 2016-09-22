@@ -1,6 +1,6 @@
-ÔÚiOSÉÏ£¬ÒªÔö¼ÓÒ»¸öAPPµÄ´óBanner£¬ÆäÊµÖ»ĞèÒªÔÚ<head>±êÇ©ÄÚÔö¼ÓÒ»¸ö<meta>±êÇ©¼´¿É£¬¸ñÊ½Èç£º
-<meta name='apple-itunes-app' content='app-id=ÄãµÄAPP-ID'>
-±ÈÈç¼ÓÒ»¸ö°Ù¶ÈÌù°ÉµÄNative APP´óBanner£¬ÓÃÏÂÃæÕâ´®¶ù´úÂë£º
+åœ¨iOSä¸Šï¼Œè¦å¢åŠ ä¸€ä¸ªAPPçš„å¤§Bannerï¼Œå…¶å®åªéœ€è¦åœ¨<head>æ ‡ç­¾å†…å¢åŠ ä¸€ä¸ª<meta>æ ‡ç­¾å³å¯ï¼Œæ ¼å¼å¦‚ï¼š
+<meta name='apple-itunes-app' content='app-id=ä½ çš„APP-ID'>
+æ¯”å¦‚åŠ ä¸€ä¸ªç™¾åº¦è´´å§çš„Native APPå¤§Bannerï¼Œç”¨ä¸‹é¢è¿™ä¸²å„¿ä»£ç ï¼š
 <meta name='apple-itunes-app' content='app-id=477927812'>
 
 
@@ -15,11 +15,11 @@
             iframe = document.createElement('iframe');
             iframe.style.display = 'none';
             document.body.appendChild(iframe);
-            return iframe;      
+            return iframe;
         }
     }
   })();
-  
+
   var userAgent = navigator.userAgent;
   function isIOS() {
     return !!userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
@@ -30,12 +30,13 @@
   function isChrome() {
     return userAgent.indexOf("Chrome") !== -1;
   }
-  
+
   var openApp = function(localUrl, callback){
     var openIframe = createIframe();
     if (isIOS()) {
-        //ÅĞ¶ÏÊÇ·ñÊÇios,¾ßÌåµÄÅĞ¶Ïº¯Êı×ÔĞĞ°Ù¶È
+        // åˆ¤æ–­æ˜¯å¦æ˜¯ios,å…·ä½“çš„åˆ¤æ–­å‡½æ•°è‡ªè¡Œç™¾åº¦
         window.location.href = localUrl;
+        /*
         var loadDateTime = Date.now();
         setTimeout(function () {
             var timeOutDateTime = Date.now();
@@ -43,26 +44,37 @@
               callback && callback();
             }
         }, 25);
+        */
     } else if (isAndroid()) {
-        //ÅĞ¶ÏÊÇ·ñÊÇandroid£¬¾ßÌåµÄÅĞ¶Ïº¯Êı×ÔĞĞ°Ù¶È
+        // åˆ¤æ–­æ˜¯å¦æ˜¯androidï¼Œå…·ä½“çš„åˆ¤æ–­å‡½æ•°è‡ªè¡Œç™¾åº¦
         if (isChrome()) {
-            //chromeä¯ÀÀÆ÷ÓÃiframe´ò²»¿ªµÃÖ±½ÓÈ¥´ò¿ª£¬ËãÒ»¸ö¿Ó
+            // chromeæµè§ˆå™¨ç”¨iframeæ‰“ä¸å¼€å¾—ç›´æ¥å»æ‰“å¼€ï¼Œç®—ä¸€ä¸ªå‘
             window.location.href = localUrl;
         } else {
-            //Å×³öÄãµÄscheme
+            // æŠ›å‡ºä½ çš„scheme
             openIframe.src = localUrl;
         }
+        /*
         setTimeout(function () {
           callback && callback();
         }, 500);
+        */
     } else {
-        //Ö÷ÒªÊÇ¸øwinphoneµÄÓÃ»§×¼±¸µÄ,Êµ¼Ê¶¼Ã»²â¹ı£¬ÏÖÔÚwinphone²»ºÃÕÒ°¡
+        // ä¸»è¦æ˜¯ç»™winphoneçš„ç”¨æˆ·å‡†å¤‡çš„,å®é™…éƒ½æ²¡æµ‹è¿‡ï¼Œç°åœ¨winphoneä¸å¥½æ‰¾å•Š
         openIframe.src = localUrl;
+        /*
         setTimeout(function () {
             callback && callback();
         }, 500);
+        */
     }
   };
+
+
+  // åé¢éƒ¨åˆ†ï¼Œå°±ä¸ç”¨çœ‹äº†~~
+  openApp('weixin://dl/scan');
+  return;
+
 
 	function makeAppUrl() {
 		var re = /[\?&]([^=&#]+)(?:=?([^&#]*))/g;
@@ -77,7 +89,7 @@
 		while (match = re.exec(url))
 			params[decode(match[1])] = decode(match[2] || '');
 
-		// Õ¾ÄÚĞÅ
+		// ç«™å†…ä¿¡
 		if (params.s && params.m && params.r)
 			return 'netease-xyqcbg://show_msg/?serverid=' + params.s + '&msgid=' + params.m + '&roleid=' + params.r;
 	}
@@ -88,6 +100,6 @@
 			location.href = "m.html";
 		});
 	} else {
-		alert("²ÎÊı´íÎó");
+		alert("å‚æ•°é”™è¯¯");
 	}
 }();
