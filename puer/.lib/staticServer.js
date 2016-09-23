@@ -1,12 +1,15 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
+const util = require('./util');
 const iconv = require('iconv-lite');
+const urllib = require('urllib');
 const config = require('./config');
+const superagent = require('superagent');
+
 const CODE = config.CODE;
 const PORT = config.STATIC_PORT || 5000;
 const STATIC_DIR = config.STATIC_DIR;
-const STATIC_BACKUP = config.STATIC_BACKUP;
 
 const TYPES = {
   "css": "text/css",
@@ -34,29 +37,40 @@ const http = require('http');
 http.createServer(function (request, response) {
   let content = '';
   let url = request.url.replace(/[#?].*$/, '');
-  const dir1 = path.join(STATIC_DIR, url);
-  const dir2 = path.join(STATIC_BACKUP, url);
+  let filePath = util.isFileExistAndGetName(STATIC_DIR, url) || '';
 
-  let ext = path.extname(dir1);
+  let ext = path.extname(filePath);
   ext = ext ? ext.slice(1) : 'unknown';
   const type = TYPES[ext] || 'text/plain';
 
-  if (fs.existsSync(dir1)) {
-    content = fs.readFileSync(dir1);
-    response.writeHead(200, {'Content-Type': type});
-  } else if (fs.existsSync(dir2)) {
-    content = fs.readFileSync(dir2);
-    response.writeHead(200, {'Content-Type': type});
-  } else {
-    response.writeHead(404, `url is not found`);
-  }
+  console.log(filePath, url, STATIC_DIR);
 
-  // 转码
-  if (/^text/.test(type)) {
-    content = iconv.decode(content, CODE);
-  }
-  response.write(content);
-  response.end();
+  new Promise((resolve, reject) => {
+    if (filePath) {
+      if (/^http/.test(filePath)) {
+        const sreq = superagent.get('http://xyq.cbg.163.com/js/saleable_pet_name.js');
+        sreq.pipe(response);
+        return reject();
+      } else {
+        response.writeHead(200, {'Content-Type': type});
+        content = fs.readFileSync(filePath);
+      }
+    } else {
+      response.writeHead(404, `url is not found`);
+    }
+    resolve(content);
+  })
+  .then(content => {
+    console.log(content);
+    if (/^text/.test(type)) {
+      content = iconv.decode(content, CODE);
+    }
+    response.write(content);
+    response.end();
+  })
+  .catch(() => {
+    // do nothing...
+  });
 }).listen(PORT, function() {
   console.log('Static Server listening to', PORT);
 });

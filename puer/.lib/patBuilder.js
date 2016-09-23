@@ -1,9 +1,11 @@
 'use strict';
+const isGeneratorFunction = require('./isGeneratorFn');
 const toNunjucks = require('./toNunjucks');
 const nunjucks = require('nunjucks');
 const require1 = require('./requireOnce');
 const iconv = require('iconv-lite');
 const path = require('path');
+const util = require('./util');
 const fs = require('fs-extra');
 const co = require('co');
 
@@ -25,27 +27,16 @@ const DIR = config.DIR,
   INCLUDE_DIR = config.INCLUDE_DIR, 
   CODE = config.CODE;
 
-function isGenerator(obj) {
-  return 'function' == typeof obj.next && 'function' == typeof obj.throw;
-}
-
-function isGeneratorFunction(obj) {
-  var constructor = obj.constructor;
-  if (!constructor) return false;
-  if ('GeneratorFunction' === constructor.name || 'GeneratorFunction' === constructor.displayName) return true;
-  return isGenerator(constructor.prototype);
-}
-
 
 const defaultOptions = {
   HTMLENCODE: function(str) {
     return str;
   },
   __include: function(file, data) {
-    const dir = path.join(INCLUDE_DIR, file);
-    if (fs.existsSync(dir)) {
-      let html = iconv.decode(fs.readFileSync(dir), CODE);
-      html = toNunjucks(html)
+    const filePath = util.isFileExistAndGetName(INCLUDE_DIR, file);
+    if (filePath) {
+      let html = util.readFile(filePath, CODE);
+      html = toNunjucks(html);
       try {
         return nunjucks.renderString(html, data || {});
       } catch (e) {
@@ -54,7 +45,7 @@ const defaultOptions = {
         console.log(html);
       }
     }
-    return `<p>缺少文件 #${file}</p>`;
+    return `<p>缺少文件 #${file}</p>`;   
   },
   __comments: function(key) {
     return `<!--${key}-->`;
@@ -64,48 +55,21 @@ const defaultOptions = {
 module.exports = {
   build: function(name, res) {
     // 读取模板文件
-    const file = path.join(PAT_DIR, `${name}.pat`);
-    if (fs.existsSync(file)) {
-      let html = iconv.decode(fs.readFileSync(file), CODE);
+    const filePath = util.isFileExistAndGetName(PAT_DIR, `${name}.pat`);
+    if (filePath) {
+      let html = util.readFile(filePath, CODE);
       html = toNunjucks(html);
+      let data = util.readMock(path.join(DATA_DIR, `${name}.js`));
+      data = Object.assign({}, defaultOptions, data || {});
+      data.__ctx__ = data;
 
-      // 读取对应数据文件
-      let data = {};
-      const dataFile = path.join(DATA_DIR, `${name}.js`);
-      if (fs.existsSync(dataFile)) {
-        let fn = require1(dataFile);
-        if (isGeneratorFunction(fn)) {
-          co(fn)
-            .then(
-              bindToTemplate,
-              function(err) {
-                res.send(500, err);
-              }
-            );
-        } else {
-          if (typeof fn === 'function') {
-            data = fn();
-          } else {
-            data = fn;
-          }
-          bindToTemplate();
-        }
-      } else {
-        bindToTemplate();
+      try {
+        const result = nunjucks.renderString(html, data);
+        res.send(200, result);
+      } catch (e) {
+        console.error(e);
+        res.send(500, html);
       }
-
-      function bindToTemplate() {
-        // 将数据绑定至模板
-        data = Object.assign({}, defaultOptions, data || {});
-        data.__ctx__ = data;
-        try {
-          const result = nunjucks.renderString(html, data);
-          res.send(200, result);
-        } catch (e) {
-          console.error(e);
-          res.send(500, html);
-        }
-      }      
     } else {
       res.send(404, `can not find ${name}`);
     }

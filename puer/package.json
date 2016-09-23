@@ -11,6 +11,7 @@
     "mockjs": "^1.0.1-beta3",
     "nunjucks": "^2.5.2",
     "puer": "^1.1.1",
+    "superagent": "^2.3.0",
     "urllib": "^2.15.0"
   },
   "devDependencies": {},
