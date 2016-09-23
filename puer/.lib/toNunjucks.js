@@ -1,86 +1,138 @@
 'use strict';
 
-module.exports = function toNunjucks(html) {
-  var length = html.length;
-  var list = [];
-  var index = 0;
-  var startTag = '<!--', endTag = '-->';
-  var start = html.indexOf(startTag);
-  var end;
-  var startLen = startTag.length;
-  var endLen = endTag.length;
+const START_TAG = '<!--', END_TAG = '-->';
+const START_TAG_LENGTH = START_TAG.length;
+const END_TAG_LENGTH = END_TAG.length;
 
-  list.push(html.substring(index, start));
-  function change(str) {
-    if (str.indexOf('#CGIEXT#') >= 0) {
-      str = str.replace(/^\s*#CGIEXT#\s*/, '');
-      const reg1 = /^expand\s+/i;
-      const reg2 = /^const\s+/i;
-      if (reg1.test(str)) {
-        return '{{ __include("'+ str.replace(reg1, '').replace(/'"/g, '').trim() +'", __ctx__) | safe }}';
-      } else if (reg2.test(str)) {
-        const arr = /const\s+([^=]+)=['"]@@([^'"]+)@@['"]/i.exec(str);
-        return `{% set ${arr[1]} = ${arr[2]} %}`;
-      } else {
-        // 从 "xxBegin:" 找到 "xxEnd:"，并且加工里面的所有内容，并且修正结束位置~~
-        var variable = str.replace(/\s*(.*?)Begin\s*:\s*/g, '$1');
-        var keyword = str.trim().replace('Begin', 'End');
-        var fromIndex = start;
-        var toIndex = html.indexOf(keyword, end + endLen);
-        var content = html.substring(end + endLen, toIndex);
+function untilNextEnd(html, index) {
+  const end = html.indexOf(END_TAG, index);
+  let nextIndex, result;
+  if (end < 0) {
+    nextIndex = html.length;
+    result = html.substring(index, nextIndex);
+    return {
+      next: nextIndex,
+      html: result
+    }
+  }
 
-        end = html.indexOf(endTag, toIndex);
-        content = content.replace(/<\!--#CGIEXT#\s*$/gmi, '');
+  result = html.substring(index, end);
+  nextIndex = end + END_TAG_LENGTH;
+  let list = result.split(START_TAG);
+  while (list && list.length > 1) {
+    let content = '';
+    let times = list.length - 1;
+    for (let i = 0; i < times; i++) {
+      let newEnd = html.indexOf(END_TAG, nextIndex);
+      if (newEnd < 0) {
+        break;
+      }
+      let tmp = html.substring(nextIndex - END_TAG_LENGTH, newEnd);
+      result += tmp;
+      content += tmp;
+      nextIndex = newEnd + END_TAG_LENGTH;
+    }
+    list = content.split(START_TAG);
+  }
+  
 
+  return {
+    next: nextIndex,
+    html: result
+  }
+}
+
+function untilNextStart(html, index) {
+  let nextIndex = html.indexOf(START_TAG, index);
+  let result = '';
+  if (nextIndex < 0) {
+    result = html.substring(index, html.length);
+  } else {
+    result = html.substring(index, nextIndex);
+    nextIndex = nextIndex + START_TAG_LENGTH;
+  }
+  
+  return {
+    next: nextIndex,
+    html: result
+  };
+}
+
+function safeString(str) {
+  return str.replace(/'/g, `\\'`);
+}
+
+let isInLoop = false;
+function convertTag(str) {
+  str = str.trim();
+  if (str.indexOf('#CGIEXT#') >= 0) {
+    str = str.replace(/^\s*#CGIEXT#\s*/, '');
+    const reg1 = /^expand\s+/i;
+    const reg2 = /^const\s+/i;
+    if (reg1.test(str)) {
+      return '{{ __include("'+ str.replace(reg1, '').replace(/'"/g, '').trim() +'", __ctx__) | safe }}';
+    } else if (reg2.test(str)) {
+      const arr = /const\s+([^=]+)=['"]@@([^'"]+)@@['"]/i.exec(str);
+      return `{# set ${arr[1]} = ${arr[2]} #}`;
+    } else {
+      // 从 "xxBegin:" 找到 "xxEnd:"，并且加工里面的所有内容，并且修正结束位置~~
+      let variable = '';
+      if (str.indexOf('Begin') >= 0) {
+        variable = str.replace(/\s*(.*)Begin\s*:\s*/g, '$1');
+        isInLoop = true;
         return [
-          '',
-          '{% if '+ variable +' %}',
-          '{% for item in '+ variable +' %}',
-          content.replace(/<\!--(.*?)-->/g, function(s, key) {
-            if (/\(.*\)/.test(key)) {
-              return '{{ '+ key.replace(/(.*)?\((.*)\)/, '$1(item.$2)') +' }}';
-            }
-            return `{{ item.${key} | default('<!--${key}-->') | safe }}`;
-          }),
-          '{% endfor %}',
-          '{% endif %}'
+          '{# if '+ variable +' #}',
+          '{# for item in '+ variable +' #}'
+        ].join('\n');
+      } else {
+        isInLoop = false;
+        return [
+          '{# endfor #}',
+          '{# endif #}'
         ].join('\n');
       }
-      return '{%'+ str +'%}';
-    } else {
-      if (/^\w*$/g.test(str)) {
-        return `{{ ${str} | default('<!--${str}-->') | safe }}`;
-      }
-      return '<!--'+ str +'-->';
     }
+  } else {
+    if (/^\w*$/g.test(str)) {
+      let key = isInLoop ? 'item.' + str : str;
+      return `{{ ${key} | default(${str}) | default(__comments('${safeString(key)}')) | safe }}`;
+    } else if (/\w+\s*?\(\s*?\w+\s*?\)/g.test(str)) {
+      let list = /(\w+)\s*\((\w+)\s*\)/g.exec(str);
+      let method = list[1];
+      let key = list[2];
+      isInLoop && (key = 'item.' + key);
+      return `{{ ${method}(${key}) | default(${method}(${key})) | default(__comments('${safeString(key)}')) | safe }}`;
+    }
+    return `{{ __comments('${safeString(str)}') | safe }}`;
   }
+}
 
-  while (start >= 0) {
-    end = html.indexOf('-->', start + startLen);
+function toNunjucks(html, index) {
+  index = index || 0;
+  let length = html.length;
+  let list = [];
 
-    if (end < 0) {
+  while (index >= 0 && index <= length) {
+    let start = untilNextStart(html, index);
+    list.push(start.html);
+
+    if (start.next < 0 || start.next >= length) {
       break;
     }
 
-    var mid = html.substring(start + startLen, end);
-    if (/\n/m.test(mid)) {
-      list.push(html.substring(start, end + endLen));
+    let end = untilNextEnd(html, start.next);
+
+    let content = end.html;
+    if (/\n|\r/m.test(content) || content.indexOf(START_TAG) >= 0) {
+      list.push('<!--' + toNunjucks(content) + '-->');
     } else {
-      list.push(change(mid));
+      list.push(convertTag(content));
     }
 
-    if (end < 0) {
-      break;
-    }
-
-    index = end + endLen;
-    start = html.indexOf(startTag, index);
-
-    if (start >= 0) {
-      list.push(html.substring(index, start));
-    }
+    index = end.next;
   }
 
-  list.push(html.substring(index, length));
   return list.join('');
 }
+
+module.exports = toNunjucks;

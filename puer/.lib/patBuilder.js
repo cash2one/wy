@@ -7,6 +7,17 @@ const path = require('path');
 const fs = require('fs-extra');
 const co = require('co');
 
+nunjucks.configure({
+  tags: {
+    blockStart: '{#',
+    blockEnd: '#}',
+    variableStart: '{{',
+    variableEnd: '}}',
+    commentStart: '{!',
+    commentEnd: '!}'
+  }
+});
+
 const config = require('./config');
 const DIR = config.DIR, 
   DATA_DIR = config.DATA_DIR, 
@@ -40,9 +51,13 @@ const defaultOptions = {
       } catch (e) {
         console.error(e);
         console.log(file);
+        console.log(html);
       }
     }
     return `<p>缺少文件 #${file}</p>`;
+  },
+  __comments: function(key) {
+    return `<!--${key}-->`;
   }
 };
 
@@ -75,14 +90,21 @@ module.exports = {
           }
           bindToTemplate();
         }
+      } else {
+        bindToTemplate();
       }
 
       function bindToTemplate() {
         // 将数据绑定至模板
         data = Object.assign({}, defaultOptions, data || {});
         data.__ctx__ = data;
-        const result = nunjucks.renderString(html, data);
-        res.send(200, result);
+        try {
+          const result = nunjucks.renderString(html, data);
+          res.send(200, result);
+        } catch (e) {
+          console.error(e);
+          res.send(500, html);
+        }
       }      
     } else {
       res.send(404, `can not find ${name}`);

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "data.js",
-  "config": "./config/qn.json",
+  "config": "./config/xyq.json",
   "dependencies": {
     "co": "^4.6.0",
     "fs-extra": "^0.30.0",
