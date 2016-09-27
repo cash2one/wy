@@ -1,0 +1,9 @@
+function openBrowser(target, callback) {
+  var map, opener;
+  map = {
+    'darwin': 'open',
+    'win32': 'start '
+  };
+  opener = map[process.platform] || 'xdg-open';
+  return exec(opener + " " + target, callback);
+}

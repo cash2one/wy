@@ -62,7 +62,7 @@ function safeString(str) {
   return str.replace(/'/g, `\\'`);
 }
 
-let isInLoop = false;
+let loopDeep = 0;
 function convertTag(str) {
   str = str.trim();
   if (str.indexOf('#CGIEXT#') >= 0) {
@@ -79,13 +79,13 @@ function convertTag(str) {
       let variable = '';
       if (str.indexOf('Begin') >= 0) {
         variable = str.replace(/\s*(.*)Begin\s*:\s*/g, '$1');
-        isInLoop = true;
+        loopDeep++;
         return [
           '{# if '+ variable +' #}',
           '{# for item in '+ variable +' #}'
         ].join('\n');
       } else {
-        isInLoop = false;
+        loopDeep--;
         return [
           '{# endfor #}',
           '{# endif #}'
@@ -94,13 +94,13 @@ function convertTag(str) {
     }
   } else {
     if (/^\w*$/g.test(str)) {
-      let key = isInLoop ? 'item.' + str : str;
+      let key = loopDeep > 0 ? 'item.' + str : str;
       return `{{ ${key} | default(${str}) | default(__comments('${safeString(key)}')) | safe }}`;
     } else if (/\w+\s*?\(\s*?\w+\s*?\)/g.test(str)) {
       let list = /(\w+)\s*\((\w+)\s*\)/g.exec(str);
       let method = list[1];
       let key = list[2];
-      isInLoop && (key = 'item.' + key);
+      loopDeep > 0 && (key = 'item.' + key);
       return `{{ ${method}(${key}) | default(${method}(${key})) | default(__comments('${safeString(key)}')) | safe }}`;
     }
     return `{{ __comments('${safeString(str)}') | safe }}`;

@@ -2,17 +2,23 @@
   "name": "pat-puer",
   "version": "1.0.0",
   "description": "",
-  "main": "data.js",
+  "main": "index.js",
+  "router": "./route.js",
   "config": "./config/xyq.json",
   "dependencies": {
+    "body-parser": "^1.15.2",
+    "bufferhelper": "^0.2.1",
+    "chokidar": "^1.6.0",
     "co": "^4.6.0",
+    "colors": "^1.1.2",
+    "cookie-parser": "^1.4.3",
+    "express": "4.14.0",
     "fs-extra": "^0.30.0",
     "iconv-lite": "^0.4.13",
     "mockjs": "^1.0.1-beta3",
     "nunjucks": "^2.5.2",
-    "puer": "^1.1.1",
-    "superagent": "^2.3.0",
-    "urllib": "^2.15.0"
+    "reload": "^1.0.1",
+    "serve-favicon": "^2.3.0"
   },
   "devDependencies": {},
   "scripts": {

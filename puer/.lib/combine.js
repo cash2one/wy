@@ -1,5 +1,5 @@
 'use strict';
-const require1 = require('./requireOnce');
+const require1 = require('./require1');
 const path = require('path');
 
 module.exports = function combine(deps, dir) {

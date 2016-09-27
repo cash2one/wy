@@ -2,7 +2,7 @@
 const isGeneratorFunction = require('./isGeneratorFn');
 const toNunjucks = require('./toNunjucks');
 const nunjucks = require('nunjucks');
-const require1 = require('./requireOnce');
+const require1 = require('./require1');
 const iconv = require('iconv-lite');
 const path = require('path');
 const util = require('./util');
@@ -21,10 +21,10 @@ nunjucks.configure({
 });
 
 const config = require('./config');
-const DIR = config.DIR, 
-  DATA_DIR = config.DATA_DIR, 
-  PAT_DIR = config.PAT_DIR, 
-  INCLUDE_DIR = config.INCLUDE_DIR, 
+const DIR = config.DIR,
+  DATA_DIR = config.DATA_DIR,
+  PAT_DIR = config.PAT_DIR,
+  INCLUDE_DIR = config.INCLUDE_DIR,
   CODE = config.CODE;
 
 
@@ -45,7 +45,7 @@ const defaultOptions = {
         console.log(html);
       }
     }
-    return `<p>缺少文件 #${file}</p>`;   
+    return `<p>缺少文件 #${file}</p>`;
   },
   __comments: function(key) {
     return `<!--${key}-->`;
@@ -65,7 +65,8 @@ module.exports = {
 
       try {
         const result = nunjucks.renderString(html, data);
-        res.send(200, result);
+        res.set('content-type', 'text/html');
+        res.send(result);
       } catch (e) {
         console.error(e);
         res.send(500, html);
