@@ -29,7 +29,7 @@ DNS Prefetch 应该尽量的放在网页的前面，推荐放在 <meta charset="
 
 
 4. <link rel="alternate" media="only screen and(max-width: 640px)" href="http://dhxy.163.com/m/">
-如果屏幕小于等于 640px，则跳转到 http://dhxy.163.com/m/
+告诉搜索引擎，如果屏幕小于等于 640px，则使用 http://dhxy.163.com/m/
 添加 RSS 订阅: <link rel="alternate" type="application/rss+xml" title="RSS" href="/rss.xml"/>
 
 
