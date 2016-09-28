@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>TO Iframe测试</title>
+  <link rel="stylesheet" href="./reset.css">
+  <link rel="stylesheet" href="./index.css">
+  <script src="./jquery.js"></script>
+
+  <link rel="stylesheet" href="./lib/jquery-ui.min.css">
+  <script src="./lib/jquery-ui.min.js"></script>
+</head>
+<body>
+  <header class="header" data-module="1">
+    <a href="/1" class="on item">链接01</a>
+    <a href="/2" class="item">链接02</a>
+    <a href="/3" class="item">链接03</a>
+    <a href="/4" class="item">链接04</a>
+  </header>
+
+  <div class="banner" data-module="1"></div>
+
+  <div class="main clearfix">
+    <div class="entries module" data-module="1">
+      <h2 class="title">各个入口</h2>
+      <ul class="list clearfix">
+        <li><a href="/1" class="item"><img src="./images/1.gif" alt="" class="ico"><br>入口 1</a></li>
+        <li><a href="/2" class="item"><img src="./images/2.gif" alt="" class="ico"><br>入口 2</a></li>
+        <li><a href="/3" class="item"><img src="./images/6.gif" alt="" class="ico"><br>入口 3</a></li>
+        <li><a href="/4" class="item"><img src="./images/5.gif" alt="" class="ico"><br>入口 4</a></li>
+        <li><a href="/5" class="item"><img src="./images/3.gif" alt="" class="ico"><br>入口 5</a></li>
+        <li><a href="/6" class="item"><img src="./images/4.gif" alt="" class="ico"><br>入口 6</a></li>
+        <li><a href="/5" class="item"><img src="./images/5.gif" alt="" class="ico"><br>入口 7</a></li>
+        <li><a href="/6" class="item"><img src="./images/6.gif" alt="" class="ico"><br>入口 8</a></li>
+      </ul>
+      <style class="css">
+
+      </style>
+      <script class="template" type="text/html">
+
+      </script>
+      <script class="data" type="text/html">
+        render({
+          title: 各个入口,
+          list: [
+            {},
+            {},
+          ]
+        });
+      </script>
+      <script class="code" type="text/html">
+        // $root
+        // fireEvent(eventName, params);
+        // watchEvent(eventName, func, executeImidiatily);
+      </script>
+    </div><!-- /entries -->
+
+    <div class="news module">
+      <h2 class="title">热门新闻</h2>
+      <ul class="list clearfix">
+        <li><a href="/1" class="link">热门新闻 -> 1</a></li>
+        <li><a href="/2" class="link">热门新闻 -> 2</a></li>
+        <li><a href="/3" class="link">热门新闻 -> 3</a></li>
+        <li><a href="/4" class="link">热门新闻 -> 4</a></li>
+        <li><a href="/5" class="link">热门新闻 -> 5</a></li>
+        <li><a href="/6" class="link">热门新闻 -> 6</a></li>
+        <li><a href="/7" class="link">热门新闻 -> 7</a></li>
+        <li><a href="/8" class="link">热门新闻 -> 8</a></li>
+      </ul>
+    </div><!-- /news -->
+  </div>
+
+  <div class="sidebar">
+    <a href="/1" class="item">分享</a>
+    <a href="/2" class="item">返回</a>
+  </div>
+
+<script src="./index.js"></script>
+</body>
+</html>

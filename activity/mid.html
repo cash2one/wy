@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>小0</title>
+  <style>
+    * { padding: 0; margin: 0; }
+    html { height: 100%; }
+    body { min-height: 100%; }
+    #_main { position: absolute; top: 50%; left: 50%; -webkit-transform: translate(-50%, -50%); transform: translate(-50%, -50%); }
+    ._dots {
+      display: inline-block;
+      -webkit-animation: jumping-dots .6s ease-in infinite;
+              animation: jumping-dots .6s ease-in infinite;
+    }
+    ._dot2 { -webkit-animation-delay: .2s; animation-delay: .2s; }
+    ._dot3 { -webkit-animation-delay: .4s; animation-delay: .4s; }
+    @-webkit-keyframes jumping-dots {
+      0% {
+        -webkit-transform: translateY(0);
+                transform: translateY(0);
+      }
+      50% {
+        -webkit-transform: translateY(-4px);
+                transform: translateY(-4px);
+      }
+      100% {
+        -webkit-transform: translateY(0);
+                transform: translateY(0);
+      }
+    }
+    @keyframes jumping-dots {
+      0% {
+        -webkit-transform: translateY(0);
+                transform: translateY(0);
+      }
+      50% {
+        -webkit-transform: translateY(-4px);
+                transform: translateY(-4px);
+      }
+      100% {
+        -webkit-transform: translateY(0);
+                transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="_main">
+    <span class="_dots _dot1">l</span><span class="_dots _dot1">o</span><span class="_dots _dot3">a</span><span class="_dots _dot1">d</span><span class="_dots _dot2">i</span><span class="_dots _dot3">n</span><span class="_dots _dot1">g</span><span class="_dots _dot2">.</span><span class="_dots _dot3">.</span><span class="_dots _dot1">.</span>
+  </div>
+</body>
+</html>
