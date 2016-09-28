@@ -1,14 +1,14 @@
 (function refresh () {
+  if (!('WebSocket' in window)) {
+    throw new Error('Reload only works with browsers that support WebSockets')
+  }
+
   var verboseLogging = false
   var socketUrl = window.location.origin.replace('http://', 'ws://')
   var socket
 
   if (verboseLogging) {
     console.log('Reload Script Loaded')
-  }
-
-  if (!('WebSocket' in window)) {
-    throw new Error('Reload only works with browsers that support WebSockets')
   }
 
   // Explanation of the flags below:

@@ -27,7 +27,7 @@ function request(url) {
       reject(e.message);
     });
 
-    req.setTimeout(5000, () => {
+    req.setTimeout(2000, () => {
       reject('time out');
     });
   });

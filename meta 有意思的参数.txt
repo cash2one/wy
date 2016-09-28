@@ -1,0 +1,37 @@
+1. <meta name="renderer" content="webkit">
+
+指定双核浏览器默认以何种方式渲染页面
+<meta name="renderer" content="webkit">//默认webkit内核
+<meta name="renderer" content="ie-comp">//默认IE兼容模式
+<meta name="renderer" content="ie-stand">//默认IE标准模式
+而 webkit|ie-comp|ie-stand 这种写法，跟font-family的规则类似，按照顺序排他的优先级，不支持则往下，浏览器将会按照从左到右的先后顺序选择其具备的渲染内核来处理当前网页。
+
+
+2. <link rel="dns-prefetch" href="http://res.nie.netease.com">
+
+DNS Prefetch，即DNS预获取，是前端优化的一部分。一般来说，在前端优化中与 DNS 有关的有两点： 一个是减少DNS的请求次数，另一个就是进行DNS预获取。
+其中 Chrome 和 Firefox 3.5+ 内置了 DNS Prefetching 技术并对DNS预解析做了相应优化设置。所以 即使不设置此属性，Chrome 和 Firefox 3.5+ 也能自动在后台进行预解析 。
+DNS Prefetch 应该尽量的放在网页的前面，推荐放在 <meta charset="UTF-8"> 后面。
+<meta http-equiv="x-dns-prefetch-control" content="on">
+<link rel="dns-prefetch" href="//www.itechzero.com">
+<link rel="dns-prefetch" href="//api.share.baidu.com">
+<link rel="dns-prefetch" href="//bdimg.share.baidu.com">
+如果需要禁止隐式的 DNS Prefetch，可以使用以下的标签：
+<meta http-equiv="x-dns-prefetch-control" content="off">
+
+
+3. <meta name="applicable-device" content="pc">
+
+这个标签，应该是在移动端日益增长的流量的大势下产生的需求吧，具体如下：
+如果网页只适合在电脑上浏览，则可以在meta中加入<metaname=“applicable-device”content=“pc”>；
+如果网页适合在移动设备上进行浏览，则可以在meta中加入<metaname=“applicable-device”content=“mobile”>；
+如果网页采用了响应式设计，则可以在meta中加入<metaname=“applicable-device”content=“pc,mobile”>。
+
+
+4. <link rel="alternate" media="only screen and(max-width: 640px)" href="http://dhxy.163.com/m/">
+如果屏幕小于等于 640px，则跳转到 http://dhxy.163.com/m/
+添加 RSS 订阅: <link rel="alternate" type="application/rss+xml" title="RSS" href="/rss.xml"/>
+
+
+5. <link rel="canonical" href="http://dhxy.163.com">
+告诉搜索引擎，此站点的唯一地址
