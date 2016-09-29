@@ -1,0 +1,3 @@
+var FnPrototypeCall = Function.prototype.call;
+var queryType = FnPrototypeCall.bind(Object.prototype.toString);
+var toArray = FnPrototypeCall.bind(Array.prototype.slice);
