@@ -5,19 +5,21 @@
   <title>TO Iframe测试</title>
   <link rel="stylesheet" href="./css/reset.css">
   <link rel="stylesheet" href="./css/index.css">
-  <style>
-    html { height: 100%; }
-    body { min-height: 100%; }
-  </style>
 </head>
-<body style="transform: translateX(-110px)">
+<body class="setting-open">
   <style>
+    body {
+      transition: transform .3s ease;
+    }
+    .setting-open {
+      transform: translateX(-120px)
+    }
     .setting-bar {
       position: fixed;
       top: 0;
       bottom: 0;
       right: -2px;
-      width: 108px;
+      width: 118px;
       background: #fff;
       transform: translateX(100%);
       border-left: 1px solid #ddd;
@@ -25,19 +27,45 @@
     }
     .setting-switch {
       position: absolute;
-      height: 100%;
-      width: 12px;
+      height: 150px;
+      width: 20px;
       top: 0;
-      left: -12px;
-      background: rgba(210, 210, 210, 0.8);
-      transition: opacity .3s ease;
+      left: -20px;
+      background: rgba(210, 210, 210, 0.9);
+      transition: background .2s ease;
+      border-radius: 0 0 0 10px;
     }
     .setting-switch:hover {
       cursor: pointer;
-      opacity: .6;
+      background: rgba(210, 210, 210, 0.7);
     }
     .setting-switch:before, .setting-switch:after {
-      
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 45%;
+      width: 9px;
+      height: 3px;
+      background: #fff;
+      border-radius: 100%;
+      transform-origin: 0 50%;
+      transition: transform .3s ease;
+    }
+    .setting-switch:before {
+      transform: rotate(40deg) translateX(-1px);
+    }
+    .setting-switch:after {
+      transform: rotate(-40deg) translateX(-1px);
+    }
+    .setting-open .setting-switch:before, .setting-open .setting-switch:after {
+      left: 2px;
+      transform-origin: 100% 50%;
+    }
+    .setting-open .setting-switch:before {
+      transform: rotate(-40deg) translateX(1px);
+    }
+    .setting-open .setting-switch:after {
+      transform: rotate(40deg) translateX(1px);
     }
     .setting-container {
       height: 100%;
@@ -49,6 +77,21 @@
       padding: 2px 5px;
       border: none;
       border-bottom: 1px solid #ddd;
+      font-size: 14px;
+    }
+    .setting-list {
+      margin-top: 10px;
+      border-left: 1px solid #ddd;
+      font-size: 14px;
+    }
+    .setting-list li {
+      padding: 7px 5px;
+      margin-left: 5px;
+      border-bottom: 1px dashed #ddd;
+    }
+    .setting-list .title {
+      display: block;
+      color: #333;
     }
   </style>
   <div class="setting-bar">
@@ -57,10 +100,10 @@
       <input class="setting-search" placeholder="enter : 板块名" />
       <ul class="setting-list">
         <li>
-          广告1
+          <a href="javascript:;" class="title">广告1</a>
         </li>
         <li>
-
+          <a href="javascript:;" class="title">广告2</a>
         </li>
       </ul>
     </div>

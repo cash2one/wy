@@ -43,6 +43,7 @@ Module.prototype = {
           return;
         }
         $el.html(code);
+        return this;
       }
     }.bind(this));
 
@@ -63,6 +64,8 @@ Module.prototype = {
       $el.html([style.trim(), html.trim()].join('\n'));
       this.compileUiBinder($el, data);
     }.bind(this));
+
+    return this;
   },
 
   compileRender: function() {
