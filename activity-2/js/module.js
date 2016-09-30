@@ -6,6 +6,11 @@
  *
  * 代码不兼容 ie8!!
  */
+
+var render = function(html, data) {
+  return template.compile(html || '')(data || {});
+}
+
 function Module(rootSelector, options) {
   this.$root = $(rootSelector);
   this.options = $.extend({
@@ -48,7 +53,10 @@ Module.prototype = {
     }.bind(this));
 
     if (options.autoRender) {
-      this.renderTo(this.$content);
+      // 防止被编译的函数出错，导致脚本无法运行
+      setTimeout(function() {
+        this.renderTo(this.$content);
+      }.bind(this));
     }
   },
 
@@ -93,16 +101,16 @@ Module.prototype = {
     if ($template.length <= 0) {
       return '';
     }
-    return template.compile($template.html())(data || {});
+    return render($template.html(), data);
   },
 
-  compileStyle: function(data) {
+  compileStyle: function(data, noStyleTag) {
     var $style = this.$style;
     if ($style.length <= 0) {
       return '';
     }
-    var html = '\n<style>\n' + $style.html() + '\n</style>';
-    return template.compile(html)(data || {});
+    var html = $style.html();;
+    return render(noStyleTag ? html : ('\n<style>\n' + html + '\n</style>'), data);
   },
 
   compileUiBinder: function($root, data) {
@@ -116,5 +124,35 @@ Module.prototype = {
     var code = $uiBinder.html().trim();
     var fn = new Function('_$root', '_data', '_event', code);
     fn($root.off(), data, GlobalEvent);
+  },
+
+  /**
+   * 生成最终可运行代码
+   * @param {Object} options 编译的参数
+   *  - static: Boolean, 是否生成静态的模块代码
+   *  - moduleName: 脚本模块的名字，如果缺失，则生成自运行闭包代码
+   * @return { style|String: 样式代码, html|String: 模块html代码, js|String: 模块的运行脚本 }
+  */
+  compile: function(options, callback) {
+    options = $.extend({ static: true, moduleName: '' });
+    var def = $.Deferred();
+
+    this.compileRender().done(function(data) {
+      var style = util.formatCode(this.compileStyle(data, true));
+
+      var html = util.formatCode(this.compileTemplate(data));;
+
+      var js = '';
+      if (options.static) {
+        html = '';
+        // js = util.formatCode(this.compileUiBinder(data));
+      } else {
+        html = html.replace(/"/g, '\\"');
+      }
+
+      def.resolve({ html: html, style: style });
+    }.bind(this));
+
+    return def;
   },
 };
