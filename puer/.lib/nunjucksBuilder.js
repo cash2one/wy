@@ -1,4 +1,7 @@
 'use strict';
+// 如果以后，需要跨目录编译，
+// 建议监听需要跨越的目录，然后，把所有目录，复制到当前界面的 __template 目录，然后再进行编译~~~
+
 const toNunjucks = require('./toNunjucks');
 const nunjucks = require('nunjucks');
 const path = require('path');
@@ -7,12 +10,12 @@ const fs = require('fs-extra');
 
 nunjucks.configure({
   tags: {
-    blockStart: '{#',
-    blockEnd: '#}',
+    blockStart: '{%',
+    blockEnd: '%}',
     variableStart: '{{',
     variableEnd: '}}',
-    commentStart: '{!',
-    commentEnd: '!}'
+    commentStart: '{#',
+    commentEnd: '#}'
   }
 });
 
@@ -23,44 +26,22 @@ const DIR = config.DIR,
   INCLUDE_DIR = config.INCLUDE_DIR,
   CODE = config.CODE;
 
-
 const defaultOptions = {
-  HTMLENCODE: function(str) {
-    return str;
-  },
-  __include: function(file, data) {
-    const filePath = util.isFileExistAndGetName(INCLUDE_DIR, file);
-    if (filePath) {
-      let html = util.readFile(filePath, CODE);
-      html = toNunjucks(html);
-      try {
-        return nunjucks.renderString(html, data || {});
-      } catch (e) {
-        console.error(e);
-        console.log(file);
-        console.log(html);
-      }
-    }
-    return `<p>缺少文件 #${file}</p>`;
-  },
-  __comments: function(key) {
-    return `<!--${key}-->`;
-  }
+  // 默认参数??
 };
 
 module.exports = {
-  build: function(name, res) {
+  build(name, res) {
     // 读取模板文件
-    const filePath = util.isFileExistAndGetName(PAT_DIR, `${name}.pat`);
+    const filePath = util.isFileExistAndGetName(PAT_DIR, `${name}.html`);
     if (filePath) {
-      let html = util.readFile(filePath, CODE);
-      html = toNunjucks(html);
+      nunjucks.configure(path.dirname(filePath));
       let data = util.readMock(path.join(DATA_DIR, `${name}.js`));
       data = Object.assign({}, defaultOptions, data || {});
       data.__ctx__ = data;
 
       try {
-        const result = nunjucks.renderString(html, data);
+        const result = nunjucks.render(path.basename(filePath), data);
         res.set('content-type', 'text/html');
         res.send(result);
       } catch (e) {
@@ -70,5 +51,5 @@ module.exports = {
     } else {
       res.send(404, `can not find ${name}`);
     }
-  }
+  },
 };

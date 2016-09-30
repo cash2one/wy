@@ -1,10 +1,8 @@
 {
-  "dir": "E:\\project\\tmp-pc\\cbg\\pat",
-  "pat": "E:\\project\\tmp-pc\\cbg\\pat\\xyq",
-  "include": "./xyq/",
+  "dir": "./",
+  "pat": "./template",
+  "include": "./template",
   "static": "./static",
-  "staticPort": 6000,
-  "staticBackup": "./common",
-  "data": "data/qn",
-  "code": "gbk"
+  "data": "data",
+  "code": "utf8"
 }
