@@ -11,8 +11,8 @@ nunjucks.configure({
     blockEnd: '#}',
     variableStart: '{{',
     variableEnd: '}}',
-    commentStart: '{!',
-    commentEnd: '!}'
+    commentStart: '{@',
+    commentEnd: '@}'
   }
 });
 

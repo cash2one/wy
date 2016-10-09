@@ -8,17 +8,6 @@ const path = require('path');
 const util = require('./util');
 const fs = require('fs-extra');
 
-nunjucks.configure({
-  tags: {
-    blockStart: '{%',
-    blockEnd: '%}',
-    variableStart: '{{',
-    variableEnd: '}}',
-    commentStart: '{#',
-    commentEnd: '#}'
-  }
-});
-
 const config = require('./config');
 const DIR = config.DIR,
   DATA_DIR = config.DATA_DIR,
@@ -32,6 +21,16 @@ const defaultOptions = {
 
 module.exports = {
   build(name, res) {
+    nunjucks.configure({
+      tags: {
+        blockStart: '{%',
+        blockEnd: '%}',
+        variableStart: '{{',
+        variableEnd: '}}',
+        commentStart: '{#',
+        commentEnd: '#}'
+      }
+    });
     // 读取模板文件
     const filePath = util.isFileExistAndGetName(PAT_DIR, `${name}.html`);
     if (filePath) {

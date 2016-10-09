@@ -28,7 +28,7 @@ module.exports = options => {
           body = body.toString('utf8');
         }
         if (!~body.indexOf('</head>')) {
-          return send(code, body);
+          return send(body);
         }
 
         const injectHTML = options.injects.join('');

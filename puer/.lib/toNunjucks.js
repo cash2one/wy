@@ -34,7 +34,7 @@ function untilNextEnd(html, index) {
     }
     list = content.split(START_TAG);
   }
-  
+
 
   return {
     next: nextIndex,
@@ -51,7 +51,7 @@ function untilNextStart(html, index) {
     result = html.substring(index, nextIndex);
     nextIndex = nextIndex + START_TAG_LENGTH;
   }
-  
+
   return {
     next: nextIndex,
     html: result
@@ -96,7 +96,7 @@ function convertTag(str) {
     if (/^\w*$/g.test(str)) {
       let key = loopDeep > 0 ? 'item.' + str : str;
       return `{{ ${key} | default(${str}) | default(__comments('${safeString(key)}')) | safe }}`;
-    } else if (/\w+\s*?\(\s*?\w+\s*?\)/g.test(str)) {
+    } else if (/^\w+\s*?\(\s*?\w+\s*?\)/g.test(str)) {
       let list = /(\w+)\s*\((\w+)\s*\)/g.exec(str);
       let method = list[1];
       let key = list[2];
