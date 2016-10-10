@@ -3,15 +3,19 @@
 const fs = require('fs');
 const path = require('path');
 const iconv = require('iconv-lite');
-const require1 = require('./require1');
+const require1 = require('../require1');
 
 module.exports = {
-  isFileExistAndGetName: function(dirs, filename) {
+  isHttpURI (uri) {
+    return /^http/.test(uri);
+  },
+
+  isFileExistAndGetName (dirs, filename) {
     let result = this.findNextExist(dirs, filename);
     return result.filename;
   },
 
-  findNextExist: function(dirs, filename, start) {
+  findNextExist (dirs, filename, start) {
     if (typeof dirs === 'string') {
       dirs = [dirs];
     }
@@ -24,7 +28,7 @@ module.exports = {
     for (let i = start || 0, max = dirs.length; i < max; i++) {
       let dir = dirs[i];
       let filePath = path.join(dir, filename) || '';
-      if (/^http/.test(filePath)) {
+      if (this.isHttpURI(filePath)) {
         result.start = i;
         result.filename = dir + filename;
         break;
@@ -38,11 +42,11 @@ module.exports = {
     return result;
   },
 
-  readFile: function(filePath, code) {
+  readFile (filePath, code) {
     return this.decode(fs.readFileSync(filePath), code);
   },
 
-  readMock: function(filePath, defaultData) {
+  readMock (filePath, defaultData) {
     if (!fs.existsSync(filePath)) {
       return defaultData || {};
     }
@@ -50,7 +54,7 @@ module.exports = {
     return typeof fn === 'function' ? fn() : fn;
   },
 
-  decode: function(bytes, code) {
+  decode (bytes, code) {
     return iconv.decode(bytes, code);
   }
 };

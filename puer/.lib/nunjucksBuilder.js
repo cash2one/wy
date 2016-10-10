@@ -5,7 +5,7 @@
 const toNunjucks = require('./toNunjucks');
 const nunjucks = require('nunjucks');
 const path = require('path');
-const util = require('./util');
+const util = require('./common/util');
 const fs = require('fs-extra');
 
 const config = require('./config');

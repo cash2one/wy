@@ -44,13 +44,21 @@ const server = app.listen(3000, () => {
 });
 
 const reloadServer = reload(server, app);
+
 // 监听所有需要的地方
-watcher.watch(require('./.lib/config').ALL_PATHS, function(path) {
-  try {
-    reloadServer.reload();
-  } catch(e) {
-    console.log('ignore one reload');
-  }
+let reloadTimer;
+require('./.lib/tmpDirMiddleware').init(function(path) {
+  clearTimeout(reloadTimer);
+  reloadTimer = setTimeout(() => {
+    console.log(`change: ${path}`.gray);
+
+    // 刷新太快, ws 会挂掉~
+    try {
+      reloadServer.reload();
+    } catch(e) {
+      console.log('ignore one reload');
+    }
+  }, 10);
 });
 
 if (pkg.router) {

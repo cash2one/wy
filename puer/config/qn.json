@@ -4,7 +4,6 @@
   "include": "./pat/qn",
   "static": "./htdocs/foreground/qn",
   "staticBackup": "./htdocs/foreground/common",
-  "staticPort": 3000,
   "data": "./data/qn",
   "code": "gbk"
 }

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "router": "./route.js",
-  "config": "./config/tx2.json",
+  "config": "./config/xyq.json",
   "dependencies": {
     "body-parser": "^1.15.2",
     "bufferhelper": "^0.2.1",

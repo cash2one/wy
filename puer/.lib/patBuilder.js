@@ -2,10 +2,10 @@
 const toNunjucks = require('./toNunjucks');
 const nunjucks = require('nunjucks');
 const path = require('path');
-const util = require('./util');
+const util = require('./common/util');
 const fs = require('fs-extra');
 
-const template = new nunjucks.Environment({
+const template = new nunjucks.Environment(new nunjucks.FileSystemLoader(process.cwd()), {
   tags: {
     blockStart: '{#',
     blockEnd: '#}',
@@ -55,6 +55,7 @@ module.exports = {
     if (filePath) {
       let html = util.readFile(filePath, CODE);
       html = toNunjucks(html);
+
       let data = util.readMock(path.join(DATA_DIR, `${name}.js`));
       data = Object.assign({}, defaultOptions, data || {});
       data.__ctx__ = data;

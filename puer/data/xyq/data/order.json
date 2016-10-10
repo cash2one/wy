@@ -15,11 +15,12 @@
     "orderid": 123,
     "orderid_to_epay": 789,
     "cur_query_tag": "xxx",
-    "game_ordersn": 7788,
+    "game_ordersn": "copytest_1475201030",
     "status": 6,
     "equip_status": 2,
     "all_buyer_poundage": 110000,
-    "fair_show_buy_poundage": 20000
+    "fair_show_buy_poundage": 20000,
+    "equip_serverid": "496"
   },
   {
     "equipid": "4932",
@@ -51,6 +52,7 @@
     "serverid": "496",
     "serversn": "89",
     "all_buyer_poundage": 20000,
-    "fair_show_buy_poundage": 500000
+    "fair_show_buy_poundage": 500000,
+    "equip_serverid": 2
   }
 ]

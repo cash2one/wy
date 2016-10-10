@@ -3,7 +3,6 @@
   "pat": ["./pat/tx2"],
   "include": ["./pat/tx2"],
   "static": ["./htdocs/foreground/tx2", "./htdocs/foreground/common", "http://tx3.cbg.163.com/", "http://res.tx3.cbg.163.com/"],
-  "staticPort": 3000,
   "data": "./data/tx2",
   "code": "gbk"
 }

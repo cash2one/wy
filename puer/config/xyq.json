@@ -3,7 +3,6 @@
   "pat": ["./pat/xyq"],
   "include": ["./pat/xyq"],
   "static": ["./htdocs/foreground/xyq", "./htdocs/foreground/common", "http://xyq.cbg.163.com/", "http://res.xyq.cbg.163.com/"],
-  "staticPort": 3000,
   "data": "./data/xyq",
   "code": "gbk"
 }

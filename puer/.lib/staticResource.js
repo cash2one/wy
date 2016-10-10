@@ -1,7 +1,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const util = require('./util');
+const util = require('./common/util');
 const config = require('./config');
 const request = require('./request');
 const Types = require('./types');

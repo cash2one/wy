@@ -2,16 +2,28 @@
 
 const pkg = require('../package.json');
 const path = require('path');
+const util = require('./common/util');
 const config = require(path.join(process.cwd(), pkg.config));
 
+// 模板根目录
 const DIR = getRealPath(config.dir, process.cwd())[0];
+// 数据文件目录
 const DATA_DIR = getRealPath(config.data, process.cwd())[0];
+// 模板文件目录
 const PAT_DIR = getRealPath(config.pat, DIR);
+// 静态文件目录
 const STATIC_DIR =  getRealPath(config.static, DIR);
+// 模板 include 方法对应的目录
 const INCLUDE_DIR = getRealPath(config.include, DIR);
+// 临时编译目录
+const TMP_DIR = path.join(process.cwd(), '__tmp_' + pkg.config.split(/\/+|\\+|\./).slice(-3, -1).join('_'));
+// 临时编译目录，静态文件放置路径
+const TMP_STATIC_DIR = path.join(TMP_DIR, '__static__');
+// 模板、脚本、样式在编译前的编码
 const CODE = config.code;
-const STATIC_PORT = config.staticPort || 3000;
-// 文件的目录列表
+// 静态文件端口号
+const STATIC_PORT = 3000;
+// 需要监听的全部的目录
 const ALL_PATHS = generaWatchPaths([DATA_DIR, PAT_DIR, STATIC_DIR, INCLUDE_DIR]);
 
 function getRealPath(dirs, root) {
@@ -19,7 +31,7 @@ function getRealPath(dirs, root) {
     let result = [];
     for (let i = 0, max = dirs.length; i < max; i++) {
       let dir = dirs[i];
-      result.push(/^http/.test(dir) ? dir : path.join(root, dir));
+      result.push(util.isHttpURI(dir) ? dir : path.join(root, dir));
     }
     return result;
   }
@@ -32,7 +44,7 @@ function generaWatchPaths(list) {
       arr = [arr];
     }
     arr.forEach(dir => {
-      !/^http/.test(dir) && res.push(dir);
+      !util.isHttpURI(dir) && res.push(dir);
     });
     return res;
   }, []).sort();
@@ -57,5 +69,5 @@ function generaWatchPaths(list) {
 }
 
 module.exports = {
-  DIR, DATA_DIR, PAT_DIR, STATIC_DIR, INCLUDE_DIR, CODE, STATIC_PORT, ALL_PATHS
+  DIR, DATA_DIR, PAT_DIR, STATIC_DIR, INCLUDE_DIR, CODE, STATIC_PORT, TMP_DIR, ALL_PATHS
 };

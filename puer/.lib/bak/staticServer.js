@@ -1,7 +1,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const util = require('./util');
+const util = require('./common/util');
 const iconv = require('iconv-lite');
 const urllib = require('urllib');
 const config = require('./config');
