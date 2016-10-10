@@ -3,7 +3,13 @@
 // 每次调用 next, 返回下一个 <!-- --> 相关的开始位置，结束位置，以及中间内容 --> { start: 0, end: 10, content: '你们好啊'}
 // 当找不到下一个词汇时，返回 null，代表结束
 function Syntaxer(html, options) {
+  this.html = html || '';
+  this.tagEnd = options && options.tagEnd || '-->';
+  this.tagStart = options && options.tagStart || '<!--';
+  this.tagEndLen = this.tagEnd.length;
+  this.tagStartLen = this.tagStart.length;
 
+  this.indexOfStart = 0;
 }
 
 Syntaxer.prototype = {
