@@ -1,5 +1,5 @@
 'use strict';
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 const util = require('./common/util');
 const config = require('./config');
@@ -9,6 +9,7 @@ const Types = require('./types');
 const CODE = config.CODE;
 const PORT = config.STATIC_PORT || 5000;
 const STATIC_DIR = config.STATIC_DIR;
+const TMP_STATIC_DIR = config.TMP_STATIC_DIR;
 
 // 请求转发，尝试遍历所有静态目录，寻找资源
 function forwardRequest(url, req, res, next, start) {
@@ -21,6 +22,14 @@ function forwardRequest(url, req, res, next, start) {
       request(filename)
         .then(
           data => {
+            try {
+              let targetFile = path.join(TMP_STATIC_DIR, url);
+              fs.ensureDirSync(path.dirname(targetFile));
+              fs.writeFileSync(targetFile, data.slice(0));
+            } catch (e) {
+              console.log(`create ${url} failed`);
+            }
+
             decode(res, data, type);
           },
           error => forwardRequest(url, req, res, next, result.start + 1)
