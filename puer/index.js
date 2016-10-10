@@ -46,7 +46,11 @@ const server = app.listen(3000, () => {
 const reloadServer = reload(server, app);
 // 监听所有需要的地方
 watcher.watch(require('./.lib/config').ALL_PATHS, function(path) {
-  reloadServer.reload();
+  try {
+    reloadServer.reload();
+  } catch(e) {
+    console.log('ignore one reload');
+  }
 });
 
 if (pkg.router) {
@@ -56,7 +60,11 @@ if (pkg.router) {
 
     console.log(`watching route file: ${path.basename(routerConfigPath)}`.green);
     watcher.watch(routerConfigPath, path => {
-      reloadServer.reload();
+      try {
+        reloadServer.reload();
+      } catch(e) {
+        console.log('ignore one reload');
+      }
     });
   }
 }

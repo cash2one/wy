@@ -5,7 +5,7 @@ const path = require('path');
 const util = require('./util');
 const fs = require('fs-extra');
 
-nunjucks.configure({
+const template = new nunjucks.Environment({
   tags: {
     blockStart: '{#',
     blockEnd: '#}',
@@ -34,7 +34,7 @@ const defaultOptions = {
       let html = util.readFile(filePath, CODE);
       html = toNunjucks(html);
       try {
-        return nunjucks.renderString(html, data || {});
+        return template.renderString(html, data || {});
       } catch (e) {
         console.error(e);
         console.log(file);
@@ -60,7 +60,7 @@ module.exports = {
       data.__ctx__ = data;
 
       try {
-        const result = nunjucks.renderString(html, data);
+        const result = template.renderString(html, data);
         res.set('content-type', 'text/html');
         res.send(result);
       } catch (e) {

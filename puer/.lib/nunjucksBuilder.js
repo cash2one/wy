@@ -21,26 +21,27 @@ const defaultOptions = {
 
 module.exports = {
   build(name, res) {
-    nunjucks.configure({
-      tags: {
-        blockStart: '{%',
-        blockEnd: '%}',
-        variableStart: '{{',
-        variableEnd: '}}',
-        commentStart: '{#',
-        commentEnd: '#}'
-      }
-    });
     // 读取模板文件
     const filePath = util.isFileExistAndGetName(PAT_DIR, `${name}.html`);
     if (filePath) {
-      nunjucks.configure(path.dirname(filePath));
+
+      const environment = new nunjucks.Environment(new nunjucks.FileSystemLoader(path.dirname(filePath)), {
+        tags: {
+          blockStart: '{%',
+          blockEnd: '%}',
+          variableStart: '{{',
+          variableEnd: '}}',
+          commentStart: '{#',
+          commentEnd: '#}'
+        }
+      });
+
       let data = util.readMock(path.join(DATA_DIR, `${name}.js`));
       data = Object.assign({}, defaultOptions, data || {});
       data.__ctx__ = data;
 
       try {
-        const result = nunjucks.render(path.basename(filePath), data);
+        const result = environment.render(path.basename(filePath), data);
         res.set('content-type', 'text/html');
         res.send(result);
       } catch (e) {
