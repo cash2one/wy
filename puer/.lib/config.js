@@ -13,6 +13,8 @@ const DATA_DIR = getRealPath(config.data, process.cwd())[0];
 const PAT_DIR = getRealPath(config.pat, DIR);
 // 静态文件目录
 const STATIC_DIR =  getRealPath(config.static, DIR);
+// 需要监听的静态目录
+const WATCH_STATIC_DIRS = generaWatchPaths([STATIC_DIR]);
 // 模板 include 方法对应的目录
 const INCLUDE_DIR = getRealPath(config.include, DIR);
 // 临时编译目录
@@ -69,5 +71,5 @@ function generaWatchPaths(list) {
 }
 
 module.exports = {
-  DIR, DATA_DIR, PAT_DIR, STATIC_DIR, INCLUDE_DIR, CODE, STATIC_PORT, TMP_DIR, ALL_PATHS
+  DIR, DATA_DIR, PAT_DIR, STATIC_DIR, WATCH_STATIC_DIRS, INCLUDE_DIR, CODE, STATIC_PORT, TMP_DIR, ALL_PATHS
 };

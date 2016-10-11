@@ -44,6 +44,16 @@ const server = app.listen(3000, () => {
 });
 
 const reloadServer = reload(server, app);
+const config = require('./.lib/config');
+
+function reloadWeb() {
+  // 刷新太快, ws 会挂掉~
+  try {
+    reloadServer.reload();
+  } catch(e) {
+    console.log('ignore one reload');
+  }
+}
 
 // 监听所有需要的地方
 let reloadTimer;
@@ -51,15 +61,13 @@ require('./.lib/tmpDirMiddleware').init(function(path) {
   clearTimeout(reloadTimer);
   reloadTimer = setTimeout(() => {
     console.log(`change: ${path}`.gray);
-
-    // 刷新太快, ws 会挂掉~
-    try {
-      reloadServer.reload();
-    } catch(e) {
-      console.log('ignore one reload');
-    }
+    reloadWeb();
   }, 10);
 });
+
+// 监听数据文件变化
+watcher.watch([config.DATA_DIR], reloadWeb);
+watcher.watch(config.WATCH_STATIC_DIRS, reloadWeb);
 
 if (pkg.router) {
   const routerConfigPath = path.join(__dirname, pkg.router);
@@ -68,11 +76,7 @@ if (pkg.router) {
 
     console.log(`watching route file: ${path.basename(routerConfigPath)}`.green);
     watcher.watch(routerConfigPath, path => {
-      try {
-        reloadServer.reload();
-      } catch(e) {
-        console.log('ignore one reload');
-      }
+      reloadWeb();
     });
   }
 }
