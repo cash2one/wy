@@ -62,6 +62,7 @@ Syntaxer.prototype = {
     var start = this.nextStart(this.indexNextStart, this.tagStart);
     if (!start) {
       isDone = true;
+      indexFinalEnd = this.content.length - 1;
     } else {
       contentPrev = start.contentPrev;
       indexStart = start.indexStart;
@@ -71,10 +72,8 @@ Syntaxer.prototype = {
       // 结束标签
       var end = this.nextEnd(this.indexNextStart, this.tagEnd, this.tagStart);
       if (!end) {
-        contentPrev += tagStart;
-        tagStart = '';
         isDone = true;
-        indexFinalEnd = this.content.length;
+        indexFinalEnd = this.content.length - 1;
       } else {
         indexEnd = end.indexEnd;
         content = end.contentPrev;
@@ -203,8 +202,8 @@ Syntaxer.prototype = {
 
 var syntaxer = new Syntaxer('我们 <!-- hello <!-- 哈哈 --> x--> 你自己看看咯 <!-- xxyiu', { tagStart: '<!--', endTag: '-->' });
 
-var res;
-do {
-  res = syntaxer.next();
-  console.log(res);
-} while (!res.done);
+// var res;
+// do {
+//   res = syntaxer.next();
+//   console.log(res);
+// } while (!res.done);
