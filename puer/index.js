@@ -67,7 +67,6 @@ require('./.lib/tmpDirMiddleware').init(function(path) {
 
 // 监听数据文件变化
 watcher.watch([config.DATA_DIR], reloadWeb);
-watcher.watch(config.WATCH_STATIC_DIRS, reloadWeb);
 
 if (pkg.router) {
   const routerConfigPath = path.join(__dirname, pkg.router);
