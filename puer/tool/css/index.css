@@ -1,0 +1,95 @@
+* { box-sizing: border-box; }
+html, body { width: 100%; }
+html { height: 100%; }
+body { min-height: 100%; display: flex; align-items: stretch; font-family: "微软雅黑"; }
+
+input, textarea { padding: 5px; font-size: 14px; border: 1px solid #bfbfbf; border-radius: 4px; vertical-align: middle; transition: border-color .3s ease; }
+input { height: 34px; line-height: 34px;  }
+textarea { display: block; width: 100%; resize: vertical; }
+textarea:focus, input:focus { border-color: #5d96ec; outline: none; }
+a:hover { text-decoration: none; }
+
+.button {
+  display: inline-block;
+  height: 34px;
+  line-height: 34px;
+  padding: 0 12px;
+  margin: 0 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  color: #fff;
+  background: #fff;
+  border-radius: 4px;
+  vertical-align: middle;
+  transition: opacity .3s ease;
+}
+.button:hover {
+  opacity: .9;
+}
+.button:first-child { margin-left: 0; }
+.button:last-child { margin-right: 0; }
+.button-suc { background: #2d6ca2; }
+.button-danger { background: #c12e2a; }
+
+#navbar {
+  position: fixed;
+  width: 70px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+#navbar .item {
+  display: block;
+  line-height: 70px;
+  font-size: 18px;
+  text-align: center;
+  writing-mode: vertical-lr;
+  flex: 1;
+
+  border-bottom: 1px solid #fff;
+  color: #fff;
+  background: #2aabd2;
+  transition: background .3s ease, box-shadow .3s ease;
+}
+#navbar .item:hover {
+  text-decoration: none;
+}
+#navbar .active.item {
+  background: #34b9ec;
+  box-shadow: 2px 0px 5px #55a8fd, 5px 0px 6px #383838;
+}
+
+#content {
+  flex: 1;
+  margin: 2px 5px 2px 80px;
+}
+#content .module {
+  margin-top: 10px;
+}
+#content .module:first-child {
+  margin-top: 0;
+}
+#content .tip {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+#content .dataCommon {
+  min-height: 70px;
+}
+#content .codeModule {
+  display: flex;
+  min-height: 500px;
+}
+#content .codeWrapper {
+  flex: 1;
+  margin: 0 1px;
+  display: flex;
+  flex-direction: column;
+}
+#content .code {
+  flex: 1;
+}
+#content .operaModule {
+  font-size: 0;
+  text-align: right;
+}

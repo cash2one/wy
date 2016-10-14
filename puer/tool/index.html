@@ -9,10 +9,45 @@
 </head>
 <body>
 
+<nav id="navbar">
+  <a href="javascript:;" class="item" data-change="pat">
+    模板文件提取
+  </a>
+  <a href="javascript:;" class="item" data-change="text">
+    文本提取
+  </a>
+</nav>
+
+<div id="content">
+  <div class="module">
+    <p class="tip">默认数据[此数据优先级最高，将覆盖掉最后生成的数据]:</p>
+    <textarea class="dataCommon" id="dataCommon">{}</textarea>
+  </div>
+
+  <div class="module" data-belong="pat">
+    <p class="tip">模板名字:</p>
+    <input type="input" value="query.pat" />
+    <a href="javascript:;" class="button button-danger import">加载模板</a>
+  </div>
+
+  <div class="module codeModule">
+    <div class="codeWrapper">
+      <p class="tip">模板源码:</p>
+      <textarea class="code templateCode" id="templateCode"></textarea>
+    </div>
+    <div class="codeWrapper">
+      <p class="tip">网页源码:</p>
+      <textarea class="code sourceCode" id="sourceCode"></textarea>
+    </div>
+  </div>
+
+  <div class="module operaModule">
+    <a href="javascript:;" class="button button-suc extract">提取数据</a>
+  </div>
+</div>
+
 <script src="./js/syntaxer.js"></script>
-<script>
-  
-</script>
+<script src="./js/datapickuper.js"></script>
 <script src="./js/index.js"></script>
 </body>
 </html>

@@ -81,8 +81,8 @@ function convertTag(str) {
         variable = str.replace(/\s*(.*)Begin\s*:\s*/g, '$1');
         loopDeep++;
         return [
-          '{# if '+ variable +' #}',
-          '{# for item in '+ variable +' #}'
+          `{# if ${loopDeep > 1 ? 'item' + (loopDeep - 1) + '.' + variable : variable} #}`,
+          `{# for item${loopDeep} in ${loopDeep > 1 ? 'item' + (loopDeep - 1) + '.' + variable : variable} #}`
         ].join('\n');
       } else {
         loopDeep--;
@@ -94,14 +94,43 @@ function convertTag(str) {
     }
   } else {
     if (/^\w*$/g.test(str)) {
-      let key = loopDeep > 0 ? 'item.' + str : str;
-      return `{{ ${key} | default(${str}) | default(__comments('${safeString(key)}')) | safe }}`;
+      var vals = '';
+
+      if (loopDeep > 0) {
+        for (let i = loopDeep; i > 0; i--) {
+          if (i === loopDeep) {
+            vals += `item${i}.${str} `;
+          } else {
+            vals += `| default(item${i}.${str})`;
+          }
+        }
+      } else {
+        vals += `${str}`;
+      }
+      vals += ` | default(${str})`;
+
+      return `{{ ${vals} | default(__comments('${safeString(str)}')) | safe }}`;
     } else if (/^\w+\s*?\(\s*?\w+\s*?\)/g.test(str)) {
       let list = /(\w+)\s*\((\w+)\s*\)/g.exec(str);
       let method = list[1];
       let key = list[2];
-      loopDeep > 0 && (key = 'item.' + key);
-      return `{{ ${method}(${key}) | default(${method}(${key})) | default(__comments('${safeString(key)}')) | safe }}`;
+
+      var vals = '';
+      if (loopDeep > 0) {
+        for (let i = loopDeep; i > 0; i--) {
+          if (i === loopDeep) {
+            vals += `${method}(item${i}.${key}) `;
+          } else {
+            vals += `| default(${method}(item${i}.${key}))`;
+          }
+        }
+      } else {
+        vals = `${method}(${key})`;
+      }
+
+      vals += ` | default(${method}(${key}))`;
+
+      return `{{ ${vals} | default(__comments('${safeString(str)}')) | safe }}`;
     }
     return `{{ __comments('${safeString(str)}') | safe }}`;
   }

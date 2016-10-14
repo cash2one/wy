@@ -3,7 +3,7 @@
 const pkg = require('../package.json');
 const path = require('path');
 const util = require('./common/util');
-const config = require(path.join(process.cwd(), pkg.config));
+const config = require(path.join(__dirname, '../', pkg.config));
 
 // 模板根目录
 const DIR = getRealPath(config.dir, process.cwd())[0];
