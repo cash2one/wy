@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>mootools 事件代理</title>
+</head>
+<body>
+
+<div id="test" class="f_module">
+  <div class="icon_wrap">
+    <img data-original="http://res.xyq.cbg.163.com/images/big/3149.gif" src="http://res.xyq.cbg.163.com/images/big/3149.gif" class="icon" is-in-view="1">
+  </div>
+  <div class="cnt">
+    <div class="title">游戏币</div>
+    <div class="desc">道具类</div>
+  </div>
+  <div class="classify">分类:<span>游戏币</span></div>
+</div>
+
+<script src="./mootools.js"></script>
+<script>
+  ;(function(Element) {
+    var KEY_PROXY = '_event_proxy_map';
+
+    function getProxy($el) {
+      return $el[KEY_PROXY] ? $el[KEY_PROXY] : ($el[KEY_PROXY] = {});
+    }
+
+    function getProxyKey(evt, selector) {
+      return evt + ' ' + selector;
+    }
+
+    function getMatchElem($root, $el, selector) {
+      if ($el.match(selector)) {
+        return $el;
+      }
+      var $pt = $el.getParent(selector);
+      if ($root.contains($pt)) {
+        return $pt;
+      }
+
+      return null;
+    }
+
+    function addItemAtProxy($el, evt, selector, fn) {
+      var proxy = getProxy($el);
+      var key = getProxyKey(evt, selector);
+
+      if (!proxy[key]) {
+        proxy[key] = {
+          list: [],
+          fn: function(e) {
+            // 注入现在代理的元素
+            e.proxyTarget = $el;
+            var $cur = getMatchElem($el, e.target, selector);
+            if ($cur) {
+              runItemAtProxy(proxy[key].list, $cur, arguments);
+            }
+          }
+        };
+      }
+      proxy[key].list.push(fn);
+
+      $el.addEvent(evt, proxy[key].fn);
+    }
+
+    // 如果任何一个函数，return true，则停止运行后面的函数
+    function runItemAtProxy(items, ctx, args) {
+      var isStop = false;
+      items.each(function(fn) {
+        if (isStop) {
+          return;
+        }
+        isStop = !!fn.apply(ctx, args);
+      });
+    }
+
+    Element.implement({
+      on: function(evt, selector, fn) {
+        var $el = this;
+        if (typeof fn === 'function') {
+          addItemAtProxy(this, evt, selector, fn);
+        }
+        return $el;
+      },
+      off: function(evt, selector, fn) {
+        var $el = this;
+        var proxy = getProxy($el);
+        var key = getProxyKey(evt, selector);
+
+        if (!proxy[key]) {
+          return $el;
+        }
+
+        if (typeof fn === 'function') {
+          proxy[key].list.erase(fn);
+        } else {
+          proxy[key].list = [];
+        }
+
+        return $el;
+      },
+      trigger: function(evt, selector, args) {
+        var $el = this;
+        var proxy = getProxy($el);
+        var key = getProxyKey(evt, selector);
+
+        if (proxy[key]) {
+          var list = proxy[key].list;
+          $el.getElements(selector).each(function(el) {
+            runItemAtProxy(list, el, [{ target: el, proxyTarget: $el }].concat(args || []));
+          });
+        }
+
+        return $el;
+      }
+    });
+  })(Element);
+</script>
+<script>
+  var $root = $('test');
+  var fn = function(e) {
+    console.log(e);
+    console.log(this);
+    console.log('classify');
+
+    // $root.off('click', '.classify');
+    // $root.off('click', '.classify', fn);
+    return true;
+  };
+  $root.on('click', '.classify', fn);
+  $root.on('click', '.classify', function() {
+    console.log('classify2');
+  });
+</script>
+
+</body>
+</html>
