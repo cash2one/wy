@@ -1,5 +1,5 @@
 'use strict';
-// DataPickuper = DataPickuper.init(Syntaxer);
+DataPickuper = DataPickuper.init(Syntaxer);
 var URL_AJAX = 'http://localhost:5000/';
 
 // 初始化 navbar 以及 其中的 tab 操作
@@ -22,11 +22,100 @@ var URL_AJAX = 'http://localhost:5000/';
   $navbar.find('.item').eq(0).click();
 })($('#navbar'), $('#content'));
 
+function Dialog(rootSelector) {
+  this.$root = $(rootSelector);
+  this.init();
+}
+Dialog.prototype = {
+  init: function() {
+    this.$data = this.$root.find('.data');
+    this.$save = this.$root.find('.save');
+    this.$close = this.$root.find('.close');
+    this.savePath = '';
+
+    this.bindUI();
+  },
+  bindUI: function() {
+    var ctx = this;
+
+    ctx.$save.click(function() {
+      var content = ctx.$data.val().trim();
+      var filename = window.prompt('保存路径:', ctx.savePath);
+
+      if (!filename) {
+        return;
+      }
+
+      $.post('/pat/data/save', { content: content, filename: filename })
+        .done(function() {
+          alert('保存成功');
+        })
+        .fail(function() {
+          alert('保存失败');
+        });
+    });
+
+    ctx.$close.click(function() {
+      ctx.hide();
+    });
+  },
+  setContent: function(content) {
+    this.$data.val($.trim(content));
+    return this;
+  },
+  setSavePath: function(savePath) {
+    this.savePath = savePath;
+    return this;
+  },
+  show: function() {
+    this.$root.addClass('active');
+    return this;
+  },
+  hide: function() {
+    this.$root.removeClass('active');
+    return this;
+  }
+};
 
 // 内容区域的ui
 (function initContentUI($root) {
   var $textTmp = $root.find('.templateCode'),
-      $textSou = $root.find('.sourceCode');
+      $textSou = $root.find('.sourceCode'),
+      $defaultData = $('#dataCommon');
+
+  function getDefaulData() {
+    try {
+      var data = $defaultData.val().trim();
+      return JSON.parse(data);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function combineWithDefault(data) {
+    var common = getDefaulData();
+    if (!common) {
+      return data;
+    }
+
+    $.extend(data, common);
+
+    // 如果是数据，需要再合并一轮
+    for (var key in data) {
+      if (data.hasOwnProperty(key) && Array.isArray(data[key])) {
+        data[key].forEach(function(item) {
+          Object.keys(item).forEach(function(ikey) {
+            if (ikey in common) {
+              item[ikey] = common[ikey];
+            }
+          });
+        });
+      }
+    }
+
+    return data;
+  }
+
   // 加载模板
   $root.on('click', '.import', function() {
     var filename = $(this).siblings('input').val().trim();
@@ -42,6 +131,7 @@ var URL_AJAX = 'http://localhost:5000/';
   });
 
   // 提取数据
+  var dialog = new Dialog('#dialog');
   $root.on('click', '.extract', function() {
     var template = $textTmp.val().trim();
     var html = $textSou.val().trim();
@@ -53,16 +143,18 @@ var URL_AJAX = 'http://localhost:5000/';
     var dataPickuper = new DataPickuper(template, html, {
       maxLoop: 20
     });
-    console.log(
-      JSON.stringify(dataPickuper.generateData(), null, 2)
-    );
+    var data = dataPickuper.generateData();
+    data = combineWithDefault(data);
+
+    dialog
+      .setSavePath($root.find('.importInput').val().trim().split('.')[0] + '.js')
+      .setContent(JSON.stringify(data, null, 2))
+      .show();
+  });
+
+  // 公用数据
+  $.get('/pat/data/default').done(function(html) {
+    $defaultData.html(html.trim());
   });
 
 })($('#content'));
-
-
-// var html = `new R"\\b呵呵`;
-// var template = `R"\\b<!--name-->`;
-//
-// var dataPickuper = new DataPickuper(template, html);
-// console.log(dataPickuper.generateData());

@@ -407,6 +407,6 @@ login_tab_init();
 // <li class="itemXXX">yyy</li>
 // `;
 
-DataPickuper = DataPickuper.init(Syntaxer);
-var dataPickuper = new DataPickuper(template, html);
-console.log(dataPickuper.generateData());
+// DataPickuper = DataPickuper.init(Syntaxer);
+// var dataPickuper = new DataPickuper(template, html);
+// console.log(dataPickuper.generateData());

@@ -4,7 +4,7 @@ const colors = require('colors');
 const reload = require('reload');
 const path = require('path');
 const app = express();
-const fs = require('fs');
+const fs = require('fs-extra');
 
 const favicon = require('serve-favicon');
 const cookieParser = require('cookie-parser');
@@ -12,8 +12,7 @@ const bodyParser = require('body-parser');
 
 const config = require('../.lib/config');
 const util = require('../.lib/common/util');
-
-app.get('')
+const pkg = require('../package.json');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -60,7 +59,32 @@ app.get('/pat/content', (req, res, next) => {
 });
 
 app.post('/pat/data/save', (req, res, next) => {
-  next();
+  const filename = req.body.filename,
+    content = req.body.content;
+
+  const savePath = path.join(__dirname, '../data/', path.basename(pkg.config, '.json'), filename);
+  fs.ensureFileSync(savePath);
+  fs.writeFileSync(savePath, `
+'use strict';
+const combine = require('../../.lib/combine');
+module.exports = function getData() {
+  return combine([
+    ${content},
+    './com/com'
+  ], __dirname);
+};
+  `);
+
+  res.send('suc');
+});
+
+app.get('/pat/data/default', (req, res, next) => {
+  let defaultData = '{}';
+  const filePath = path.join(__dirname, './default', path.basename(pkg.config));
+  if (fs.existsSync(filePath)) {
+    defaultData = fs.readFileSync(filePath).toString();
+  }
+  res.send(defaultData);
 });
 
 app.use((req, res, next) => {

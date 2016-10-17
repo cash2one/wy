@@ -1,0 +1,8 @@
+{
+  "ResUrl": "http://localhost:3000",
+  "static_version": "",
+  "CgiRootUrl": "http://xyq.cbg.163.com/cgi-bin",
+  "PET_SKILL_URL": "http://res.xyq.cbg.163.com/images/skill/",
+  "RecommdDomain": "http://recommd.xyq.cbg.dev.webapp.163.com:8105",
+  "TrackerDomain": "http://123.58.164.185:10080"
+}
