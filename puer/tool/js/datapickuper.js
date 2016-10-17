@@ -32,7 +32,8 @@
     this.templates = this.splitTemplate();
 
     this.options = Object.assign({
-      isLoop: false
+      isLoop: false,
+      maxLoop: 20,
     }, options || {});
 
     this.init();
@@ -100,6 +101,7 @@
     _generateData: function(template, isDeepLoop) {
       var options = this.options;
       var isLoop = options.isLoop;
+      var maxLoop = options.maxLoop;
       var keys = [];
 
       // 遇到设置变量的情况，无视之
@@ -151,15 +153,17 @@
       var listMatch;
 
       if (isDeepLoop) {
-        // 深度循环
-        // var pickuper = new DataPickuper(item.template, item.html, Object.assign({}, options, { isLoop: true }));
-        // data[item.key] = pickuper.generateData();
+        // 深度循环 ((?:xxx)*) --> xxx
         regTemplate = regTemplate.replace(/^\(\(\?\:(.*?)\)\*\)$/, '$1');
         listMatch = html.match(new RegExp(regTemplate, 'g'));
 
         if (listMatch) {
           var list = [], resultKey;
-          listMatch.forEach(function(html) {
+          listMatch.forEach(function(html, index) {
+            // 不能超过最大循环数
+            if (index >= maxLoop) {
+              return;
+            }
             var data = {};
             // 将循环降维
             template.replace(/<!--#CGIEXT#([^:]*?)Begin\:-->(.*)<!--#CGIEXT#\1End\:-->/, function(str, key, tmp) {
@@ -184,9 +188,15 @@
           var res = regExpTmp.exec(html);
 
           if (html.trim() !== '') {
+            var index = 0;
             while (res) {
+              if (index >= maxLoop) {
+                break;
+              }
+
               listMatch.push.apply(listMatch, res.slice(1));
               res = regExpTmp.exec(html);
+              index++;
             }
           }
         }

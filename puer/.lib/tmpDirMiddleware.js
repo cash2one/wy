@@ -42,9 +42,9 @@ module.exports = {
     copyToTmp(patDirs.reverse());
     config.PAT_DIR = [tmpDir];
 
-    // include 目录，更变为 --> TMP_DIR/__include__
-    copyToTmp(includeDirs.reverse(), './__include__');
-    config.INCLUDE_DIR = [path.join(tmpDir, './__include__')];
+    // include 目录，更变为 --> TMP_DIR/
+    copyToTmp(includeDirs.reverse());
+    config.INCLUDE_DIR = [tmpDir];
 
     // static 目录，变更为 --> [TMP_DIR/__static__, 其他绝对路径]
     staticDirs.forEach(dir => {

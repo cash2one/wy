@@ -50,7 +50,9 @@ var URL_AJAX = 'http://localhost:5000/';
       return alert('模板和源码，不能空~');
     }
 
-    var dataPickuper = new DataPickuper(template, html);
+    var dataPickuper = new DataPickuper(template, html, {
+      maxLoop: 20
+    });
     console.log(
       JSON.stringify(dataPickuper.generateData(), null, 2)
     );
