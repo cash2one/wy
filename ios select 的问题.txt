@@ -1,0 +1,29 @@
+ios 的 select 组件，在onblur 时，会触发 onchange 事件。
+
+
+参考: http://stackoverflow.com/questions/5960731/strange-behavior-of-select-dropdowns-onchange-js-event-when-using-next-on-m/7284325#7284325
+
+// 用下面函数，代替 select 的 onchange 事件
+$.fn.quickChange = function(handler) {
+    return this.each(function() {
+        var self = this;
+        self.qcindex = self.selectedIndex;
+        var interval;
+        function handleChange() {
+            if (self.selectedIndex != self.qcindex) {
+                self.qcindex = self.selectedIndex;
+                handler.apply(self);
+            }
+        }
+        $(self).focus(function() {
+            interval = setInterval(handleChange, 100);
+        }).blur(function() { window.clearInterval(interval); })
+        .change(handleChange); // also wire the change event in case the interval technique isn't supported (chrome on android)
+    });
+};
+// =>
+$("#mySelect1").quickChange(function() { 
+    var currVal = $(this).val();
+    //populate mySelect2
+});
+

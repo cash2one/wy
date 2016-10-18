@@ -39,7 +39,7 @@ module.exports = function getData() {
   "NO_STATIC_KIND_IDS": "[23]",
   "recommd_info": "<!--recommd_info-->",
   "equip_refer_loc": "",
-  "act": "query",
+  "act": "search_role_equip",
   "auction_condition": "",
   "auction_overall": "0",
   "cur_page": "8",
@@ -746,7 +746,7 @@ module.exports = function getData() {
       ]
     }
   ],
-  "EmptyRecommandTable": [],
+  "EmptyRecommandTable": [{}],
   "QueryCollectPopup": [
     {
       "CgiRootUrl": "http://xyq.cbg.163.com/cgi-bin"
@@ -756,4 +756,3 @@ module.exports = function getData() {
     './com/com'
   ], __dirname);
 };
-  
