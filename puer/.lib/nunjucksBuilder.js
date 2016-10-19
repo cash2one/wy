@@ -23,6 +23,7 @@ module.exports = {
   build(name, res) {
     // 读取模板文件
     const filePath = util.isFileExistAndGetName(PAT_DIR, `${name}.html`);
+    console.log(filePath);
     if (filePath) {
 
       const environment = new nunjucks.Environment(new nunjucks.FileSystemLoader(path.dirname(filePath)), {
@@ -46,7 +47,7 @@ module.exports = {
         res.send(result);
       } catch (e) {
         console.error(e);
-        res.send(500, html);
+        res.send(500, fs.readFileSync(filePath).toString());
       }
     } else {
       res.send(404, `can not find ${name}`);

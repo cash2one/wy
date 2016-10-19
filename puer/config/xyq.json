@@ -1,8 +1,24 @@
 {
   "dir": "E:\\project\\charon_pat_static\\",
-  "pat": ["./pat/xyq"],
-  "include": ["./pat/xyq"],
-  "static": ["./htdocs/foreground/xyq", "./htdocs/foreground/common", "http://xyq.cbg.163.com/", "http://res.xyq.cbg.163.com/"],
+  "templates": [
+    {
+      "from": "./pat/xyq"
+    }
+  ],
+  "statics": [
+    {
+      "from": "./htdocs/foreground/common"
+    },
+    {
+      "from": "./htdocs/foreground/xyq"
+    },
+    {
+      "from": "http://xyq.cbg.163.com/"
+    },
+    {
+      "from": "http://res.xyq.cbg.163.com/"
+    }
+  ],
   "data": "./data/xyq",
   "code": "gbk"
 }

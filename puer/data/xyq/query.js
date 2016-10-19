@@ -746,7 +746,7 @@ module.exports = function getData() {
       ]
     }
   ],
-  "EmptyRecommandTable": [{}],
+  "EmptyRecommandTable": [],
   "QueryCollectPopup": [
     {
       "CgiRootUrl": "http://xyq.cbg.163.com/cgi-bin"

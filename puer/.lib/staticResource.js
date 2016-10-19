@@ -7,13 +7,12 @@ const request = require('./request');
 const Types = require('./types');
 
 const CODE = config.CODE;
-const PORT = config.STATIC_PORT || 5000;
-const STATIC_DIR = config.STATIC_DIR;
-const TMP_STATIC_DIR = config.TMP_STATIC_DIR;
+const STATIC_SOURCE_DIRS = config.STATIC_SOURCE_DIRS;
+const STATIC_TEMPORARY_DIR = config.STATIC_TEMPORARY_DIR;
 
 // 请求转发，尝试遍历所有静态目录，寻找资源
 function forwardRequest(url, req, res, next, start) {
-  let result = util.findNextExist(STATIC_DIR, url, start || 0);
+  let result = util.findNextExist(STATIC_SOURCE_DIRS, url, start || 0);
   let filename = result.filename;
   if (filename) {
     let type = Types.get(filename);
@@ -23,7 +22,7 @@ function forwardRequest(url, req, res, next, start) {
         .then(
           data => {
             try {
-              let targetFile = path.join(TMP_STATIC_DIR, url);
+              let targetFile = path.join(STATIC_TEMPORARY_DIR, url);
               fs.ensureDirSync(path.dirname(targetFile));
               fs.writeFileSync(targetFile, data.slice(0));
             } catch (e) {
@@ -52,7 +51,7 @@ function decode(res, data, type) {
 
 function query(req, res, next) {
   let url = req.url.replace(/[#?].*$/, '');
-  let filePath = util.isFileExistAndGetName(STATIC_DIR, url) || '';
+  let filePath = util.isFileExistAndGetName(STATIC_SOURCE_DIRS, url) || '';
   let type = Types.get(filePath);
   res.set('content-type', type);
 

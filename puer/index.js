@@ -37,7 +37,7 @@ app.use((req, res, next) => {
   res.send(404, 'can not find anything');
 });
 
-const server = app.listen(3000, () => {
+const server = app.listen(pkg.port || 3000, () => {
   var host = server.address().address;
   var port = server.address().port;
   console.log('Example app listening at port:%s'.bold.green, port);

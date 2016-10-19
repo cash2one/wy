@@ -1,0 +1,35 @@
+{
+  "dir": "E:\\project\\charon_pat_static\\",
+
+  "templates": [
+    {
+      "from": "./mgame"
+    },
+    {
+      "from": "./mgame", "to": "./mgame"
+    },
+    {
+      "from": "./txhd"
+    }
+  ],
+  "templateRoot": "./",
+
+  "statics": [
+    {
+      "from": "./htdocs/foreground/txhd"
+    },
+    {
+      "from": "./htdocs/foreground/mgame"
+    },
+    {
+      "from": "http://res.txhd.cbg.163.com/"
+    },
+    {
+      "from": "http://txhd.cbg.163.com/"
+    }
+  ],
+  "staticRoot": "./__static__",
+
+  "data": "./data/txhd",
+  "code": "utf8"
+}

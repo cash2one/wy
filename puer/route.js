@@ -10,6 +10,7 @@ module.exports = {
   },
 
   'GET /jj/:page.html': function(req, res, next) {
+    console.log(req.params.page);
     nunjucksBuilder.build(req.params.page, res);
   },
 

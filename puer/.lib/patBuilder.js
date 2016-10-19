@@ -19,8 +19,7 @@ const template = new nunjucks.Environment(new nunjucks.FileSystemLoader(process.
 const config = require('./config');
 const DIR = config.DIR,
   DATA_DIR = config.DATA_DIR,
-  PAT_DIR = config.PAT_DIR,
-  INCLUDE_DIR = config.INCLUDE_DIR,
+  TEMPLATE_SOURCE_DIRS = config.TEMPLATE_SOURCE_DIRS,
   CODE = config.CODE;
 
 
@@ -29,7 +28,7 @@ const defaultOptions = {
     return str;
   },
   __include: function(file, data) {
-    const filePath = util.isFileExistAndGetName(INCLUDE_DIR, file);
+    const filePath = util.isFileExistAndGetName(TEMPLATE_SOURCE_DIRS, file);
     if (filePath) {
       let html = util.readFile(filePath, CODE);
       html = toNunjucks(html);
@@ -51,7 +50,7 @@ const defaultOptions = {
 module.exports = {
   build: function(name, res) {
     // 读取模板文件
-    const filePath = util.isFileExistAndGetName(PAT_DIR, `${name}.pat`);
+    const filePath = util.isFileExistAndGetName(TEMPLATE_SOURCE_DIRS, `${name}.pat`);
     if (filePath) {
       let html = util.readFile(filePath, CODE);
       html = toNunjucks(html);

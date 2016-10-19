@@ -7,27 +7,43 @@ const util = require('./common/util');
 const colors = require('colors');
 const watcher = require('./watcher');
 const config = require('./config');
-const FileType = { pat: 1, static: 2, include: 3 };
+const FileType = { pat: 1, static: 2 };
 
-let tmpDir = config.TMP_DIR,
-  patDirs = config.PAT_DIR,
-  includeDirs = config.INCLUDE_DIR,
-  staticDirs = config.STATIC_DIR;
+// config.templates 和 config.statics 有 { from: , [to:] }, 组成的对象列表
+let tmpDir = config.TEMPORARY_DIR,
+  templateDirs = config.templates || [],
+  staticDirs = config.statics || [];
 
 let staticHttpDirs = [], staticNormalDirs = [];
 
-// 复制到临时目录
-function copyToTmp(dirs, relativePath) {
-  (dirs || []).forEach((dir) => {
-    if (!fs.existsSync(dir)) {
-      return;
-    }
-    fs.copySync(dir, path.join(tmpDir, relativePath || ''));
+// 修正路径
+function fixDirs(dirs, rootFrom, rootTo) {
+  return (dirs || []).map(item => {
+    let fr = item.from;
+    let to = item.to || './';
+
+    return {
+      "to": path.resolve(rootTo, to),
+      "from": path.resolve(rootFrom, fr)
+    };
   });
 }
 
+// 复制到临时目录
+function copyToTmp(dir, relativePath) {
+  if (!fs.existsSync(dir)) {
+    return;
+  }
+  fs.copySync(dir, path.resolve(tmpDir, relativePath || ''));
+}
+
 module.exports = {
-  init (callback) {
+  init (options, callback) {
+    if (typeof options === 'function') {
+      callback = options;
+      options = {};
+    }
+
     if (fs.existsSync(tmpDir)) {
       fs.removeSync(tmpDir);
     }
@@ -37,65 +53,42 @@ module.exports = {
   },
 
   _copyToTmp () {
-    // 最前面的目录，优先级最高啊!!!
-    // pat 目录，变更为 --> TMP_DIR/
-    copyToTmp(patDirs.reverse());
-    config.PAT_DIR = [tmpDir];
-
-    // include 目录，更变为 --> TMP_DIR/
-    copyToTmp(includeDirs.reverse());
-    config.INCLUDE_DIR = [tmpDir];
-
-    // static 目录，变更为 --> [TMP_DIR/__static__, 其他绝对路径]
-    staticDirs.forEach(dir => {
-      (util.isHttpURI(dir) ? staticHttpDirs : staticNormalDirs).push(dir);
+    // 修正当前的模板目录
+    templateDirs = fixDirs(templateDirs, config.DIR, config.TEMPLATE_TEMPORARY_DIR);
+    templateDirs.forEach(item => {
+      copyToTmp(item.from, item.to);
     });
-    copyToTmp(staticNormalDirs, './__static__');
-    config.TMP_STATIC_DIR = path.join(tmpDir, './__static__');
-    // 先检查临时目录，有的话，就不再寻找了
-    config.STATIC_DIR = [config.TMP_STATIC_DIR].concat(staticHttpDirs);
+    config.TEMPLATE_SOURCE_DIRS = [config.TEMPLATE_TEMPORARY_DIR];
+
+    // 提取静态文件的目录，和 http 目录
+    staticDirs.forEach(item => {
+      let dir = item.from || './';
+      (util.isHttpURI(dir) ? staticHttpDirs : staticNormalDirs).push(item);
+    });
+    staticNormalDirs = fixDirs(staticNormalDirs, config.DIR, config.STATIC_TEMPORARY_DIR);
+    staticNormalDirs.forEach(item => {
+      copyToTmp(item.from, item.to);
+    });
+    config.STATIC_SOURCE_DIRS = [config.STATIC_TEMPORARY_DIR].concat(staticHttpDirs.map(item => item.from));
   },
 
   _watchTmp (callback) {
     // 监听各个目录，并且复制文件
-    function watchCallback(type, oldDirname, filePath) {
+    function watchCallback(type, pathOld, pathNew, filepathWatch) {
+      let relativePath = path.relative(pathOld, filepathWatch);
 
-      let newFilePath = '';
-      switch (type) {
-        case FileType.pat:
-          newFilePath = tmpDir;
-          break;
-        case FileType.include:
-          newFilePath = config.INCLUDE_DIR[0];
-          break;
-        case FileType.static:
-          newFilePath = config.TMP_STATIC_DIR;
-          break;
-      }
-
-      let relativePath = path.relative(oldDirname, filePath);
-      // console.log(type);
-      // console.log(filePath);
-      // console.log(oldDirname);
-      // console.log(newFilePath);
-      // console.log(relativePath);
-
-      if (newFilePath && fs.existsSync(filePath)) {
-        newFilePath = path.join(newFilePath, relativePath);
-        fs.copySync(filePath, newFilePath);
-
-        callback && callback(filePath);
+      if (fs.existsSync(filepathWatch)) {
+        let filepathNew = path.resolve(pathNew, relativePath);
+        fs.ensureFileSync(filepathNew);
+        fs.copySync(filepathWatch, filepathNew);
+        callback && callback(filepathWatch);
       }
     }
-
-    patDirs.forEach(dir => {
-      watcher.watch(dir, watchCallback.bind(null, FileType.pat, dir));
+    templateDirs.forEach(item => {
+      watcher.watch(item.from, watchCallback.bind(null, FileType.pat, item.from, item.to || config.TEMPLATE_TEMPORARY_DIR));
     });
-    includeDirs.forEach(dir => {
-      watcher.watch(dir, watchCallback.bind(null, FileType.include, dir));
-    });
-    staticNormalDirs.forEach(dir => {
-      watcher.watch(dir, watchCallback.bind(null, FileType.static, dir));
+    staticNormalDirs.forEach(item => {
+      watcher.watch(item.from, watchCallback.bind(null, FileType.static, item.from, item.to || config.STATIC_TEMPORARY_DIR));
     });
 
     console.log('Ready to watch and copy files to template dir'.green.bold);
