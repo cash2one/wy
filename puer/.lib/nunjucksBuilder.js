@@ -8,12 +8,20 @@ const path = require('path');
 const util = require('./common/util');
 const fs = require('fs-extra');
 
+nunjucks.installJinjaCompat();
+
 const config = require('./config');
 const DIR = config.DIR,
   DATA_DIR = config.DATA_DIR,
-  PAT_DIR = config.PAT_DIR,
-  INCLUDE_DIR = config.INCLUDE_DIR,
-  CODE = config.CODE;
+  TEMPLATE_SOURCE_DIRS = config.TEMPLATE_SOURCE_DIRS,
+  CODE = config.CODE,
+  filter = config.filter ? path.resolve(process.cwd(), config.filter): path.join(__dirname, '../filter/default.js');
+
+let filterFn = function() {};
+if (fs.existsSync(filter)) {
+  let fn = require(filter);
+  typeof fn === 'function' && (filterFn = fn);
+}
 
 const defaultOptions = {
   // 默认参数??
@@ -22,10 +30,8 @@ const defaultOptions = {
 module.exports = {
   build(name, res) {
     // 读取模板文件
-    const filePath = util.isFileExistAndGetName(PAT_DIR, `${name}.html`);
-    console.log(filePath);
+    const filePath = util.isFileExistAndGetName(TEMPLATE_SOURCE_DIRS, `${name}`);
     if (filePath) {
-
       const environment = new nunjucks.Environment(new nunjucks.FileSystemLoader(path.dirname(filePath)), {
         tags: {
           blockStart: '{%',
@@ -36,6 +42,7 @@ module.exports = {
           commentEnd: '#}'
         }
       });
+      filterFn(environment);
 
       let data = util.readMock(path.join(DATA_DIR, `${name}.js`));
       data = Object.assign({}, defaultOptions, data || {});
@@ -47,7 +54,7 @@ module.exports = {
         res.send(result);
       } catch (e) {
         console.error(e);
-        res.send(500, fs.readFileSync(filePath).toString());
+        res.send(500, JSON.stringify(e) + '<br><br><br>' + fs.readFileSync(filePath).toString());
       }
     } else {
       res.send(404, `can not find ${name}`);

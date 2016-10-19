@@ -1,19 +1,17 @@
 {
   "dir": "E:\\project\\charon_pat_static\\",
-
   "templates": [
     {
-      "from": "./mgame"
+      "from": "./pat/mgame"
     },
     {
-      "from": "./mgame", "to": "./mgame"
+      "from": "./pat/mgame", "to": "./mgame"
     },
     {
-      "from": "./txhd"
+      "from": "./pat/txhd"
     }
   ],
   "templateRoot": "./",
-
   "statics": [
     {
       "from": "./htdocs/foreground/txhd"
@@ -29,7 +27,6 @@
     }
   ],
   "staticRoot": "./__static__",
-
   "data": "./data/txhd",
   "code": "utf8"
 }

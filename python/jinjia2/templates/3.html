@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{{ title }}</title>
+</head>
+<body>
+  {% block main %}
+    这个是内容啊<br/>
+    看到内容吗: {{ age | toAge }}
+  {% endblock main %}
+  {% set (original_poundage, real_poundage) = poundage_calc(100, 20) %}
+  原始价格: {{ original_poundage }}
+  真实价格: {{ real_poundage }}
+</body>
+</html>

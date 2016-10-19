@@ -9,9 +9,8 @@ module.exports = {
     patBuilder.build(req.params.page, res);
   },
 
-  'GET /jj/:page.html': function(req, res, next) {
-    console.log(req.params.page);
-    nunjucksBuilder.build(req.params.page, res);
+  'GET /jj/:page.:ext': function(req, res, next) {
+    nunjucksBuilder.build(`${req.params.page}.${req.params.ext}`, res);
   },
 
   'GET *.:ext': function(req, res, next) {
