@@ -40,6 +40,7 @@ app.use((req, res, next) => {
 const server = app.listen(pkg.port || 3000, () => {
   var host = server.address().address;
   var port = server.address().port;
+  console.log(pkg.config.bold.green);
   console.log('Example app listening at port:%s'.bold.green, port);
 });
 

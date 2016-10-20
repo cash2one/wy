@@ -15,7 +15,7 @@ module.exports = {
 
   'GET *.:ext': function(req, res, next) {
     const ext = req.params.ext.toLowerCase();
-    if (['js', 'css', 'png', 'jpg', 'jpeg', 'gif', 'txt', 'less', 'scss'].indexOf(ext) >= 0) {
+    if (['js', 'css', 'png', 'jpg', 'jpeg', 'gif', 'bmp', 'txt', 'less', 'scss'].indexOf(ext) >= 0) {
       staticResource.query(req, res, next);
     } else {
       next();

@@ -24,7 +24,8 @@ app.all('*', (req, res, next) => {
 });
 
 function readFile(filename) {
-  const filePath = util.isFileExistAndGetName(config.PAT_DIR, filename);
+  const filePath = util.isFileExistAndGetName(config.TEMPLATE_SOURCE_DIRS, filename);
+  console.log(filePath)
   if (!filePath) {
     return '';
   }
@@ -33,9 +34,7 @@ function readFile(filename) {
   // 替换掉 include 的内容
   while (/<!--#CGIEXT#\s+expand\s+['"]?(.*?)['"]?\s*-->/.test(content)) {
     content = content.replace(/<!--#CGIEXT#\s+expand\s+['"]?(.*?)['"]?\s*-->/gm, function(str, pathInclude) {
-      pathInclude = util.isFileExistAndGetName(config.INCLUDE_DIR, pathInclude);
-      console.log(pathInclude);
-
+      pathInclude = util.isFileExistAndGetName(config.TEMPLATE_SOURCE_DIRS, pathInclude);
       if (pathInclude) {
         return util.readFile(pathInclude, config.CODE);
       }
@@ -94,5 +93,6 @@ app.use((req, res, next) => {
 const server = app.listen(5000, () => {
   var host = server.address().address;
   var port = server.address().port;
+  console.log(pkg.config.bold.green);
   console.log('Example app listening at port:%s'.bold.green, port);
 });
