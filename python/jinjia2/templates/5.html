@@ -6,5 +6,42 @@
 </head>
 <body>
   {{ name }}: 年龄 {{ age }}
+  {{ data }}
+  {{ people.get_name() }}
+
+  {{ people is sequence }}
+  {{ people is mapping }}
+  {{ people is iterable }}
+
+  {{ people.__dict__ is defined }}
+  {{ people.__dict__ is mapping }}
+  {{ name is string }}
+  {{ age is number }}
+  {{ list is sequence }}
+  {{ list is mapping }}
+
+  列表:
+  [{{ list | join(',') }}]
+
+  对象:
+  {{ people.__dict__ }}
+  {#
+    {% set dlist = [] %}
+    {% for key in people.__dict__.keys() -%}
+      {% set value = people.__dict__[key] %}
+      {% if value is string %}
+        {% set _x = dlist.append('"%s": "%s"' | format(key, people.__dict__[key])) %}
+      {% elif value is number %}
+        {% set _x = dlist.append('"%s": %s' | format(key, people.__dict__[key])) %}
+      {% elif value is sequence %}
+
+      {% elif value is mapping %}
+
+      {% else %}
+
+      {% endif %}
+    {%- endfor %}
+    {{ '{'}} {{ dlist | join(',') }} {{ '}' }}
+  #}
 </body>
 </html>

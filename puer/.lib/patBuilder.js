@@ -65,7 +65,8 @@ module.exports = {
         res.send(result);
       } catch (e) {
         console.error(e);
-        res.send(500, html);
+        res.set('content-type', 'text/html');
+        res.status(500).send(`<html><head></head><body><pre>${html}</pre></body></html>`);
       }
     } else {
       res.send(404, `can not find ${name}`);

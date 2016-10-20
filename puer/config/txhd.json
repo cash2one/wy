@@ -28,5 +28,6 @@
   ],
   "staticRoot": "./__static__",
   "data": "./data/txhd",
-  "code": "utf8"
+  "code": "utf8",
+  "pythonOthers": ["/.python/.filter/default.py"]
 }
