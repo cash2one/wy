@@ -27,12 +27,12 @@ module.exports = options => {
         if (Buffer.isBuffer(body)) {
           body = body.toString('utf8');
         }
-        if (!~body.indexOf('</head>')) {
+        if (!~body.indexOf('<head>')) {
           return send(body);
         }
 
         const injectHTML = options.injects.join('');
-        body = body.replace('</head>', injectHTML + '</head>');
+        body = body.replace('<head>', '<head>\n' + injectHTML);
 
         if (length) {
           length = parseInt(length);
