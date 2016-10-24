@@ -7,6 +7,7 @@ const TYPES = {
   "ico": "image/x-icon",
   "jpeg": "image/jpeg",
   "jpg": "image/jpeg",
+  "bmp": "image/bmp",
   "js": "text/javascript",
   "json": "application/json",
   "pdf": "application/pdf",
@@ -29,8 +30,8 @@ module.exports = {
     } else {
       extname = 'unknown';
     }
-    
-    return TYPES[extname] || 'text/plain';
+
+    return TYPES[extname.toLowerCase()] || 'text/plain';
   },
   extend(cf) {
     return Object.assign(TYPES, cf || {});

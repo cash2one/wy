@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "router": "./route.js",
-  "config": "./config/dh2.json",
+  "config": "./config/x3.json",
   "port": 3000,
   "dependencies": {
     "body-parser": "^1.15.2",

@@ -1,0 +1,24 @@
+{
+  "dir": "E:\\project\\charon_pat_static\\",
+  "templates": [
+    {
+      "from": "./pat/x3"
+    }
+  ],
+  "statics": [
+    {
+      "from": "./htdocs/foreground/common"
+    },
+    {
+      "from": "./htdocs/foreground/x3"
+    },
+    {
+      "from": "http://res.x3.cbg.163.com/"
+    },
+    {
+      "from": "http://x3.cbg.163.com/"
+    }
+  ],
+  "data": "./data/x3",
+  "code": "gbk"
+}

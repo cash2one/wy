@@ -52,27 +52,35 @@
 
       var templates = [];
       var max = 120, i = 0;
-      while (indexSearch > 0) {
+
+      if (indexSearch <= 0) {
         templates.push({
-          template: contentSearch.substring(0, indexSearch),
+          template: contentSearch,
           type: 'normal'
         });
-
-        let contentMatch = contentSearch.substring(indexSearch).match(reg)[0];
-        templates.push({
-          template: contentMatch,
-          type: 'deepLoop'
-        });
-
-        contentSearch = contentSearch.substring(indexSearch + contentMatch.length);
-        indexSearch = contentSearch.search(reg);
-
-        if (indexSearch < 0 || indexSearch >= template.length) {
+      } else {
+        while (indexSearch > 0) {
           templates.push({
-            template: contentSearch,
+            template: contentSearch.substring(0, indexSearch),
             type: 'normal'
           });
-          break;
+
+          let contentMatch = contentSearch.substring(indexSearch).match(reg)[0];
+          templates.push({
+            template: contentMatch,
+            type: 'deepLoop'
+          });
+
+          contentSearch = contentSearch.substring(indexSearch + contentMatch.length);
+          indexSearch = contentSearch.search(reg);
+
+          if (indexSearch < 0 || indexSearch >= template.length) {
+            templates.push({
+              template: contentSearch,
+              type: 'normal'
+            });
+            break;
+          }
         }
       }
 

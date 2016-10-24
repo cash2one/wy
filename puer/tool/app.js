@@ -14,8 +14,8 @@ const config = require('../.lib/config');
 const util = require('../.lib/common/util');
 const pkg = require('../package.json');
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({ extended: false, limit: '50mb' }));
 app.use(cookieParser());
 app.use('/', express.static(path.join(__dirname, './')));
 app.all('*', (req, res, next) => {
