@@ -48,6 +48,17 @@ module.exports = {
       fs.removeSync(tmpDir);
     }
 
+    process.on('SIGINT', function() {
+      // 清空临时目录
+      try {
+        fs.removeSync(tmpDir);
+      } catch (e) {
+
+      } finally {
+        process.exit(0);
+      }
+    });
+
     this._copyToTmp();
     this._watchTmp(callback);
   },
