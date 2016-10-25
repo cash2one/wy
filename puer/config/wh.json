@@ -1,0 +1,24 @@
+{
+  "dir": "E:\\project\\charon_pat_static\\",
+  "templates": [
+    {
+      "from": "./pat/wh"
+    }
+  ],
+  "statics": [
+    {
+      "from": "./htdocs/foreground/common"
+    },
+    {
+      "from": "./htdocs/foreground/wh"
+    },
+    {
+      "from": "http://wh.cbg.163.com/"
+    },
+    {
+      "from": "http://res.wh.cbg.163.com/"
+    }
+  ],
+  "data": "./data/wh",
+  "code": "gbk"
+}
