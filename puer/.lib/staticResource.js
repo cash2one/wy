@@ -16,7 +16,7 @@ function forwardRequest(url, req, res, next, start) {
   let filename = result.filename;
   if (filename) {
     let type = Types.get(filename);
-    console.log(filename);
+    // console.log(filename);
 
     if (/^http/.test(filename)) {
       request(filename)

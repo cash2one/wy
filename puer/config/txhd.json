@@ -20,10 +20,13 @@
       "from": "./htdocs/foreground/mgame"
     },
     {
-      "from": "http://res.txhd.cbg.163.com/rcc1fb72fdd309078a830a/"
+      "from": "E:\\project\\_grunt_file\\dst"
     },
     {
       "from": "http://txhd.cbg.163.com/"
+    },
+    {
+      "from": "http://res.txhd.cbg.163.com/rcc1fb72fdd309078a830a/"
     }
   ],
   "staticRoot": "./__static__",
