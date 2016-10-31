@@ -2,7 +2,7 @@
 const config = require('../../../.lib/config');
 
 module.exports = {
-  ResUrl: `http://localhost:${config.STATIC_PORT}`,
+  ResUrl: `http://localhost:${config.PORT}`,
   static_version: '',
   // ResUrl: 'http://res.qn2.cbg.163.com',
   // static_version: 'rccf418e88576fab3240b7',

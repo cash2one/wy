@@ -45,7 +45,12 @@ function forwardRequest(url, req, res, next, start) {
 function decode(res, data, type) {
   let content = data;
   if (/^text/.test(type)) {
-    content = util.decode(content, CODE);
+    // 尝试解析编码
+    let str = util.decode(content, CODE);
+    // 看看编码是否正确
+    if(str.indexOf('�') < 0){
+      content = str;
+    }
   }
   res.send(content);
 }

@@ -2,6 +2,9 @@
   "dir": "E:\\project\\charon_pat_static\\",
   "templates": [
     {
+      "from": "./pat/pcgame"
+    },
+    {
       "from": "./pat/x3"
     }
   ],

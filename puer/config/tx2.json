@@ -1,8 +1,27 @@
 {
   "dir": "E:\\project\\charon_pat_static\\",
-  "pat": ["./pat/tx2"],
-  "include": ["./pat/tx2"],
-  "static": ["./htdocs/foreground/tx2", "./htdocs/foreground/common", "http://tx3.cbg.163.com/", "http://res.tx3.cbg.163.com/"],
+  "templates": [
+    {
+      "from": "./pat/pcgame"
+    },
+    {
+      "from": "./pat/tx2"
+    }
+  ],
+  "statics": [
+    {
+      "from": "./htdocs/foreground/common"
+    },
+    {
+      "from": "./htdocs/foreground/tx2"
+    },
+    {
+      "from": "http://res.tx3.cbg.163.com/"
+    },
+    {
+      "from": "http://tx3.cbg.163.com/"
+    }
+  ],
   "data": "./data/tx2",
   "code": "gbk"
 }

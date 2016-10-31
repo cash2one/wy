@@ -5,7 +5,7 @@ const combine = require('../../../.lib/combine');
 module.exports = combine([
   {
     ResUrl: `http://localhost:${config.PORT}`,
-    static_version: '',
+    static_version: '../',
     "CgiRootUrl": "http://x3.cbg.dev.webapp.163.com:8103/cgi-bin",
     "is_login": "0",
     "area_id": "3",
