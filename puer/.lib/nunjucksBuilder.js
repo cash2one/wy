@@ -57,8 +57,8 @@ module.exports = {
       data = Object.assign({}, data || {});
 
       buildPythonFileAndRun(name, JSON.stringify(TEMPLATE_SOURCE_DIRS), JSON.stringify(data), function(error, content) {
+        res.set('content-type', 'text/html');
         if (error) {
-          res.set('content-type', 'text/html');
           res.status(500).send(`<html><head></head><body><pre>${content}</pre></body></html>`);
         } else {
           res.send(content);

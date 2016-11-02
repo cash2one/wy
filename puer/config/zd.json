@@ -8,7 +8,7 @@
       "from": "./pat/mgame", "to": "./mgame"
     },
     {
-      "from": "./pat/txhd"
+      "from": "./pat/zd"
     }
   ],
   "templateRoot": "./",
@@ -20,20 +20,20 @@
       "from": "./htdocs/foreground/mgame"
     },
     {
-      "from": "./htdocs/foreground/txhd"
-    },
-    {
       "from": "E:\\project\\_grunt_file\\dst"
     },
     {
-      "from": "http://txhd.cbg.163.com/"
+      "from": "./htdocs/foreground/zd"
     },
     {
-      "from": "http://res.txhd.cbg.163.com/rcc1fb72fdd309078a830a/"
+      "from": "http://zmq.cbg.163.com/"
+    },
+    {
+      "from": "http://res.zmq.cbg.163.com/rcb4ba945a1cf0d7bd5d55/"
     }
   ],
   "staticRoot": "./__static__",
-  "data": "./data/txhd",
+  "data": "./data/zd",
   "code": "utf8",
   "pythonOthers": ["/.python/.filter/default.py"]
 }

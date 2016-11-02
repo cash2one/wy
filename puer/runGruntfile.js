@@ -1,7 +1,8 @@
 'use strict';
 // @notice 不实时监听图片！！！！
 
-const product = 'txhd';
+// const product = 'txhd';
+const product = 'zd';
 
 const fs = require('fs-extra');
 const path = require('path');
