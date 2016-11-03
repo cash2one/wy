@@ -30,9 +30,10 @@ const defaultOptions = {
   __include: function(file, data) {
     const filePath = util.isFileExistAndGetName(TEMPLATE_SOURCE_DIRS, file);
     if (filePath) {
-      let html = util.readFile(filePath, CODE);
-      html = toNunjucks(html);
+      let html;
       try {
+        html = util.readFile(filePath, CODE);
+        html = toNunjucks(html);
         return template.renderString(html, data || {});
       } catch (e) {
         console.error(e);

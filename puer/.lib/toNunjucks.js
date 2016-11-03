@@ -72,8 +72,12 @@ function convertTag(str) {
     if (reg1.test(str)) {
       return '{{ __include("'+ str.replace(reg1, '').replace(/'"/g, '').trim() +'", __ctx__) | safe }}';
     } else if (reg2.test(str)) {
-      const arr = /const\s+([^=]+)=['"]@@([^'"]+)@@['"]/i.exec(str);
-      return `{# set ${arr[1]} = ${arr[2]} #}`;
+      const arr = /const\s+([^=]+)=['"]@?@?([^'"]+)@?@?['"]/i.exec(str);
+      if (str.indexOf('@@') > 0) {
+        return `{# set ${arr[1]} = ${arr[2]} #}`;
+      } else {
+        return `{# set ${arr[1]} = "${arr[2]}" #}`;
+      }
     } else {
       // 从 "xxBegin:" 找到 "xxEnd:"，并且加工里面的所有内容，并且修正结束位置~~
       let variable = '';
