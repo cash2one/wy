@@ -6,7 +6,7 @@ module.exports = {
   readDirFiles (dir) {
     dir = path.resolve(process.cwd(), dir);
 
-    console.log(dir);
+    // console.log(dir);
     const ctx = this;
     const dirs = fs.readdirSync(dir);
     const result = [];
@@ -40,5 +40,38 @@ module.exports = {
       return stat.isDirectory();
     }
     return false;
+  },
+  error (obj) {
+    return Object.assign({
+      line: -1,
+      message: '',
+      error: '',
+      file: ''
+    }, obj || {});
+  },
+  lineno (str) {
+    return ((str || '').match(/(\n\r|\r\n|\n|\r)/g) || []).length + 1;
+  },
+
+  // 递归列表
+  recurList (list, options) {
+    list = list.slice(0);
+    options = Object.assign({
+      next (item, doNext) {
+        doNext();
+      },
+      callback () {
+        // 最终做什么?
+      }
+    }, options || {});
+
+    let next = function(item) {
+      if (item) {
+        options.next(item, next.bind(list, list.shift()));
+      } else {
+        options.callback.call(list);
+      }
+    };
+    next(list.shift());
   }
 };
