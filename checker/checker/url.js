@@ -4,7 +4,7 @@ const util = require('../lib/util');
 module.exports = {
   type: 'html,pat',
   fn: function(file, content, next) {
-    let reg = /https?:\/\/[^:]+:\d+[^'"]*/g;
+    let reg = /https?:\/\/[^:'"]+:\d+[^'"]*?/g;
     let errors = [];
 
     let result = reg.exec(content);

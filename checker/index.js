@@ -63,15 +63,16 @@ const allErrors = [];
 util.recurList(files, {
   next (file, doNext) {
     runCheckers(file, function (errors) {
-      console.log(`********** 检查地址: ${file}`);
-      printAllErrors(errors || []);
-      console.log(`********** 结束检查地址: ${file}`);
-      console.log('\n\n');
+      if (errors && errors.length > 0) {
+        console.log(`********** 检查地址: ${file}`);
+        printAllErrors(errors || []);
+        console.log(`********** 结束检查地址: ${file}`);
+        console.log('\n\n');
 
-      if (commander.save) {
-        allErrors.push.apply(allErrors, errors || []);
+        if (commander.save) {
+          allErrors.push.apply(allErrors, errors || []);
+        }
       }
-
       doNext();
     });
   },
