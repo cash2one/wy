@@ -60,29 +60,41 @@ function printAllErrors(errors) {
 
 // 遍历所有文件
 const allErrors = [];
-util.recurList(files, {
-  next (file, doNext) {
+let isChecking = false;
+let timerCheck = null;
+
+function checkNext() {
+  if (isChecking) {
+    return;
+  }
+
+  let file = files.shift();
+  if (file) {
+    isChecking = true;
     runCheckers(file, function (errors) {
       if (errors && errors.length > 0) {
         console.log(`********** 检查地址: ${file}`);
         printAllErrors(errors || []);
-        console.log(`********** 结束检查地址: ${file}`);
+        console.log(`********** 结束检查`);
         console.log('\n\n');
 
         if (commander.save) {
           allErrors.push.apply(allErrors, errors || []);
         }
       }
-      doNext();
+      isChecking = false;
     });
-  },
-  callback () {
+  } else {
     console.log('检查完毕....');
+    clearInterval(timerCheck);
 
     if (commander.save) {
       let file = path.resolve(cwd, typeof commander.save === 'string' ? commander.save : './_lfp_log.txt');
       fs.ensureFileSync(file);
       fs.writeFileSync(file, JSON.stringify(allErrors, null, 2));
+      console.log(`写入日志文件: ${file}`);
     }
   }
-});
+}
+
+timerCheck = setInterval(checkNext, 1);
