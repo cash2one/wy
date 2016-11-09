@@ -1,0 +1,27 @@
+{
+  "dir": "E:\\project\\charon_pat_static\\",
+  "templates": [
+    {
+      "from": "./pat/pcgame"
+    },
+    {
+      "from": "./pat/dt2"
+    }
+  ],
+  "statics": [
+    {
+      "from": "./htdocs/foreground/common"
+    },
+    {
+      "from": "./htdocs/foreground/dt2"
+    },
+    {
+      "from": "http://res.dt2.cbg.163.com/"
+    },
+    {
+      "from": "http://dt2.cbg.163.com/"
+    }
+  ],
+  "data": "./data/dt2",
+  "code": "gbk"
+}
