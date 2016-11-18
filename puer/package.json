@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "router": "./route.js",
-  "config": "./config/dt2.json",
+  "config": "./config/xy2.json",
   "port": 3000,
   "dependencies": {
     "body-parser": "^1.15.2",

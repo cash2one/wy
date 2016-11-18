@@ -17,6 +17,8 @@
     var userAgent = navigator.userAgent;
     var escape = win.escape, unescape = win.unescape;
     var addEvent;
+
+    // IE9，如果不使用 attachEvent，返回的错误，将不会标准
     if (window.attachEvent) {
       addEvent = function(elem, evt, fn) {
         elem.attachEvent('on' + evt, fn);
