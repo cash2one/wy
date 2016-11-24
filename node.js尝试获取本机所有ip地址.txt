@@ -1,0 +1,11 @@
+const os = require('os');
+const ifaces = os.networkInterfaces();
+
+Object.keys(ifaces).forEach(key => {
+  ifaces[key].forEach(details => {
+    if (details.family === 'IPv4') {
+      // 一般第一个，就是我们想要的
+      console.log('ip地址:' + details.address);
+    }
+  });
+});

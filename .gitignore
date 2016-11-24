@@ -2,3 +2,4 @@ node_modules/
 error-log/logs/
 error-log/source
 __tmp*
+light7/.python/run.py

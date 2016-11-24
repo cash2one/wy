@@ -1,0 +1,18 @@
+{
+  "dir": "./",
+  "templates": [
+    {
+      "from": "./template"
+    }
+  ],
+  "statics": [
+    {
+      "from": "./static"
+    },
+    {
+      "from": "./node_modules/light7/dist"
+    }
+  ],
+  "data": "./mock_data",
+  "code": "utf8"
+}
