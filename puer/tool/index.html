@@ -13,15 +13,20 @@
   <a href="javascript:;" class="item" data-change="pat">
     模板文件提取
   </a>
-  <a href="javascript:;" class="item" data-change="text">
+  <!-- <a href="javascript:;" class="item" data-change="text">
     文本提取
-  </a>
+  </a> -->
 </nav>
 
 <div id="content">
   <div class="module">
     <p class="tip">默认数据[此数据优先级最高，将覆盖掉最后生成的数据]:</p>
     <textarea class="dataCommon" id="dataCommon">{}</textarea>
+  </div>
+
+  <div class="module" data-belong="pat">
+    <p class="tip">模板目录:</p>
+    <input type="input" value="E:\project\charon_pat_static\pat\" class="dirInput" />
   </div>
 
   <div class="module" data-belong="pat">

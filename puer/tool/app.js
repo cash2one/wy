@@ -23,8 +23,8 @@ app.all('*', (req, res, next) => {
   next();
 });
 
-function readFile(filename) {
-  const filePath = util.isFileExistAndGetName(config.TEMPLATE_SOURCE_DIRS, filename);
+function readFile(dirpath, filename) {
+  const filePath = util.isFileExistAndGetName(dirpath ? dirpath : config.TEMPLATE_SOURCE_DIRS, filename);
   console.log(filePath)
   if (!filePath) {
     return '';
@@ -48,11 +48,12 @@ function readFile(filename) {
 
 app.get('/pat/content', (req, res, next) => {
   const filename = req.query.filename;
-  console.log(`get pat content: ${filename}`);
+  const dirpath = req.query.dirpath;
+  console.log(`get pat content: ${path.join(dirpath, filename)}`);
 
   let result = '';
   if (filename) {
-    result = readFile(filename);
+    result = readFile(dirpath, filename);
   }
   res.send(result);
 });

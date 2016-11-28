@@ -158,10 +158,13 @@ Dialog.prototype = {
   // 加载模板
   $root.on('click', '.import', function() {
     var filename = $(this).siblings('input').val().trim();
+    var dirpath = $('#content .module .dirInput').val().trim();
+
     if (!filename) { return; }
     localStorage.importFilename = filename;
+    localStorage.dirpath = dirpath || localStorage.dirpath;
 
-    $.get(URL_AJAX + 'pat/content', { filename: filename })
+    $.get(URL_AJAX + 'pat/content', { filename: filename, dirpath: dirpath })
       .done(function(html) {
         $textTmp.val(html);
       })
@@ -171,6 +174,9 @@ Dialog.prototype = {
   });
   if (localStorage.importFilename) {
     $root.find('.importInput').val(localStorage.importFilename);
+  }
+  if (localStorage.dirpath) {
+    $root.find('.dirInput').val(localStorage.dirpath);
   }
 
   // 提取数据

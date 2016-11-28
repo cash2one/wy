@@ -85,6 +85,9 @@ a:hover { text-decoration: none; }
   display: flex;
   flex-direction: column;
 }
+#content .dirInput {
+  width: 520px;
+}
 #content .code {
   flex: 1;
 }
