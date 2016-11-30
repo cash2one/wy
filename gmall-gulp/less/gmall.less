@@ -1,0 +1,64 @@
+/* === variables === */
+@c-red: #ba281b;
+@c-green: #3dc0ab;
+@nav-width: 4rem;
+
+/* === reset === */
+p, ul{
+  margin: 0;
+  padding: 0;
+}
+ul {list-style: none;}
+
+/* === common === */
+html {font-size: 20px!important;}
+body {
+  color: #777674;
+  font-family:'Microsoft Yahei',Helvetica;
+  -webkit-font-smoothing:antialiased;
+  background: #272b37;
+}
+.c-red{color: @c-red;}
+.c-green{color: @c-green;}
+.page-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: @nav-width;
+  padding-bottom: 8px;
+  background: #151c27;
+  .logo, h2 {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+  }
+  h2 {
+    width: 1em;
+    line-height: 1.2;
+    font-size: 1.2rem;
+    font-weight: normal;
+    color: #dcb66f;
+    word-break: break-all;
+  }
+  a {
+    width: 100%;
+    line-height: 2rem;
+    text-align: center;
+    text-decoration: none;
+    color: #777674;
+    &.current {
+      color: #dcb66f;
+      border: 2px solid red;
+      margin: -1px 0;
+    }
+  }
+}
+.content {
+  left: @nav-width;
+  padding-bottom: 2rem;
+  background: #272b37;
+}

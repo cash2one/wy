@@ -1,0 +1,32 @@
+// 监听 location.hash 变化，做相应的处理
+var Hasher = (function (win, $) {
+  var defaultKey = 'default';
+  var map = {
+    // hask: 处理函数
+  };
+
+  function check() {
+    run();
+  }
+  function run(hash) {
+    if (!hash) {
+      hash = win.location.hash.replace(/^#?/, '');
+    }
+    var fn = map[hash] || map[defaultKey] || $.noop;
+    fn();
+  }
+  
+  // 必须这么写，兼容 firefox
+  win.addEventListener('hashchange', check, false);
+  $(check);
+
+  return {
+    run: run,
+    add: function(hash, fn) {
+      map[hash] = fn;
+    },
+    setDefault: function(def) {
+      defaultKey = def;
+    }
+  };
+})(window, window.Zepto);

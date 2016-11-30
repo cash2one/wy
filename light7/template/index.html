@@ -1,90 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-  <link rel="shortcut icon" href="/favicon.ico">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <title>light7学习文件</title>
-  <link rel="stylesheet" href="./css/light7.css">
-  <link rel="stylesheet" href="./css/light7-swiper.min.css">
+{% extends "/include/base.html" %}
 
-  <style>
+{% block navBar %}
+  <header class="bar bar-nav">
+    <h1 class="title">我的生活</h1>
+  </header>
+{% endblock %}
 
-  </style>
-</head>
-<body>
-  <!-- 自己的代码 -->
-  <div class="page">
-    <header class="bar bar-nav">
-      <a class="button button-link button-nav pull-right" href="/demos/card" data-transition='slide-out'>
-        返回
-        <span class="icon icon-right"></span>
-      </a>
-      <h1 class="title">我的生活</h1>
-    </header>
-    <nav class="bar bar-tab">
-      <a class="tab-item active" href="#">
-        <span class="icon icon-home"></span>
-        <span class="tab-label">首页</span>
-      </a>
-      <a class="tab-item" href="#">
-        <span class="icon icon-me"></span>
-        <span class="tab-label">我</span>
-      </a>
-      <a class="tab-item" href="#">
-        <span class="icon icon-star"></span>
-        <span class="tab-label">收藏</span>
-      </a>
-      <a class="tab-item" href="#">
-        <span class="icon icon-settings"></span>
-        <span class="tab-label">设置</span>
-      </a>
-    </nav>
-    <div class="content" style="text-align: center; ">
-      <style>
-        .testUl { padding: 0; margin: 0; text-align: center; font-size: 0; }
-        .testUl .li, .testUl .lix { font-size: 14px; width: 200px; text-align: center; list-style: none; padding: 0; margin: 10px; display: inline-block; background: #fff; }
-        .testUl .lix { height: 0; line-height: 0; overflow: hidden;  display: inline-block; margin-top: 0; margin-bottom: 0; }
-      </style>
-      <!-- 页面内容 -->
-      <div style="text-align: center;">
-        <div class="testUl">
-          <div class="li">测试001</div>
-          <div class="li">测试002</div>
-          <div class="li">测试003</div>
-          <div class="li">测试004</div>
-          <div class="li">测试005</div>
-          <div class="li">测试006</div>
-          <div class="li">测试007</div>
-          <div class="li">测试008</div>
-          <div class="li">测试009</div>
-          <div class="li">测试010</div>
-          <div class="li">测试011</div>
-          <div class="li">测试012</div>
-          <div class="li">测试013</div>
-          <div class="li">测试014</div>
-          <div class="li">测试015</div>
-          <div class="li">测试016</div>
-          <div class="li">测试017</div>
-          <div class="li">测试018</div>
-          <div class="li">测试019</div>
-          <div class="li">测试020</div>
-          <div class="lix"></div>
-          <div class="lix"></div>
-          <div class="lix"></div>
-          <div class="lix"></div>
-          <div class="lix"></div>
-        </div>
-      </div>
-      <!-- END 页面内容 -->
+{% block content %}
+  <div class="content-padded">
+    欢迎来到首页测试
+    <div class="list-block">
+      <ul>
+        <li class="item-content">
+          <a href="/demos/demo1.html" class="item-inner">
+            <div class="item-title">demo1</div>
+            <span class="icon icon-right"></span>
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
-  <!-- END 自己的代码 -->
-
-  <script type='text/javascript' src='jquery.min.js' charset='utf-8'></script>
-  <script type='text/javascript' src='./js/light7.min.js' charset='utf-8'></script>
-  <script type='text/javascript' src='js/light7-swiper.min.js' charset='utf-8'></script>
-</body>
-</html>
+{% endblock %}

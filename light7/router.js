@@ -12,6 +12,12 @@ module.exports = {
       // 默认数据
     });
   },
+  // 配置 get 请求，访问规则为: /pat/xxx.html
+  'GET /:dir/:page.html' (req, res, next) {
+    nunjucksBuilder.build(req.params.dir + '/' + req.params.page + '.html', res, {
+      // 默认数据
+    });
+  },
   // 配置静态资源访问规则
   'GET *.:ext' (req, res, next) {
     const ext = req.params.ext.toLowerCase();

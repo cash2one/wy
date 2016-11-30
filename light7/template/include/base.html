@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>light7学习文件</title>
+  <link rel="stylesheet" href="/css/light7.css">
+  <link rel="stylesheet" href="/css/light7-swiper.min.css">
+</head>
+<body>
+  <!-- 自己的代码 -->
+  <div class="page">
+    {% block navBar %}
+      <header class="bar bar-nav">
+        <a class="button button-link button-nav pull-left" href="/index.html">
+          <span class="icon icon-home"></span>
+          主页
+        </a>
+        <a class="button button-link button-nav pull-right back">
+          返回
+          <span class="icon icon-right"></span>
+        </a>
+        <h1 class="title">我的生活</h1>
+      </header>
+    {% endblock %}
+
+    {% block tabBar %}
+      <nav class="bar bar-tab">
+        <a class="tab-item active" href="#">
+          <span class="icon icon-home"></span>
+          <span class="tab-label">首页</span>
+        </a>
+        <a class="tab-item" href="#">
+          <span class="icon icon-me"></span>
+          <span class="tab-label">我</span>
+          <span class="badge">1200</span>
+        </a>
+        <a class="tab-item" href="#">
+          <span class="icon icon-star"></span>
+          <span class="tab-label">收藏</span>
+        </a>
+        <a class="tab-item" href="#">
+          <span class="icon icon-settings"></span>
+          <span class="tab-label">设置</span>
+        </a>
+      </nav>
+    {% endblock %}
+    <div class="content">
+      <!-- 页面内容 -->
+      {% block content %}{% endblock %}
+      <!-- END 页面内容 -->
+    </div>
+  </div>
+  <!-- END 自己的代码 -->
+
+  <script type='text/javascript' src='/jquery.min.js' charset='utf-8'></script>
+  <script type='text/javascript' src='/js/light7.js' charset='utf-8'></script>
+  <script type='text/javascript' src='/js/light7-swiper.min.js' charset='utf-8'></script>
+  <script>
+    $(function() {
+      $.init();
+    });
+  </script>
+</body>
+</html>
