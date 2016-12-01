@@ -101,14 +101,22 @@ Dialog.prototype = {
 
     // 如果是数据，需要再合并一轮
     for (var key in data) {
-      if (data.hasOwnProperty(key) && Array.isArray(data[key])) {
-        data[key].forEach(function(item) {
-          Object.keys(item).forEach(function(ikey) {
-            if (ikey in common) {
-              item[ikey] = common[ikey];
-            }
+      if (data.hasOwnProperty(key)) {
+        if (Array.isArray(data[key])) {
+          data[key].forEach(function(item) {
+            Object.keys(item).forEach(function(ikey) {
+              if (ikey in common) {
+                item[ikey] = common[ikey];
+              } else if (typeof item[ikey] === 'string' && item[ikey].match(/(\d{4}-\d{2}-)(\d{2})(\d{2})(:\d{2}:\d{2})/)) {
+                // 修正时间格式
+                item[ikey] = item[ikey].replace(/(\d{4}-\d{2}-)(\d{2})(\d{2})(:\d{2}:\d{2})/, '$1$2 $3$4');
+              }
+            });
           });
-        });
+        } else if (typeof data[key] === 'string' && data[key].match(/(\d{4}-\d{2}-)(\d{2})(\d{2})(:\d{2}:\d{2})/)) {
+          // 修正时间格式
+          data[key] = data[key].replace(/(\d{4}-\d{2}-)(\d{2})(\d{2})(:\d{2}:\d{2})/, '$1$2 $3$4');
+        }
       }
     }
 

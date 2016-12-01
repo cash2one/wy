@@ -24,7 +24,8 @@ app.all('*', (req, res, next) => {
 });
 
 function readFile(dirpath, filename) {
-  const filePath = util.isFileExistAndGetName(dirpath ? dirpath : config.TEMPLATE_SOURCE_DIRS, filename);
+  const templateDirs = dirpath ? [dirpath] : config.TEMPLATE_SOURCE_DIRS;
+  const filePath = util.isFileExistAndGetName(templateDirs, filename);
   console.log(filePath)
   if (!filePath) {
     return '';
@@ -34,9 +35,9 @@ function readFile(dirpath, filename) {
   // 替换掉 include 的内容
   while (/<!--#CGIEXT#\s+expand\s+['"]?(.*?)['"]?\s*-->/.test(content)) {
     content = content.replace(/<!--#CGIEXT#\s+expand\s+['"]?(.*?)['"]?\s*-->/gm, function(str, pathInclude) {
-      pathInclude = util.isFileExistAndGetName(config.TEMPLATE_SOURCE_DIRS, pathInclude);
-      if (pathInclude) {
-        return util.readFile(pathInclude, config.CODE);
+      var newPathInclude = util.isFileExistAndGetName(templateDirs, pathInclude);
+      if (newPathInclude) {
+        return util.readFile(newPathInclude, 'gbk');
       }
 
       return `<!--#CGIEXT# const ${pathInclude}="@@IS_EMPTY@@" -->`;
