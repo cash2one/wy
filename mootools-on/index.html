@@ -58,10 +58,9 @@
             }
           }
         };
+        $el.addEvent(evt, proxy[key].fn);
       }
-      proxy[key].list.push(fn);
-
-      $el.addEvent(evt, proxy[key].fn);
+      proxy[key].list.push(fn);      
     }
 
     // 如果任何一个函数，return true，则停止运行后面的函数
@@ -96,8 +95,9 @@
           proxy[key].list.erase(fn);
         } else {
           proxy[key].list = [];
+          $el.removeEvent(evt, proxy[key].fn);
         }
-
+        
         return $el;
       },
       trigger: function(evt, selector, args) {
