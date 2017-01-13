@@ -1,0 +1,16 @@
+{
+  "name": "xlsx-to-json-list",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "da宗熊",
+  "license": "ISC",
+  "dependencies": {
+    "thenablejs": "0.0.2",
+    "xlsx-to-json": "^0.2.4",
+    "xlsx2json": "^1.0.0"
+  }
+}
