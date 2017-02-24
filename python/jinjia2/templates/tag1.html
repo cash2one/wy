@@ -4,9 +4,12 @@
   <meta charset="utf-8">
   <title>{{ title }}</title>
   <link href="{% uri "/htdocs/css/index.css" %}" rel="stylesheet" />
+  {% link "/htdocs/css/index.css" %}
 </head>
 <body>
   {{ name }}: 年龄 {{ age }}<br/>
+  
+  {% link "css/plugin1.css" %}
 
   <script src="{% uri "htdocs/js/native_call.js" %}"></script>
   <script src="{% uri "/test/main.js" %}"></script>

@@ -1,29 +1,35 @@
 #!/user/bin/env python
 # coding: utf-8
 
+import re
 from jinja2 import nodes
 from jinja2.ext import Extension
 
-def print_func (msg):
-  print 'Hello : ', msg
-  return
+from base import BaseExtension
+from uri import UriExtension
 
 # 创建一个自定义拓展类，继承 jinja2.ext.Extension
-class UriExtension(Extension):
+class LinkExtension(BaseExtension):
   # 定义该拓展的语句关键字，这里表示模版中的 {% uri "参数" %} 语句
-  tags = set(["uri"])
+  tags = set(["link"])
 
   def __init__(self, environment):
     # 初始化父类，必须这样写
-    super(UriExtension, self).__init__(environment)
+    super(LinkExtension, self).__init__(environment)
 
     # 在 Jinja2 的环境变量中，添加属性
     # 这样，就可以在 env.xxx 来访问了
     environment.extend(
-      uri=self,
-      uri_support=True,
-      uri_dist={}
+      link=self,
+      link_support=True,
+      link_list=[]
     )
+  
+  def ready(self):
+    self.reset()
+
+  def reset(self):
+    self.environment.link_list = []
   
   # 重新 jinja2.ext.Extension 类的 parse 函数
   # 这里是处理模板中 {% uri %} 语句的主程序
@@ -56,26 +62,33 @@ class UriExtension(Extension):
       body = ''
 
       # 返回一个 CallBlock类型的节点，并将其之前取得的行号，设置在该节点中
-      # 初始化 CallBlock 节点时，传入我们自定义的 _query_resource 方法的调用，两个空列表，以及刚才解析后的语句内容 body
-      return nodes.CallBlock(self.call_method('_query_resource', args), [], [], body).set_lineno(lineno)
+      # 初始化 CallBlock 节点时，传入我们自定义的 _do_add_link 方法的调用，两个空列表，以及刚才解析后的语句内容 body
+      return nodes.CallBlock(self.call_method('_do_add_link', args), [], [], body).set_lineno(lineno)
   
-  # 查找资源
-  def _query_resource(self, resource_name, caller):
-    # 在 uri_dist 中，查找资源正确的名称
-    if resource_name.startswith('/'):
-      resource_name = resource_name[1:]
-
-    # 获取 {% uri %}...{% enduri %} 语句中的内容
-    # 这里 caller() 对应上面调用 CallBlock 时传入的 body
-    # content = caller()
-
-    if resource_name in self.environment.uri_dist:
-      obj = self.environment.uri_dist[resource_name]
-      return obj['uri']
-    else:
-      return '/' + resource_name
-
-  # 设置资源字典
-  def set_dist(self, resource_dist):
-    self.environment.uri_dist = resource_dist
+  # 添加资源
+  def _do_add_link(self, url, caller):
+    self.add_link(url)
+    return ''
   
+  # 添加资源
+  def add_link(self, url):
+    # 删除资源的前缀斜杠
+    replace_reg = re.compile(r'^/*')
+    url = replace_reg.sub('', url)
+    # 加入集合中
+    link_list = self.environment.link_list
+    if url not in link_list:
+      link_list.append(url)
+  
+  # 生成 link 标签
+  def build_link(self):
+    has_uri = hasattr(self.environment, 'uri')
+    link_list = self.environment.link_list
+    links = []
+    for uri in link_list:
+      print uri
+      if has_uri:
+        links.append('<link href="%s" rel="stylesheet" />' % self.environment.uri.query_resource(uri))
+      else:
+        links.append('<link href="%s" rel="stylesheet" />' % ('/' + uri))
+    return '\n'.join(links)

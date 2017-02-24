@@ -5,14 +5,14 @@ from jinja2 import Environment, FileSystemLoader
 import json
 
 # 本地文件
-from plugins.uri import UriExtension
+from extensions.uri import UriExtension
+from extensions.link import LinkExtension
 
 env = Environment(
     auto_reload=False,
     loader=FileSystemLoader('./templates'), # 也可以是绝对路径
-    extensions=[UriExtension]
+    extensions=[UriExtension, LinkExtension]
 )
-
 
 #### 测试 {% uri "链接" %} ####
 # 读取 配置文件
@@ -29,8 +29,17 @@ env.uri.set_dist(dist_resource['res'])
 #### 测试 {% uri "链接" %} ####
 
 
-template = env.get_template('tag1.html')
-def render(tmp, map):
-    print tmp.render(**map)
 
-render(template, { "title": u"测试", "name": u"da宗熊", "age": 20 })
+def render(tmp, map):
+    return tmp.render(**map)
+
+env.uri.ready()
+env.link.ready()
+
+template = env.get_template('tag1.html')
+result = render(template, { "title": u"测试", "name": u"da宗熊", "age": 20, "list": [] })
+result = result.replace('</head>', env.link.build_link() + '\n</head>')
+print result
+
+env.uri.reset()
+env.link.reset()
