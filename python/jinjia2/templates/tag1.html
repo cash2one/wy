@@ -3,13 +3,44 @@
 <head>
   <meta charset="utf-8">
   <title>{{ title }}</title>
-  <link href="{% uri "/htdocs/css/index.css" %}" rel="stylesheet" />
-  {% link "/htdocs/css/index.css" %}
+  {% script %}
+    $(function() {
+      console.log(1);
+    });
+  {% endscript %}
+  {% script %}
+    $(function() {
+      console.log(2);
+    });
+  {% endscript %}
+
+
+  {# 后出现的 css-> id，覆盖掉前面出现的 #}
+  {% css "inline1" %}
+    .test { width: 100%; height: auto; }
+    .empty { background: url({% uri "/test.png" %}) no-repeat; }
+  {% endcss %}
+  {% css "inline1" %}
+    .test { width: 100%; height: 100%; }
+    .empty { background: url({% uri "/test.png" %}) no-repeat; }
+  {% endcss %}
+
+  {% css %}
+    .mm { width: 100%; height: 100%; }
+  {% endcss %}
+  {% css %}
+    .nn { width: 100%; height: 100%; }
+  {% endcss %}
 </head>
 <body>
+  {% widget '/widget/header' %}
+
+  {% css "/htdocs/css/index.css" %}{% endcss %}
+  {% css "/htdocs/css/index.css" %}{% endcss %}
+
   {{ name }}: 年龄 {{ age }}<br/>
+
   
-  {% link "css/plugin1.css" %}
 
   <script src="{% uri "htdocs/js/native_call.js" %}"></script>
   <script src="{% uri "/test/main.js" %}"></script>

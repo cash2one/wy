@@ -1,6 +1,7 @@
 #!/user/bin/env python
 # coding: utf-8
 
+import re
 from jinja2 import nodes
 from jinja2.ext import Extension
 
@@ -70,6 +71,9 @@ class UriExtension(BaseExtension):
     # 在 uri_dist 中，查找资源正确的名称
     if resource_name.startswith('/'):
       resource_name = resource_name[1:]
+    # 删除资源的前缀斜杠
+    replace_reg = re.compile(r'^/*')
+    resource_name = replace_reg.sub('', resource_name)
     
     if resource_name in self.environment.uri_dist:
       obj = self.environment.uri_dist[resource_name]

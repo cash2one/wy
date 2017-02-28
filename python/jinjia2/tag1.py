@@ -6,12 +6,14 @@ import json
 
 # 本地文件
 from extensions.uri import UriExtension
-from extensions.link import LinkExtension
+from extensions.css import CssExtension
+from extensions.script import ScriptExtension
+from extensions.widget import WidgetExtension
 
 env = Environment(
     auto_reload=False,
     loader=FileSystemLoader('./templates'), # 也可以是绝对路径
-    extensions=[UriExtension, LinkExtension]
+    extensions=[UriExtension, CssExtension, ScriptExtension, WidgetExtension]
 )
 
 #### 测试 {% uri "链接" %} ####
@@ -34,12 +36,19 @@ def render(tmp, map):
     return tmp.render(**map)
 
 env.uri.ready()
-env.link.ready()
+env.css.ready()
+env.script.ready()
+env.widget.ready()
 
 template = env.get_template('tag1.html')
 result = render(template, { "title": u"测试", "name": u"da宗熊", "age": 20, "list": [] })
-result = result.replace('</head>', env.link.build_link() + '\n</head>')
+
+result = result.replace('</head>', env.css.build_css() + '\n</head>')
+result = result.replace('</body>', env.script.build_script() + '\n</body>')
+
 print result
 
 env.uri.reset()
-env.link.reset()
+env.css.reset()
+env.script.reset()
+env.widget.reset()
