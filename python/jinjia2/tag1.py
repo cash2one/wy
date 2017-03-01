@@ -8,12 +8,11 @@ import json
 from extensions.uri import UriExtension
 from extensions.css import CssExtension
 from extensions.script import ScriptExtension
-from extensions.widget import WidgetExtension
 
 env = Environment(
     auto_reload=False,
     loader=FileSystemLoader('./templates'), # 也可以是绝对路径
-    extensions=[UriExtension, CssExtension, ScriptExtension, WidgetExtension]
+    extensions=[UriExtension, CssExtension, ScriptExtension]
 )
 
 #### 测试 {% uri "链接" %} ####
@@ -38,7 +37,6 @@ def render(tmp, map):
 env.uri.ready()
 env.css.ready()
 env.script.ready()
-env.widget.ready()
 
 template = env.get_template('tag1.html')
 result = render(template, { "title": u"测试", "name": u"da宗熊", "age": 20, "list": [] })
@@ -51,4 +49,3 @@ print result
 env.uri.reset()
 env.css.reset()
 env.script.reset()
-env.widget.reset()

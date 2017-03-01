@@ -1,3 +1,14 @@
+{% macro widget (name = "", css = False, js = False) -%}
+  {% if css %}
+    {% css name|replace(".html", ".css") %}{% endcss %}
+  {% endif %}
+  {% if name %}
+    {% include name ignore missing with context %}
+  {% endif %}
+  {% if js %}
+    {% script name|replace(".html", ".js") %}{% endscript %}
+  {% endif %}
+{%- endmacro %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,7 +24,6 @@
       console.log(2);
     });
   {% endscript %}
-
 
   {# 后出现的 css-> id，覆盖掉前面出现的 #}
   {% css "inline1" %}
@@ -33,11 +43,11 @@
   {% endcss %}
 </head>
 <body>
-  {% widget '/widget/header' %}
 
   {% css "/htdocs/css/index.css" %}{% endcss %}
   {% css "/htdocs/css/index.css" %}{% endcss %}
 
+  {{ widget(name = "/widget/header/header.html", js = True, css = True) }}
   {{ name }}: 年龄 {{ age }}<br/>
 
   

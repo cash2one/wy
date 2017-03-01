@@ -16,6 +16,10 @@
       "uri": "http://cdn.cbg.163.com/htdocs/less/index_8775e3c.less",
       "type": "less"
     },
+    "widget/header/header.css": {
+      "uri": "http://cdn.cbg.163.com/widget/css/header_8775e3c.less",
+      "type": "less"
+    },
     "test/data/data.js": {
       "uri": "/test/data/data.js",
       "type": "js"
