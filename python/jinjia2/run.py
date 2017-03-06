@@ -18,7 +18,7 @@ env = Environment(
 #### 测试 {% uri "链接" %} ####
 # 读取 配置文件
 str_dist_resource = '{ "res": {} }'
-file_object = open('./tag1_map.json', 'r')
+file_object = open('./run_map.json', 'r')
 try:
      str_dist_resource = file_object.read()
 finally:

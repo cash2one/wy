@@ -66,20 +66,28 @@ class UriExtension(BaseExtension):
 
     return self.query_resource(resource_name)
   
-  # 查找资源
+  # 查找资源链接
   def query_resource(self, resource_name):
-    # 在 uri_dist 中，查找资源正确的名称
-    if resource_name.startswith('/'):
-      resource_name = resource_name[1:]
-    # 删除资源的前缀斜杠
-    replace_reg = re.compile(r'^/*')
-    resource_name = replace_reg.sub('', resource_name)
-    
-    if resource_name in self.environment.uri_dist:
-      obj = self.environment.uri_dist[resource_name]
+    obj = self.query_object(resource_name)
+    if obj != None:
       return obj['uri']
     else:
-      return '/' + resource_name
+      return resource_name
+  
+  # 查找资源对象对象
+  def query_object(self, url):
+    # 在 uri_dist 中，查找资源正确的名称
+    if url.startswith('/'):
+      url = url[1:]
+    # 删除资源的前缀斜杠
+    replace_reg = re.compile(r'^/*')
+    url = replace_reg.sub('', url)
+    
+    if url in self.environment.uri_dist:
+      obj = self.environment.uri_dist[url]
+      return obj
+    else:
+      return None
 
   # 设置资源字典
   def set_dist(self, resource_dist):

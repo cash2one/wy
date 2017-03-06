@@ -1,0 +1,50 @@
+{
+  "res": {
+    "htdocs/css/base.css": {
+      "uri": "/css/lib.css",
+      "type": "css"
+    },
+    "htdocs/css/reset.css": {
+      "uri": "/css/lib.css",
+      "type": "css"
+    },
+    "htdocs/css/index.css": {
+      "uri": "/css/index_8775e3c.css",
+      "type": "css"
+    },
+    "widget/header/header.css": {
+      "uri": "/widget/css/header_8775e3c.css",
+      "type": "css"
+    },
+    "htdocs/js/base.js": {
+      "uri": "/htdocs/js/base_ef7a6a0.js",
+      "type": "js",
+      "extras": {
+        "moduleId": "htdocs/js/base"
+      }
+    },
+    "htdocs/js/index.js": {
+      "uri": "/htdocs/js/index_3d64f5d.js",
+      "type": "js",
+      "extras": {
+        "moduleId": "htdocs/js/index"
+      },
+      "deps": [
+        "htdocs/js/base.js",
+        "htdocs/js/native_call.js"
+      ]
+    },
+    "htdocs/js/native_call.js": {
+      "uri": "/htdocs/js/native_call_559a8cb.js",
+      "type": "js",
+      "extras": {
+        "moduleId": "htdocs/js/native_call"
+      }
+    },
+    "widget/header/header.js": {
+      "uri": "/widget/js/header_8775e3c.js",
+      "type": "js"
+    }
+  },
+  "pkg": {}
+}

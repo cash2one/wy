@@ -1,3 +1,4 @@
+{# 组件的 macro #}
 {% macro widget (name = "", css = False, js = False) -%}
   {% if css %}
     {% css name|replace(".html", ".css") %}{% endcss %}
@@ -9,11 +10,13 @@
     {% script name|replace(".html", ".js") %}{% endscript %}
   {% endif %}
 {%- endmacro %}
+
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
   <title>{{ title }}</title>
+  {# 测试 script 标签，是否会按顺序，放到页面最底部 #}
   {% script %}
     $(function() {
       console.log(1);
@@ -24,6 +27,28 @@
       console.log(2);
     });
   {% endscript %}
+
+  {# 后出现的 js-> id，覆盖掉前面出现的 #}
+  {% script "inline1" %}
+    console.log('不应该输出这段');
+  {% endscript %}
+  {% script "inline1" %}
+    console.log('应该输出这段');
+  {% endscript %}
+
+  {# 根据 map.json，index.js 会依赖 tool.js，所以 tool.js 也需要加载进来 #}
+  {% script "htdocs/js/index.js" %}{% endscript %}
+  
+
+  {# 根据 map.json，这两个脚本，会合并为 lib.js #}
+  {% script "/htdocs/js/native_call.js" %}{% endscript %}
+  {% script "htdocs/js/base.js" %}{% endscript %}
+
+  
+
+  {# 此文件，不在 map.json 中，所以应该源地址返回 #}
+  {% script "http://www.test.com/jquery.js" %}{% endscript %}
+
 
   {# 后出现的 css-> id，覆盖掉前面出现的 #}
   {% css "inline1" %}
@@ -41,18 +66,18 @@
   {% css %}
     .nn { width: 100%; height: 100%; }
   {% endcss %}
+
+  {# 根据 map.json，这两个样式，会合并为 lib.css #}
+  {% css "htdocs/css/reset.css" %}{% endcss %}
+  {% css "htdocs/css/base.css" %}{% endcss %}
+
+  {# 根据 map.json，这个样式，地址应该会被 md5 的 #}
+  {% css "htdocs/css/index.css" %}{% endcss %}
+
+  {# 此文件，不在 map.json 中，所以应该源地址返回 #}
+  {% css "http://www.test.com/jquery.css" %}{% endcss %}
 </head>
 <body>
-
-  {% css "/htdocs/css/index.css" %}{% endcss %}
-  {% css "/htdocs/css/index.css" %}{% endcss %}
-
   {{ widget(name = "/widget/header/header.html", js = True, css = True) }}
-  {{ name }}: 年龄 {{ age }}<br/>
-
-  
-
-  <script src="{% uri "htdocs/js/native_call.js" %}"></script>
-  <script src="{% uri "/test/main.js" %}"></script>
 </body>
 </html>

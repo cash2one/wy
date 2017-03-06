@@ -91,8 +91,11 @@ class CssExtension(BaseExtension):
   
   # 添加内联资源
   def _do_add_inline_link(self, caller):
-    self._id += 1
-    return self._do_add_link('__auto_link_%s' % self._id, caller)
+    content = caller().strip()
+    if content != '':
+      self._id += 1
+      return self._do_add_link('__auto_link_%s' % self._id, caller)
+    return ''
   
   # 判断资源是否已经存在
   def _index_of(self, id):

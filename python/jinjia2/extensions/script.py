@@ -95,8 +95,10 @@ class ScriptExtension(BaseExtension):
   
   # 添加内联资源
   def _do_add_inline_script(self, caller):
-    self._id += 1
-    self._do_add_script('_auto_script_%s' % self._id, caller)
+    content = caller().strip()
+    if content != '':
+      self._id += 1
+      return self._do_add_script('_auto_script_%s' % self._id, caller)
     return ''
 
   # 判断资源是否已经存在
@@ -122,15 +124,26 @@ class ScriptExtension(BaseExtension):
   # 添加外部资源
   def add_extra(self, url):
     # 尝试从 uri 中，修复链接
+    newUrl = url
     if hasattr(self.environment, "uri"):
-      url = self.environment.uri.query_resource(url)
+      newUrl = self.environment.uri.query_resource(url)
 
     # 加入集合中
-    if self._index_of(url) != -1:
+    if self._index_of(newUrl) != -1:
       pass
     else:
-      self.environment.script_list.append({ "type": ScriptType.EXTRA, "id": url, "content": url })
+      self._add_deps(url)
+      self.environment.script_list.append({ "type": ScriptType.EXTRA, "id": newUrl, "content": newUrl })
   
+  # 如果存在依赖，则应该把依赖优先加载
+  def _add_deps(self, url):
+    obj = self.environment.uri.query_object(url)
+    if obj != None:
+      if 'deps' in obj:
+        lst = obj['deps']
+        for val in lst:
+          self.add_extra(val)
+
   # 生成 script 标签
   def build_script(self):
     script_list = self.environment.script_list
