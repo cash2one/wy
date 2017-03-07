@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>模板玉符</title>
+  <script src="./js/vue.js" charset="utf-8"></script>
+</head>
+<body>
+  <div id="app">
+    <ul>
+      <li>普通绑定: {{ normal }}</li>
+      <li>html绑定: <span v-html="html"></span></li>
+      <li>属性绑定: <span v-bind:title="title">标题</span></li>
+      <!-- 熟路测试一下双向绑定 -->
+      <li>Boolean属性绑定: <input type="checkbox" v-model:checked="checked" /></li>
+      <!-- 也仅限于支持三元表达式 -->
+      <li>表达式: {{ checked ? 1 : 0 }}</li>
+      <li>事件测试: <button v-on:click="reverse($event)">按钮</button></li>
+      <!-- 这里的 this，指向的，是window哦 -->
+      <li>修饰符测试: <a href="http://www.baidu.com/" v-on:click.prevent="this.console.log($event.target.href)">点击不能跳转的咧~</a></li>
+      <!-- 过滤器 -->
+      <li>过滤器: {{ 'to_upper_case' | toUpper  }}</li>
+      <li>过滤器: {{ 'hello vue~' | capitalize }}</li>
+      <!-- v-bind 缩写 -->
+      <li>缩写绑定: <span :title="title">标题</span></li></li>
+      <!-- v-on 缩写 -->
+      <li>缩写绑定: <button @click="reverse($event)">按钮</button></li>
+    </ul>
+  </div>
+
+  <script type="text/javascript">
+    // 定义全局过滤器
+    Vue.filter('toUpper', function(value) {
+      if (!value) return '';
+      value += '';
+      return value.toUpperCase();
+    });
+
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        normal: 1,
+        html: '<strong>2</strong>',
+        title: 'test',
+        checked: true
+      },
+      methods: {
+        reverse: function(event) {
+          event.target.innerHTML = event.target.innerHTML.split('').reverse().join('');
+        }
+      },
+      // 定义局部过滤器
+      filters: {
+        capitalize: function (value) {
+          if (!value) return ''
+          value = value.toString()
+          return value.charAt(0).toUpperCase() + value.slice(1)
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Slot 与 作用域插槽</title>
+  <script src="./js/vue.js" charset="utf-8"></script>
+</head>
+<body>
+  <div id="app">
+    <my-list :items="items">
+      <template slot="item" scope="props">
+        <li class="my-item">
+          {{ props.text }}
+        </li>
+      </template>
+    </my-list>
+  </div>
+  <script type="text/javascript">
+    var child = {
+      props: {
+        items: {
+          type: Array,
+          require: true
+        }
+      },
+      template: `
+        <ul>
+          <!-- 把 :text 传到父层插槽中 -->
+          <slot name="item" v-for="item in items" :text="item.text"></slot>
+        </ul>
+      `
+    };
+
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        items: [
+          { text: '插槽显示的1' },
+          { text: '插槽显示的2'}
+        ]
+      },
+      components: {
+        'my-list': child
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>vue实例，以及生命周期</title>
+  <script src="./js/vue.js" charset="utf-8"></script>
+</head>
+<body>
+  <div id="app">
+    {{ index }}: {{ message }}
+  </div>
+  <script type="text/javascript">
+    // 两种初始化方式:
+    // 方式一: 普通初始化
+    // var vm = new Vue({ })
+
+    // 方式二: 拓展继承
+    var MyComponent = Vue.extend({
+      data: function() {
+        // 一定要定义为 function 方式，来 return 一个新的对象
+        // 不然所有继承父类的组件，都会共享这部分的内容
+        return {
+          message: '默认消息'
+        }
+      }
+    });
+
+    var data = {
+      index: 1
+    };
+    var vm = new MyComponent({
+      el: '#app',
+      data: data,
+
+      // 几个生命周期
+      beforeCreate: function() {
+        console.log('在创建之前');
+      },
+
+      created: function() {
+        // 如有有 el 参数 或 vm.$mount(el) 被调用，则继续往下执行，否则不往下走了
+        console.log('组件创建完毕，还没有渲染');
+      },
+
+      beforeMount: function() {
+        console.log('在创建之前')
+      },
+
+      mounted: function() {
+        console.log('组件被创建了');
+      },
+
+      beforeUpdate: function() {
+        console.log('组件更新');
+      },
+
+      updated: function() {
+        console.log('组件更新完毕');
+      },
+
+      beforeDestroy: function() {
+        console.log('组件销毁前');
+      },
+
+      destroyed: function() {
+        console.log('组件被销毁');
+      }
+    });
+
+    vm.index = 2;
+    console.assert(vm.index === data.index, 'vm.index 指向 data.index');
+    data.index = 3;
+    console.assert(vm.index === data.index, 'data.index 指向 vm.index');
+    var messageUpdated = data.message = "默认消息更新了";
+    console.assert(vm.message == messageUpdated, 'data也拥有了vm.$data的所有属性');
+
+    // vm 里的一些属性
+    console.assert(vm.$data === data, 'vm.$data 是存储数据的地方');
+    console.assert(vm.$el === document.getElementById('app'), 'vm.$el 指向绑定的元素');
+
+    // 将返回一个取消监听的函数
+    var unwatch = vm.$watch('index', function(newVal, oldVal) {
+      // 监听新旧值的变化
+      console.log(newVal, oldVal);
+    });
+    vm.index = 1;
+    // 立刻执行 unwatch，将导致回调没有立刻执行，所以使用内置的 $nextTick，打一个时间差
+    vm.$nextTick(unwatch);
+
+    // 销毁组件
+    vm.$nextTick(function() {
+      vm.$destroy();
+    });
+  </script>
+</body>
+</html>

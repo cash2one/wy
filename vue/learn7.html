@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>过度效果</title>
+  <script src="./js/vue.js" charset="utf-8"></script>
+</head>
+<body>
+  <div id="app">
+    <button v-on:click="show = !show">
+      Toggle
+    </button>
+    <transition name="fade">
+      <p v-if="show">hello</p>
+    </transition>
+  </div>
+
+  <style>
+    /* 正在执行动画时，会添加这个 class */
+    .fade-enter-active, .fade-leave-active {
+      transition: opacity 2s
+    }
+    /* 定义进入过度的开始状态，设置，在下一帧会被移除 */
+    .fade-enter {
+      opacity: 0
+    }
+    /* 元素进入的结束状态 */
+    .fade-enter-to {
+      opacity: 1;
+    }
+    /* 定义离开的开始状态，在下一帧会被移除 */
+    .fade-leave {
+      opacity: 1;
+    }
+    /* 元素离开的结束状态 */
+    .fade-leave-to {
+      opacity: 0;
+    }
+  </style>
+  <script type="text/javascript">
+    var vm = new Vue({
+      data: {
+        show: true
+      }
+    });
+    vm.$mount('#app');
+  </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>计算属性，能少用尽量少用，很吃性能，而且太多了，dom更新会被拖慢</title>
+  <script src="./js/vue.js" charset="utf-8"></script>
+</head>
+<body>
+  <div id="app">
+    <p>原消息: "{{ message }}"</p>
+    <p>计算所得消息: "{{ reversedMessage }}" <button v-on:click="$emit('remove')">X</button></p>
+  </div>
+
+  <script type="text/javascript">
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        message: 'Hello'
+      },
+      computed: {
+        // a computed getter
+        reversedMessage: function () {
+          // 只要 this.message 没有更新，那么，此方法是不会再触发的了~
+          // 因为计算属性内部，有做相关的缓存
+          return this.message.split('').reverse().join('')
+        },
+        // now 属性，因为没有依赖内部属性
+        // 所以第一次访问之后，无论此属性被访问多少次，都不会再更新了
+        now: function() {
+          return Date.now();
+        }
+      }
+    })
+  </script>
+</body>
+</html>

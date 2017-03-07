@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>简单使用</title>
+  <script src="./js/vue.js" charset="utf-8"></script>
+</head>
+<body>
+  <div id="app">
+    <h1>{{ message1 }}</h1>
+    <!-- 绑定 title 属性 -->
+    <div v-bind:title="title" v-on:mouseover="updateTitle">
+      鼠标移过这里，title每次会自动生成
+    </div>
+
+    <!-- v-if 指令 -->
+    <button v-on:click="toggle">切换显示内容</button>
+    <div v-if="isShow">
+      被v-if控制的内容
+    </div>
+
+    <!-- 循环测试 -->
+    <ul>
+      <todo-item v-for="todo,index in todos" v-bind:todo="todo" v-bind:index="index"></todo-item>
+    </ul>
+  </div>
+  <script type="text/javascript">
+    // 全局组件
+    Vue.component('todo-item', {
+      props: ['todo', 'index'],
+      template: '<li>{{ index }}: {{ todo.text }}</li>'
+    });
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        message1: 'Hello Vue!',
+        title: 'This is title' + new Date(),
+
+        // 如果 isShow 一开始没有定义，则 toggle 方法，会失效哦~
+        isShow: false,
+
+        todos: [
+          { text: 'Learn Javascript' },
+          { text: 'Learn Vue' },
+          { text: 'Build something awesome' }
+        ]
+      },
+      methods: {
+        updateTitle: function() {
+          this.title = 'This is title' + new Date();
+        },
+
+        toggle: function() {
+          this.isShow = !this.isShow;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
