@@ -4,3 +4,4 @@ error-log/source
 __tmp*
 light7/.python/run.py
 *.pyc
+vue/dest/
