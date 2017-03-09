@@ -52,6 +52,43 @@ module.exports = {
   lineno (str) {
     return ((str || '').match(/(\n\r|\r\n|\n|\r)/g) || []).length + 1;
   },
+  // 读取 index 所在的所有字符
+  readLineByIndex (str, index) {
+    let list = [str[index]];
+    // 往前找
+    let isGoon = true, i = index;
+    while (isGoon) {
+      i--;
+      let s = str[i];
+      if (s) {
+        if (s == '\n' || s == '\r') {
+          isGoon = false;
+        } else {
+          list.unshift(str[i]);
+        }
+      } else {
+        isGoon = false;
+      }
+    }
+
+    isGoon = true, i = index;
+    // 往后找
+    while (isGoon) {
+      i++;
+      let s = str[i];
+      if (s) {
+        if (s == '\n' || s == '\r') {
+          isGoon = false;
+        } else {
+          list.push(str[i]);
+        }
+      } else {
+        isGoon = false;
+      }
+    }
+
+    return list.join('');
+  },
 
   // 递归列表
   recurList (list, options) {

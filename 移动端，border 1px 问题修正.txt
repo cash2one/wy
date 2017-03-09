@@ -1,0 +1,11 @@
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+    .ios .button {
+        border-width:.5px
+    }
+}
+
+@media only screen and (-webkit-device-pixel-ratio: 3) {
+    .ios .button {
+        border-width:.33px
+    }
+}
