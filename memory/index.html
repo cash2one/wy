@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>js 内存回收测试</title>
+</head>
+<body>
+
+结论: 只要所有引用，都设置为 null，内存就会被回收了
+
+  <script>
+    function Picker() {
+      this.a = 1;
+      this.b = 2;
+      this.$body = document.body;
+    }
+    Picker.prototype = {
+      say: function() { console.log('hi'); }
+    }
+    var picker = new Picker();
+    document.body.picker = picker;
+    picker = null;
+
+    var y = (function() {
+      console.log(picker);
+
+      function Year() {
+        this.x = 1;
+      }
+      return new Year;
+    })();
+    y = null;
+  </script>
+</body>
+</html>
