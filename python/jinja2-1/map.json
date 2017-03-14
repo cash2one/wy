@@ -1,0 +1,63 @@
+{
+  "res": {
+    "htdocs/css/index.css": {
+      "uri": "/htdocs/css/index_d1961ff.css",
+      "type": "css"
+    },
+    "htdocs/css/reset.css": {
+      "uri": "/htdocs/css/reset_16dfd10.css",
+      "type": "css"
+    },
+    "htdocs/js/async.js": {
+      "uri": "/htdocs/js/async_d36e452.js",
+      "type": "js"
+    },
+    "htdocs/js/base.js": {
+      "uri": "/htdocs/js/lib_d4781e2.js",
+      "type": "js",
+      "deps": [
+        "htdocs/js/native_call.js"
+      ]
+    },
+    "htdocs/js/index.js": {
+      "uri": "/htdocs/js/index_e19b3e6.js",
+      "type": "js",
+      "deps": [
+        "htdocs/js/base.js",
+        "htdocs/js/native_call.js",
+        "htdocs/css/index.css"
+      ]
+    },
+    "htdocs/js/mod.js": {
+      "uri": "/htdocs/js/mod_c8a3cfb.js",
+      "type": "js"
+    },
+    "htdocs/js/native_call.js": {
+      "uri": "/htdocs/js/lib_d4781e2.js",
+      "type": "js",
+      "deps": [
+        "htdocs/js/base.js"
+      ]
+    },
+    "htdocs/less/index.less": {
+      "uri": "/htdocs/less/index_8775e3c.less",
+      "type": "less"
+    },
+    "htdocs/module/header.js": {
+      "uri": "/htdocs/module/header_6dabfe4.js",
+      "type": "js"
+    },
+    "test/data/data.js": {
+      "uri": "/test/data/data.js",
+      "type": "js"
+    },
+    "test/data/index.js": {
+      "uri": "/test/data/index.js",
+      "type": "js"
+    },
+    "test/index.js": {
+      "uri": "/test/index.js",
+      "type": "js"
+    }
+  }
+}

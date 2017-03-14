@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>单元测试</title>
+  <link rel="stylesheet" href="./css/qunit.css">
+  <script src="./js/qunit.js" charset="utf-8"></script>
+</head>
+<body>
+  <!-- 必须先引入这两个元素 -->
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+
+  <script type="text/javascript">
+    var test = QUnit.test.bind(QUnit),
+      module = QUnit.module.bind(QUnit);
+
+    module('同步测试');
+    test('同步加载脚本', function(assert) {
+      assert.ok(1 == '1', '==会自动转义');
+      assert.equal(1, '1', '==会自动转义2');
+
+      assert.deepEqual({x: 1}, {x: 1}, '两个对象，有相同的字面量');
+    });
+
+    module('异步测试');
+    test('异步加载测试', function(assert) {
+      // 期待要运行两次检测
+      assert.expect( 2 );
+
+      function calc( x, operation ) {
+        return operation( x );
+      }
+
+      var result = calc( 2, function( x ) {
+        assert.ok( true, "calc() calls operation function" );
+        return x * x;
+      });
+
+      assert.equal( result, 4, "2 square equals 4" );
+    });
+
+    test('异步加载2', function(assert) {
+      var done = assert.async();
+      setTimeout(function() {
+        assert.ok(1 == '1', '异步测试通过');
+        done();
+      }, 10);
+    });
+  </script>
+</body>
+</html>

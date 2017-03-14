@@ -1,0 +1,54 @@
+{# 组件的 macro #}
+{% macro widget (name = "", css = False, js = False) -%}
+  {% if css %}
+    {% require name|replace(".html", ".css") %}
+  {% endif %}
+  {% if name %}
+    {% include name ignore missing with context %}
+  {% endif %}
+  {% if js %}
+    {% require name|replace(".html", ".js") %}
+  {% endif %}
+{%- endmacro %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{ title }} By {{ author }}</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, max-scale=1">
+  <link href="{% uri "/htdocs/css/reset.css" %}" rel="stylesheet" >
+  
+  {# 应该生成 script 标签，指向原本链接 #}
+  {% require "http://www.baidu.com/lib/js/jquery.js" %}
+  {% require "http://www.baidu.com/lib/js/jquery.js" %}
+
+  {# 应该生成 link 标签，指向原本的链接 #}
+  {% require "http://www.baidu.com/lib/css/reset.css" %}
+  
+  {# 内联的 style，应该按顺序出现 #}
+  {% style %}
+    body { font-size: 14px; }
+  {% endstyle %}
+
+  {# 动态指定外部资源的类型 #}
+  {% require "http://www.cdn.baidu.com/unitest", "css" %}
+
+  {# 读取 map.json 的配置，把正确的脚本加载回来 #}
+  {% require "htdocs/js/mod.js" %}
+
+  {# 内联的 script，应该按顺序出现 #}
+  {% script %}
+    $(function() {
+      console.log('ready');
+    });
+  {% endscript %}
+
+  {# 读取 map.json 的配置，自动把依赖的 js 和 css 加载 #}
+  {% require "htdocs/js/index.js" %} 
+</head>
+<body>
+  {# 组件测试 #}
+  {{ widget(name = "/widget/header/header.html", js = True, css = True) }}
+</body>
+</html>
