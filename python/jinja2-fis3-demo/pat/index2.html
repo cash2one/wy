@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{title}}</title>
+  <script src="./js/mod.js"></script>
+  <script src="./js/vue.js"></script>
+  <link rel="stylesheet" href="./css/reset.css">
+  <script src="./js/index.js"></script>
+  <script>
+    // 为了让DOM充分加载，需要额外代码
+    window.addEvent('domready', function() {
+      require(["htdocs/js/index.js"], function(header) {
+        console.log('Hi, success require');
+        console.log(header);
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="module1">
+    {{ content }}
+  </div>
+  <style>
+    .module1 { padding: 20px; font-weight: bold; }
+  </style>
+
+  <script src="./js/mod.js"></script>
+</body>
+</html>

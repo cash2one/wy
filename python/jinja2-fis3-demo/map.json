@@ -1,0 +1,76 @@
+{
+  "res": {
+    "component/userInfo/userInfo.vue": {
+      "uri": "/htdocs/vue/userInfo/userInfo.js",
+      "type": "js",
+      "deps": [
+        "component/userInfo/userInfo.css"
+      ]
+    },
+    "component/userInfo/userInfo.css": {
+      "uri": "/htdocs/vue/userInfo/userInfo.css",
+      "type": "css"
+    },
+    "htdocs/css/index.css": {
+      "uri": "/htdocs/css/index.css",
+      "type": "css"
+    },
+    "htdocs/css/reset.css": {
+      "uri": "/htdocs/css/reset.css",
+      "type": "css"
+    },
+    "htdocs/js/async.js": {
+      "uri": "/htdocs/js/async.js",
+      "type": "js"
+    },
+    "htdocs/js/base.js": {
+      "uri": "/htdocs/js/lib.js",
+      "type": "js"
+    },
+    "htdocs/js/index.js": {
+      "uri": "/htdocs/js/index.js",
+      "type": "js",
+      "deps": [
+        "htdocs/css/index.css",
+        "htdocs/js/native_call.js",
+        "htdocs/js/base.js",
+        "component/userInfo/userInfo.vue"
+      ]
+    },
+    "htdocs/js/mod.js": {
+      "uri": "/htdocs/js/mod.js",
+      "type": "js"
+    },
+    "htdocs/js/native_call.js": {
+      "uri": "/htdocs/js/lib.js",
+      "type": "js",
+      "deps": [
+        "htdocs/js/base.js"
+      ]
+    },
+    "htdocs/js/vue.js": {
+      "uri": "/htdocs/js/vue.js",
+      "type": "js"
+    },
+    "test/data/index2.js": {
+      "uri": "/test/data/index2.js",
+      "type": "js"
+    },
+    "test/index.js": {
+      "uri": "/test/index.js",
+      "type": "js"
+    },
+    "test/second/child.js": {
+      "uri": "/test/second/child.js",
+      "type": "js"
+    },
+    "widget/header/header.js": {
+      "uri": "/htdocs/widget/header/header.js",
+      "type": "js"
+    },
+    "widget/header/header.less": {
+      "uri": "/htdocs/widget/header/header.css",
+      "type": "css"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+.component-userInfo {
+  display: inline-block;
+  border: 1px solid #ddd;
+  margin: 10px;
+  padding: 10px;
+  -webkit-box-shadow: 0 0 2px #ddd;
+          box-shadow: 0 0 2px #ddd;
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+}
+.component-userInfo .icon,
+.component-userInfo .content {
+  display: inline-block;
+  vertical-align: bottom;
+}
+.component-userInfo .icon {
+  width: 120px;
+  height: 120px;
+  background: url(back.png) no-repeat;
+}
+.component-userInfo .name {
+  font-size: 18px;
+}
+.component-userInfo .introduce {
+  font-size: 14px;
+  font-weight: normal;
+}

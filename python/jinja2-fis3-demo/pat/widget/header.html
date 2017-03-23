@@ -1,0 +1,11 @@
+{% require '/widget/header/header.js' %}
+{% require '/widget/header/header.less' %}
+<div class="header">
+  by da宗熊
+</div>
+{% script %}
+  /* 严格遵循，最前面的斜杠是要不得的!!! 不过后缀可以省略 */
+  require(['widget/header/header'], function(header) {
+    header.init();
+  });
+{% endscript %}

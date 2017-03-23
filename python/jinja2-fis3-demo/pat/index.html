@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{title}}</title>
+  <script src="{% uri "/htdocs/js/mod.js" %}"></script>
+  {% require "htdocs/js/vue.js" %}
+  {% require "htdocs/css/reset.css" %}
+  {% require "htdocs/js/index.js" %}
+  {% script %}
+    // 因为脚本已经置于页面最底部，所以绝对保证了 dom 元素，已经准备好了，不需要额外的代码
+    require(["htdocs/js/index.js"], function(header) {
+      console.log('Hi, success require');
+      console.log(header);
+    });
+  {% endscript %}
+</head>
+<body>
+  <div class="module1">
+    {{ content }}
+  </div>
+  {% style %}
+    .module1 { padding: 20px; font-weight: bold; }
+  {% endstyle %}
+
+  {% require "htdocs/js/vue.js" %}
+</body>
+</html>
