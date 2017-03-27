@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>组件通讯，vuex - mapState</title>
+  <script src="./js/vue.js"></script>
+  <script src="./js/vuex.js"></script>
+</head>
+<body>
+  <div id="app">
+    <counter></counter>
+    <input type="button" value="+" @click="increase">
+  </div>
+
+  <script>
+    var store = new Vuex.Store({
+      state: {
+        count: 0
+      },
+
+      mutations: {
+        increase: function(state) {
+          state.count++;
+        }
+      }
+    });
+
+    var counter = Vue.extend({
+      template: '<div>{{ count }} -> {{ countAlias }} -> {{ countPlusLocalState }}</div>',
+      data: function() {
+        return {
+          localCount: 5
+        }
+      },
+
+      // Vuex.mapState 纯粹是工具方法，并没有其它特殊的处理
+      // 如果计算属性，刚好与 store 中的名字一直，可以使用: Vuex.mapState([ 'count' ]) 代替之
+      computed: Vuex.mapState({
+        // 使用 mapState 后，函数的第一个参数，就是 state 了
+        count: function(state) { return state.count; },
+        // countAlias 的值，等于 state => state.count
+        countAlias: 'count',
+        countPlusLocalState: function(state) {
+          return state.count + this.localCount;
+        }
+      })
+    });
+
+    var app = new Vue({
+      el: '#app',
+      store: store,
+      components: { counter: counter },
+      methods: {
+        increase: function() {
+          this.$store.commit('increase');
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>组件通讯，vuex</title>
+  <script src="./js/vue.js"></script>
+  <script src="./js/vuex.js"></script>
+</head>
+<body>
+  <div id="app">
+    <user-info :user="user"></user-info>
+    <div class="message">
+      {{ message }}
+    </div>
+  </div>
+
+  <script>
+    var store = new Vuex.Store({
+      state: {
+        message: ''
+      },
+
+      mutations: {
+        message: function(state, msg) {
+          state.message = msg;
+        }
+      }
+    });
+
+    var userInfo = Vue.extend({
+      props: {
+        user: { type: Object, default: {} }
+      },
+      template: `<div>I'm {{ user.name }}<br/><a href="javascript:;" @click="sayHi">Say Hi~</a></div>`,
+      data: function() {
+        return { };
+      },
+      methods: {
+        sayHi: function() {
+          this.$store.commit('message', 'Hello ' + this.user.name + ', at ' + (new Date).toLocaleString());
+        }
+      }
+    });
+
+    var app = new Vue({
+      el: '#app',
+      // 使用 vuex
+      store: store,
+      // vuex 配合计算属性使用
+      computed: {
+        message: function() {
+          return this.$store.state.message;
+        }
+      },
+
+      data: {
+        user: {
+          name: 'da宗熊'
+        }
+      },
+      components: {
+        'user-info': userInfo
+      }
+    });
+  </script>
+</body>
+</html>

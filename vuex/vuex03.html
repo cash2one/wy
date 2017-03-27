@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>组件通讯，vuex</title>
+  <script src="./js/vue.js"></script>
+  <script src="./js/vuex.js"></script>
+</head>
+<body>
+  <div id="app">
+    <counter></counter>
+  </div>
+
+  <script>
+    // vuex 中，允许我们定义 getters，定义后，可在多个组件的 computed 属性中使用
+    // getters 会暴露为 store.getters 对象
+
+    var store = new Vuex.Store({
+      state: {
+        todos: [
+          { id: 1, text: '消灭那只宗熊', done: false },
+          { id: 2, text: '杀死那只黑熊', done: true }
+        ]
+      },
+
+      getters: {
+        doneTodos: function(state) {
+          return state.todos.filter(function(todo) { return todo.done; });
+        },
+        todoCount: function(state) {
+          return state.todos.length;
+        },
+        // 第二个参数，是 getters，可以使用其它 getters
+        doneTodosCount: function(state, getters) {
+          return getters.doneTodos.length;
+        }
+      },
+
+      mutations: {
+        increase: function(state) {
+          state.count++;
+        }
+      }
+    });
+
+    var counter = Vue.extend({
+      template: `<div>
+        <ul v-for="todo in todos">
+          <li>{{ todo.id }}. {{ todo.text }} [{{ todo.done ? '√' : '×' }}]</li>
+        </ul>
+        <div>总数: {{ count }} / 已完成: {{ doneCount }}</div>
+      </div>`,
+      computed: Object.assign(
+        // 获取 state 中的 todos
+        Vuex.mapState(['todos']),
+
+        // 获取 getters 的 doneTodosCount
+        {
+          doneCount: function(state) {
+            return this.$store.getters.doneTodosCount;
+          }
+        },
+
+        // 可以使用 Vuex.mapGetters 工具，快速使用 getters
+        // Vuex.mapGetters([ 'todoCount' ]) 如果同名，可以这样使用
+        // 如果要改名，就这样使用:
+        Vuex.mapGetters({
+          count: 'todoCount'
+        })
+      )
+    });
+
+    var app = new Vue({
+      el: '#app',
+      store: store,
+      components: { counter: counter }
+    });
+  </script>
+</body>
+</html>

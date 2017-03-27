@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>组件通讯，双向绑定</title>
+  <script src="./js/vue.js"></script>
+  <script src="./js/propsync.js"></script>
+</head>
+<body>
+  <!-- http://www.cnblogs.com/xxcanghai/p/6124699.html -->
+  <!-- 限制，父组件 和 子组件，属性名字，必须一致，限制有点大，可以放弃 -->
+  <div id="app">
+    <user-info :user="user" :message="message" @on-props-change="change"></user-info>
+    <div class="message">
+      {{ message }}
+    </div>
+  </div>
+
+  <script>
+    var userInfo = Vue.extend({
+      // 让这个组件，默认的 props，支持双向绑定
+      mixins: [propsync],
+      props: {
+        user: { propsync: false },
+        message: { default: '' }
+      },
+      template: `<div>I'm {{ user.name }}<br/><a href="javascript:;" @click="sayHi">Say Hi~</a></div>`,
+      data: function() {
+        return {
+          // newMessage: this.message
+        };
+      },
+      methods: {
+        sayHi: function() {
+          // 通过前缀 p_ 来访问对应的变量
+          this.p_message = 'Hello ' + this.user.name + ', at ' + (new Date).toLocaleString();
+        }
+      }
+    });
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        message: '',
+        user: {
+          name: 'da宗熊'
+        }
+      },
+      methods: {
+        // 此方法，相应 mixin 了 propsync 之后，子组件的相应
+        change: function(name, newVal, oldVal) {
+          this[name] = newVal;
+          console.log('['+ name +'] from: ' + oldVal + ' to:' + newVal);
+        }
+      },
+      components: {
+        'user-info': userInfo
+      }
+    });
+  </script>
+</body>
+</html>
