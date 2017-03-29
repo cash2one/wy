@@ -1,0 +1,51 @@
+<!--
+	<% var pager = this.pager; %>
+  <% 
+    var max = 5; 
+    var current = pager.cur_page;
+    var total = pager.total_pages;
+    var start = 1, end = max;
+    
+    if (total <= 5) {
+      end = total;
+    } else {
+      var left = Math.ceil(max / 2), right = max - left;
+      if (current <= left) {
+        start = 1;
+      } else {
+        start = current - left + 1;
+        end = current + right;
+      }
+      if (end > total) {
+        end = total;
+        start = total - max;
+      }
+    }
+  %>
+	<div class="pages">
+		第<%= current %>页，共<%= total %>页&nbsp;
+    <% if (current > 1) { %>
+      <a href="javascript:pager_goto(1);">首页</a>
+      <a href="javascript:pager_goto(<%= pager["cur_page"]-1 %>)">上一页</a>
+    <% } %>
+    <% for (var i = start; i <= end; i++) { %>
+      <% if (i == current) { %>
+        <span class="current"><%= i %></span>
+      <% } else { %>
+        <a href="javascript:pager_goto(<%= i %>)" class="elselink"><%= i %></a>
+      <% } %>
+    <% } %>
+    <% if (current < total) { %>
+      <a href="javascript:pager_goto(<%= pager["cur_page"]+1 %>)">下一页</a>
+      <a href="javascript:pager_goto(<%= total %>);">末页</a>
+    <% } %>
+    <% if (total > 1) { %>
+      &nbsp;
+      <span>
+        跳转至
+        <input id="pager_input" type="text" size="3" class="txt1" onkeypress="pager_keydown_handler(this, event)" onkeydown="pager_keydown_handler(this, event)" />
+        页
+      </span>
+    <% } %>
+	</div>
+-->
