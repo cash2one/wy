@@ -4,24 +4,16 @@
       "uri": "/cbg/build/index.js",
       "type": "js"
     },
-    "cbg/config.js": {
-      "uri": "/cbg/config.js",
-      "type": "js"
-    },
-    "cbg/test/index.js": {
-      "uri": "/cbg/test/index.js",
-      "type": "js"
-    },
-    "cbg/webpack/index.js": {
-      "uri": "/cbg/webpack/index.js",
-      "type": "js"
-    },
     "cbg/css/index.css": {
       "uri": "/cbg/css/index.css",
       "type": "css"
     },
     "cbg/js/base.js": {
-      "uri": "/cbg/js/base.js",
+      "uri": "/cbg/js/base_8e9078c.js",
+      "type": "js"
+    },
+    "cbg/test/index.js": {
+      "uri": "/cbg/test/index.js",
       "type": "js"
     }
   },

@@ -1,3 +1,6 @@
 node_modules/
 npm-debug.log
 htdocs/extensions
+htdocs/*/test
+htdocs/*/run.py
+htdocs/*/server.cf
