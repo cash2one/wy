@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{{ title }}</title>
+  <script>
+    var ResUrl = '{{ ResUrl }}';
+  </script>
+  {% require ResUrl + '/build/index.js' %}
+</head>
+<body>
+  {{ content }}
+  <div id="app"></div>
+</body>
+</html>

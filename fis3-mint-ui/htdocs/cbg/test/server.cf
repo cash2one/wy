@@ -1,0 +1,6 @@
+# 注释
+GET / /index.html
+GET /main /main.html /index.js
+
+GET /index2 /index.html /data/index2.js
+GET /index3 /index.html /data/index3.json
