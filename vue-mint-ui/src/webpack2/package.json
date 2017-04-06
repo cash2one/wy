@@ -1,0 +1,42 @@
+{
+  "author": {
+    "name": "zswang",
+    "url": "http://weibo.com/zswang"
+  },
+  "bugs": {
+    "url": "https://github.com/zswang/fis3-parser-webpack/issues"
+  },
+  "dependencies": {
+    "deasync": "^0.1.3",
+    "memory-fs": "^0.3.0",
+    "proxy-fs": "^0.0.10",
+    "webpack": "^2.3.3"
+  },
+  "description": "A parser for fis to compile webpack module.",
+  "devDependencies": {
+    "istanbul": "0.3.17",
+    "jdists": "^1.3.12",
+    "jshint": "2.5.8",
+    "mocha": "2.0.1",
+    "should": "4.1.0"
+  },
+  "license": "MIT",
+  "main": "lib/index.js",
+  "maintainers": [
+    {
+      "name": "zswang",
+      "email": "wjhu111@21cn.com"
+    }
+  ],
+  "name": "fis3-parser-webpack",
+  "optionalDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zswang/fis3-parser-webpack.git"
+  },
+  "scripts": {
+    "lint": "jshint src/*.js",
+    "test": "istanbul cover --hook-run-in-context node_modules/mocha/bin/_mocha -- -R spec"
+  },
+  "version": "0.0.5"
+}

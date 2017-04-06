@@ -5,3 +5,4 @@ __tmp*
 light7/.python/run.py
 *.pyc
 vue/dest/
+vue-mint-ui/dest/
