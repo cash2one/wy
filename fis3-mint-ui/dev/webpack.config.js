@@ -52,10 +52,9 @@ module.exports = {
       }
     ]
   },
-  devServer: {
-    historyApiFallback: true,
-    noInfo: true
-  },
+  externals: {
+    vue: 'window.Vue'
+  }
   // devtool: '#eval-source-map'
 }
 

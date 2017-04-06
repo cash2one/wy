@@ -15,6 +15,10 @@
     "cbg/test/index.js": {
       "uri": "/cbg/test/index.js",
       "type": "js"
+    },
+    "cbg/js/vue.js": {
+      "uri": "/cbg/js/vue.js",
+      "type": "js"
     }
   },
   "pkg": {}

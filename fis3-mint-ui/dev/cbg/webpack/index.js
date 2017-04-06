@@ -19,12 +19,10 @@ Vue.component(Cell.name, Cell)
  // Vue.$messagebox = Vue.prototype.$messagebox = MessageBox;
  // Vue.$toast = Vue.prototype.$toast = Toast;
  // Vue.$indicator = Vue.prototype.$indicator = Indicator;
- 
+
  Vue.$toast = Vue.prototype.$toast = Toast;
 
 new Vue({
   el: '#app',
   render: h => h(App)
-})
-
-console.log(3)
+});
