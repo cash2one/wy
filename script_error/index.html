@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>脚本错误测试</title>
+  <script>
+    var target = document.documentElement;
+    if (target.addEventListener) {
+      // chrome
+      target.addEventListener('load', function(e) {
+        console.log('load', e, e.target.id);
+      }, true);
+      target.addEventListener('error', function(e) {
+        console.log('error', e, e.target.id);
+      }, true);
+    } else {
+      console.log(2);
+      window.attachEvent('onreadystatechange', function(e) {
+        console.log(document.readyState);
+        if (document.readyState === 'complete') {
+          console.log('长度:' + document.scripts.length);
+          var ss = document.scripts;
+          for (var i = 0, max = ss.length; i < max; i++) {
+            var s = ss[i];
+            if (s.getAttribute('src')) {
+              console.log(s.readyState, ' ', s.src);
+              s.onreadystatechange = function() {
+                console.log(this.readyState, ' ', this.src);
+              }
+            }
+          }
+        }
+      });
+      /*
+      setTimeout(function() {
+        var ss = document.getElementsByTagName('script');
+        for (var i = 0, max = ss.length; i < max; i++) {
+          var s = ss[i];
+          if (s.getAttribute('src')) {
+            s.onreadystatechange = function() {
+              console.log(122);
+            }
+          }
+        }
+      });
+      */
+    }
+/*
+var node = document.createElement('script');
+node.src = 'http://localhost:8080/js/common.js';
+node.type = 'text/javascript';
+
+node.onreadystatechange = (function(node) {
+    return function () {
+        if (/loaded|complete/.test(node.readyState)) {
+            _finish();
+        }
+    };
+})(node);
+
+var _finish=function() {
+
+        if (node.readyState == 'complete') {
+            // insert node only after completing the request, though this is not necessary
+            // var head = document.head;
+            // head || (head = document.getElementsByTagName('head')[0]);
+            // head.appendChild(node);
+            // call success function
+            alert('success');
+            return;
+        }
+
+        var firstState = node.readyState;
+
+        // hack: calling 'children' property changes node's readyState from 'loaded' to complete
+        // (if script was loaded normally) or to 'loading' - if error detected
+        node.children;
+
+        // error detected
+        if (firstState == 'loaded' && node.readyState == 'loading') {
+            // custom error code
+            alert('error');
+        }
+}
+*/
+  </script>
+</head>
+<body>
+  <script>
+    // 除 ie 外，其它地方均返回了运行中的脚本元素
+    console.log(document.currentScript);
+  </script>
+  <script id="jsCommon" src="http://localhost:8082/js/common.js" charset="utf-8"></script>
+  <script id="jsIndex" src="http://localhost:8082/js/index.js" charset="utf-8"></script>
+</body>
+</html>
