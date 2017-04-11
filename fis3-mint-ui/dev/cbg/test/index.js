@@ -5,7 +5,7 @@ module.exports = function(done, req, res, next) {
   // next();
   done({
     title: 'index2',
-    ResUrl: '/cbg',
-    content: '默认读取 test/index.js，来渲染模板3'
+    ResUrl: '/static',
+    content: '欢迎来到vue的界面'
   });
 };

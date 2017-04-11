@@ -3,21 +3,34 @@
 const fs = require('fs-extra');
 const path = require('path');
 const webpack = require('webpack');
-const product = process.env.NODE_PRODUCT;
 const isProduct = process.env.NODE_ENV === 'production';
+
+/**
+  * chunk 分片，参考:
+  *   http://blog.csdn.net/github_26672553/article/details/52280655
+  *   https://zhuanlan.zhihu.com/p/21318102?refer=leanreact
+  *   http://blog.csdn.net/zhbhun/article/details/46826129
+  *   http://www.07net01.com/2016/10/1687441.html [IMPORTANT]
+*/
 
 module.exports = {
   // entry 和 output 两个参数，是用于测试的
-  entry: `./${product}/webpack/index.js`,
+  entry: {
+    index: './webpack/index.js'
+  },
   output: {
-    path: path.resolve(__dirname, `./${product}/build`),
-    filename: 'index.js'
+    path: path.resolve(__dirname, `./build`),
+    filename: '[name].js',
+
+    // publicPath: '/static/build/',
+    chunkFilename: "[name].js" // [id].js
   },
 
   resolve: {
     extensions: ['.webpack.js', '.web.js', '.ts', '.js'],
     alias: {
-      'vue$': 'vue/dist/vue'
+      'vue$': 'vue/dist/vue',
+      'mint-ui': 'mint-ui/lib'
     }
   },
   module: {
@@ -26,7 +39,9 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
-          // vue-loader options go here
+          // loaders: {
+          //   'scss': 'style-loader!css-loader!sass-loader'
+          // }
         }
       },
       {
@@ -54,7 +69,10 @@ module.exports = {
   },
   externals: {
     vue: 'window.Vue'
-  }
+  },
+  plugins: [
+    new webpack.optimize.CommonsChunkPlugin("map")
+  ]
   // devtool: '#eval-source-map'
 }
 
@@ -77,11 +95,3 @@ if (isProduct) {
     })
   ])
 }
-
-// 读取项目配置
-let config = {}, configFilepath = path.join(__dirname, './' + product + '/config.js');
-if (fs.existsSync(configFilepath)) {
-  config = Object.assign({ webpack: (opts) => { return opts; } }, require(configFilepath));
-}
-
-Object.assign(module.exports, config.webpack(module.exports, product, isProduct) || {});

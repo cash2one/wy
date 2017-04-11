@@ -1,0 +1,38 @@
+{
+  "name": "test-dev-cbg",
+  "version": "1.0.0",
+  "description": "",
+  "main": "config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "webpack": "cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "webpack_watch": "cross-env NODE_ENV=development webpack --progress --hide-modules -w",
+    "fis3": "cd .. && cross-env NODE_ENV=production NODE_PRODUCT=cbg fis3 release -d ../htdocs",
+    "fis3_watch": "cd .. && cross-env NODE_ENV=development NODE_PRODUCT=cbg fis3 release -d ../htdocs -w",
+    "dev": "concurrently -k \"npm run webpack_watch\" \"npm run fis3_watch\"",
+    "build": "npm run webpack && npm run fis3"
+  },
+  "author": "da宗熊",
+  "license": "ISC",
+  "dependencies": {
+    "mint-ui": "^2.2.3",
+    "vue": "^2.2.6"
+  },
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^6.4.1",
+    "babel-plugin-component": "^0.9.1",
+    "babel-preset-es2015": "^6.24.1",
+    "concurrently": "^3.4.0",
+    "cross-env": "^4.0.0",
+    "css-loader": "^0.28.0",
+    "file-loader": "^0.11.1",
+    "style-loader": "^0.16.1",
+    "url-loader": "^0.5.8",
+    "vue-loader": "^11.3.4",
+    "vue-template-compiler": "^2.2.6",
+    "webpack": "^2.3.3"
+  }
+}

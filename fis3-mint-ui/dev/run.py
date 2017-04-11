@@ -35,7 +35,7 @@ data = json.loads(dataStr)
 #### 测试 {% uri "链接" %} ####
 # 读取 配置文件
 str_dist_resource = '{ "res": {} }'
-map_file_object = open(sys.path[0] + '/cbg/map.json', 'r')
+map_file_object = open(sys.path[0] + '/${product}/map.json', 'r')
 try:
      str_dist_resource = map_file_object.read()
 finally:

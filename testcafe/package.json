@@ -1,0 +1,14 @@
+{
+  "name": "test-testcafe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "test1.js",
+  "scripts": {
+    "test": "grunt -h"
+  },
+  "author": "da宗熊",
+  "license": "ISC",
+  "devDependencies": {
+    "grunt": "^1.0.1"
+  }
+}
