@@ -1,0 +1,82 @@
+// test
+(function() {
+
+  function processError(error) {
+    var url = error.stack.match("https?://[^\n]+");
+    url = url ? url[0] : "";
+    var rowCols = url.match(":(\\d+):(\\d+)");
+    if (!rowCols) {
+        rowCols = [0, 0, 0];
+    }
+
+    var stack = error.stack
+      .replace(/\n/gi, "")
+      .split(/\bat\b/)
+      .slice(0, 9)
+      .join("@")
+      .replace(/\?[^:]+/gi, "");
+    var msg = error.toString();
+    if (stack.indexOf(msg) < 0) {
+      stack = msg + "@" + stack;
+    }
+
+    return JSON.stringify({
+      msg: stack,
+      rowNum: rowCols[1],
+      colNum: rowCols[2],
+      target: url.replace(rowCols[0], ""),
+      ua: navigator.userAgent
+    });
+  }
+
+  var logUrl = 'http://xyq-tracer.cbg.163.com/1.gif';
+  function sendLog(error) {
+    var error = {
+      v: new Date/1,
+      log : 'app_error',
+      error_type: 'script_error',
+      info: processError(error)
+    };
+    loadImage(addParamsAtUrl(logUrl, error));
+  }
+  window.send_log = sendLog;
+
+  // http://xx.yy.com/index + { v: 123 } --> http://xx.yy.com/index?v=123
+  // http://xx.yy.com/index?a=1 + { b: 2 } --> http://xx.yy.com/index?a=1&b=2
+  function addParamsAtUrl(url, params) {
+    var paramList = [];
+    if (params) {
+      for (var key in params) {
+        params.hasOwnProperty(key)
+          && paramList.push(key + '=' + encodeURIComponent(params[key]));
+      }
+      url += (url.indexOf('?') >= 0 ? '&' : '?') + paramList.join('&');
+    }
+    return url;
+  }
+
+  function loadImage(src, callback, timeout) {
+    var image = new Image();
+    var isSuccess = true;
+    var timer;
+    var finish = function() {
+      clearTimeout(timer);
+      image.onload = image.onerror = null;
+      callback && callback(isSuccess);
+      try {
+        image = null;
+        delete image;
+      } catch (e) { }
+    };
+    var fail = function() {
+      isSuccess = false;
+      finish();
+    };
+    timer = timeout && setTimeout(fail, timeout);
+
+    image.onload = finish;
+    image.onerror = fail;
+    image.src = src;
+  }
+})();
+// end test

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>clustery.js 高兴能的滚动列表</title>
+  <script src="./lib/vue.js" charset="utf-8"></script>
+  <style>
+    * { padding: 0; margin: 0; }
+    html, body, #app { height: 100%; }
+    li { list-style: none; }
+
+    .wrapper { height: 600px; overflow: auto; }
+    .list-item { border-bottom: 2px solid #ddd; }
+  </style>
+</head>
+<body>
+  <div class="app" id="app">
+    <div ref="wrapper" class="wrapper">
+      <cluster :query="query">
+        <template scope="props">
+          <div v-for="item in props.list" class="list-item" :key="item.id">
+            <h4>ID {{ item.id }}</h4>
+            <div class="content" v-html="item.content"></div>
+          </div>
+        </template>
+      </cluster>
+    </div>
+  </div>
+
+  <script src="./lib/thenable.js"></script>
+  <script>
+    var arr = [];
+    var texts = ['大吉大利', '合家安康', '生意兴隆', '一帆风顺'],
+      heights = [30, 50, 60, 70],
+      colors = ['#ebeeff', '#ebf7ff', '#9be8d7'];
+
+    function queryData(start, end) {
+      var arr = [];
+      for (var i = start, max = end; i < max; i++) {
+        arr.push({
+          id: i + 1,
+          content: '<p style="height: '+
+            heights[Math.floor(Math.random() * heights.length)] +'px; background: '+
+            colors[Math.floor(Math.random() * colors.length)] +';">'+
+            texts[Math.floor(Math.random() * texts.length)] +'</p>'
+        });
+      }
+      return arr;
+    }
+
+    arr = queryData(0, 30);
+
+    function getOffset(el) {
+      var offset = { x: el.offsetLeft, y: el.offsetTop };
+      var pt = el.offsetParent;
+      while (pt) {
+        offset.x += (pt.offsetLeft || 0);
+        offset.y += (pt.offsetTop || 0);
+        pt = pt.offsetParent;
+      }
+      return offset;
+    }
+
+    // @require ./lib/thenable.js
+    var Cluster = Vue.extend({
+      props: {
+        query: { type: Function, required: true },
+        perPage: { type: Number, default: 15 },
+        params: { type: Object, default: function() { return {}; } }
+      },
+      template: `
+        <div class="wrapper" ref="scroll">
+          <h1>滚动测试</h1>
+          <div class="inner" ref="content">
+            <div :style="{height: topHeight + 'px'}" ref="top"></div>
+            <slot :list="list" :params="params"></slot>
+            <div :style="{height: bottomHeight + 'px'}" ref="bottom"></div>
+          </div>
+        </div>
+      `,
+      data: function() {
+        return {
+          index: 0,
+          list: [],
+          isLoading: false,
+          // 预先加载距离
+          preload: 10,
+          topHeight: 0,
+          bottomHeight: 0
+        };
+      },
+      watch: {
+
+      },
+      created: function() {
+        var ctx = this;
+        ctx.all = [];
+        // 存储高度
+        ctx.heightMap = {};
+
+        // ctx.minShowPage = 2;
+        ctx.maxShowPage = 3;
+
+        ctx.topBorder = 0;
+        ctx.bottomBorder = 0;
+      },
+
+      mounted: function() {
+        var ctx = this;
+
+        ctx.loadData(0);
+
+        ctx.scrollEvn = function(e) {
+          if (ctx.isLoading) { return; }
+          var scrollTop = ctx.$refs.scroll.scrollTop;
+          if (scrollTop > ctx.bottomBorder) {
+            ctx.isLoading = true;
+            ctx.index++;
+
+            ctx.loadData(this.index)
+              .then(function() {
+                ctx._setTopHeightByIndex(ctx._getItemGroup(ctx.list[0]));
+                ctx.isLoading = false;
+                console.log('生成新的数据');
+              });
+          }
+        }.bind(ctx);
+
+        ctx._setTopHeightByIndex = function(count) {
+          var height = 0;
+          for (var i = 0; i < count; i++) {
+            height += (ctx.heightMap[i] || 0)
+          }
+          ctx.topHeight = height;
+        };
+
+        ctx.$refs.scroll.addEventListener('scroll', ctx.scrollEvn);
+      },
+      methods: {
+
+        updateDistance: function() {
+          var ctx = this;
+          var distance = getOffset(ctx.$refs.scroll).y + ctx.$refs.scroll.clientHeight;
+          ctx.bottomBorder = getOffset(ctx.$refs.bottom).y - distance - ctx.preload;
+
+          if (ctx.list.length <= 0) { return; }
+
+          var children = ctx.$refs.content.children;
+          var preGroup = ctx._getItemGroup(ctx.list[0]);
+          var preY = getOffset(children[1]).y;
+
+          for (var i = 0, max = ctx.list.length; i < max; i++) {
+            var item = ctx.list[i], group = ctx._getItemGroup(item);
+            if (group != preGroup) {
+              var y = getOffset(children[i]).y;
+              ctx.heightMap[preGroup] = y - preY;
+              preGroup = group;
+              preY = y;
+            } else if (i == max - 1 && group == preGroup) {
+              var y = getOffset(ctx.$refs.bottom).y;
+              ctx.heightMap[group] = y - preY;
+            }
+          }
+
+          console.log(ctx.bottomBorder);
+        },
+
+        loadData: function(index) {
+          var ctx = this;
+          // 加载 index - 1, index, index + 1 的数据
+          return new Thenable(function(resolve) {
+            ctx.loadByIndex(index - 1)
+              .then(function() {
+                return ctx.loadByIndex(index + 1);
+              })
+              .then(function() {
+                return ctx.loadByIndex(index);
+              })
+              .then(function() {
+                ctx.$nextTick(function() {
+                  ctx.updateDistance();
+                  resolve();
+                });
+              });
+          });
+        },
+
+        loadByIndex: function(index) {
+          var ctx = this, prevs = ctx.prevs, nexts = ctx.nexts;
+          var all = ctx.all;
+          var current = ctx.index;
+          var half = Math.floor(ctx.maxShowPage / 2);
+
+          // TODO 这个判定不怎么准确....
+          if (index > half) {
+            if (all.length >= (index + half) * ctx.perPage) {
+              // 重新分配数据
+              ctx.list = all.slice((index - half) * ctx.perPage, (index + half) * ctx.perPage);
+            } else {
+              // 请求缺失的数据
+              var thenables = [];
+              for (var i = index - half; i <= index + half; i++) {
+                thenables.push(ctx.queryPage(i));
+              }
+              return Thenable.all(thenables).then(function() {
+                return ctx.loadByIndex(index);
+              });
+            }
+          } else {
+            if (all.length >= (half + 1) * ctx.perPage) {
+              ctx.list = all.slice(0, (half + 1) * ctx.perPage);
+            } else {
+              var thenables = [];
+              for (var i = 0; i < (half + 1); i++) {
+                thenables.push(ctx.queryPage(i));
+              }
+              return Thenable.all(thenables).then(function() {
+                return ctx.loadByIndex(index);
+              });
+            }
+          }
+
+          return Thenable.resolve();
+        },
+
+        queryData: function(start, end) {
+          var ctx = this;
+
+          if (ctx.all.length >= end) {
+            return Thenable.resolve();
+          }
+
+          return new Thenable(function(resolve) {
+            ctx.query({ start: start, end: end}, function(arr) {
+              var list = arr.slice(0);
+              ctx._setItemsInOrder(list, start, end);
+              ctx._setItemsInGroup(list, Math.floor(start / ctx.perPage));
+
+              list.unshift(start, end);
+              ctx.all.splice.apply(ctx.all, list);
+              resolve();
+            });
+          });
+        },
+
+        queryPage: function(index) {
+          return this.queryData(index * this.perPage, (index + 1) * this.perPage);
+        },
+
+        _setItemsInOrder: function(list, start, end) {
+          for (var i = 0, max = Math.min(list.length, end - start); i < max; i++) {
+            if (list[i]) {
+              list[i]['_s_index_'] = i + start;
+            }
+          }
+        },
+        _getItemOrder: function(item) {
+          return item['_s_index_'];
+        },
+
+        _setItemsInGroup: function(list, groupIndex) {
+          for (var i = 0, max = list.length; i < max; i++) {
+            if (list[i]) {
+              list[i]['_s_group_'] = groupIndex;
+            }
+          }
+        },
+        _getItemGroup: function(item, height) {
+          return item['_s_group_'];
+        }
+      }
+    });
+
+    Vue.component('cluster', Cluster);
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        start: 0,
+        end: arr.length,
+        topHeight: 0,
+        bottomHeight: 0,
+        list: arr
+      },
+
+      mounted: function() {
+        // var ctx = this;
+        // ctx.clustery = new Clustery({
+        //   scrollElem: this.$refs.wrapper,
+        //   contentElem: this.$refs.inner,
+        //   rows_in_block: 20,
+        //   blocks_in_cluster: 4,
+        //   callbacks: {
+        //     shouldUpdate: function(_data) {
+        //       ctx.setRenderData(_data);
+        //     }
+        //   }
+        // });
+
+        // var ctx = this;
+        // setTimeout(function() {
+        //   ctx.list.push.apply(ctx.list, queryData(ctx.list.length, ctx.list.length + 30));
+        // }, 1000);
+      },
+
+      destroyed: function() {
+        if(this.clustery) {
+          this.clustery.destroy();
+        }
+      },
+
+      methods: {
+        setRenderData: function(_data) {
+          if (typeof _data === 'object') {
+            this.topHeight = _data.top_offset;
+            this.bottomHeight = _data.bottom_offset;
+            this.start = _data.start;
+            this.end = _data.end;
+          } else {
+            this.bottomHeight = _data;
+          }
+        },
+        query: function(data, insert) {
+          var start = data.start, end = data.end;
+          setTimeout(function() {
+            insert(queryData(start, end));
+          }, 2000);
+        }
+      },
+
+      computed: {
+        sliceList: function() {
+          return this.list.slice(this.start, this.end);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

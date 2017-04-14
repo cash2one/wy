@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>clustery.js 高兴能的滚动列表</title>
+  <script src="./lib/vue.js" charset="utf-8"></script>
+  <script src="./lib/clustery.js" charset="utf-8"></script>
+  <style>
+    * { padding: 0; margin: 0; }
+    html, body, #app { height: 100%; }
+    li { list-style: none; }
+
+    .wrapper { height: 600px; overflow: auto; }
+    .list-item { height: 60px; border-bottom: 2px solid #ddd; }
+  </style>
+</head>
+<body>
+  <div class="app" id="app">
+    <div ref="wrapper" class="wrapper">
+      <div>From {{ start }} to {{ end }}</div>
+      <ul ref="inner">
+        <li :style="{height: topHeight + 'px'}"></li>
+        <!-- TODO 一定要添加 :key 属性，不然会有意料之外的收获!!!! -->
+        <li class="list-item" v-for="item in sliceList" :key="item.id" @click="hi(item.id)">
+          <h4>ID {{ item.id }}</h4>
+          <div class="content" v-html="item.content"></div>
+        </li>
+        <li :style="{height: bottomHeight + 'px'}"></li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    var arr = [];
+    var texts = ['大吉大利', '合家安康', '生意兴隆', '一帆风顺'],
+      heights = [30, 50, 60, 70],
+      colors = ['#ebeeff', '#ebf7ff', '#9be8d7'];
+    for (var i = 0, max = 500; i < max; i++) {
+      arr.push({
+        id: i + 1,
+        content: '<p style="height: '+
+          30 +'px; background: '+
+          colors[Math.floor(Math.random() * colors.length)] +';">'+
+          texts[Math.floor(Math.random() * texts.length)] +'</p>'
+      });
+    }
+    var app = new Vue({
+      el: '#app',
+      data: {
+        start: 0,
+        end:0,
+        topHeight: 0,
+        bottomHeight: 0,
+        list: arr
+      },
+
+      mounted: function() {
+        var ctx = this;
+        ctx.clustery = new Clustery({
+          scrollElem: this.$refs.wrapper,
+          contentElem: this.$refs.inner,
+          rows: this.list,
+          item_height: 62,
+          rows_in_block: 20,
+          blocks_in_cluster: 4,
+          callbacks: {
+            shouldUpdate: function(_data) {
+              ctx.setRenderData(_data);
+            }
+          }
+        });
+      },
+
+      destroyed: function() {
+        if(this.clustery) {
+          this.clustery.destroy();
+        }
+      },
+
+      methods: {
+        setRenderData: function(_data) {
+          if (typeof _data === 'object') {
+            this.topHeight = _data.top_offset;
+            this.bottomHeight = _data.bottom_offset;
+            this.start = _data.start;
+            this.end = _data.end;
+          } else {
+            this.bottomHeight = _data;
+          }
+        },
+        hi: function(msg) {
+          console.log(msg);
+        }
+      },
+
+      computed: {
+        sliceList: function() {
+          return this.list.slice(this.start, this.end);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

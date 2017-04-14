@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>clustery.js 高兴能的滚动列表</title>
+  <script src="./lib/vue.js" charset="utf-8"></script>
+  <style>
+    * { padding: 0; margin: 0; }
+    html, body, #app { height: 100%; }
+    li { list-style: none; }
+
+    .wrapper { height: 600px; overflow: auto; }
+    .list-item { border-bottom: 2px solid #ddd; }
+  </style>
+</head>
+<body>
+  <div class="app" id="app">
+    <div ref="wrapper" class="wrapper">
+      <cluster :list="list" :query="query">
+        <template scope="props">
+          <div v-for="item in props.list" class="list-item" :key="item.id">
+            <h4>ID {{ item.id }}</h4>
+            <div class="content" v-html="item.content"></div>
+          </div>
+        </template>
+      </cluster>
+    </div>
+  </div>
+
+  <script src="./vue-clustery.js" charset="utf-8"></script>
+  <script>
+    var arr = [];
+    var texts = ['大吉大利', '合家安康', '生意兴隆', '一帆风顺'],
+      heights = [30, 50, 60, 70],
+      colors = ['#ebeeff', '#ebf7ff', '#9be8d7'];
+
+    function queryData(start, end) {
+      var arr = [];
+      for (var i = start, max = end; i < max; i++) {
+        arr.push({
+          id: i + 1,
+          content: '<p style="height: '+
+            heights[Math.floor(Math.random() * heights.length)] +'px; background: '+
+            colors[Math.floor(Math.random() * colors.length)] +';">'+
+            texts[Math.floor(Math.random() * texts.length)] +'</p>'
+        });
+      }
+      return arr;
+    }
+
+    arr = queryData(0, 30);
+
+    var Cluster = Vue.extend({
+      props: {
+        query: { type: Function, required: true },
+        list: { type: Array, required: true },
+        // 上下一共显示多个板块
+        blocks: { type: Number, default: 1 },
+        rows: { type: Number, default: 15 },
+        start: { type: Number, default: 0 },
+        params: { type: Object, default: function() { return {}; } }
+      },
+      template: `
+        <div class="wrapper" ref="wrapper">
+          <h1>滚动测试</h1>
+          <div class="inner" ref="inner">
+            <div :style="{height: topHeight + 'px'}"></div>
+            <slot :list="sliceList" :params="params"></slot>
+            <div :style="{height: bottomHeight + 'px'}"></div>
+          </div>
+        </div>
+      `,
+      data: function() {
+        return {
+          end: this.start + this.rows,
+          index: this.start,
+          blockIndex: Math.ceil(this.start / this.rows),
+          showLength: this.rows * (this.blocks * 2 + 1),
+
+          perPage: 20,
+
+          topHeight: 0,
+          bottomHeight: 0,
+
+          prevList: [],
+          nextList: []
+        };
+      },
+      computed: {
+        sliceList: function() {
+          var ctx = this;
+          return ctx.list.slice(ctx.index, ctx.index + ctx.showLength);
+        }
+      },
+      watch: {
+        'list': function() {
+          console.log('update list');
+        }
+      },
+      mounted: function() {
+        var ctx = this;
+        // TODO 监听滚动
+        ctx.$refs.wrapper.addEventListener('scroll', function() {
+          console.log('滚动中', ctx.$refs.inner.children.length - 2);
+        });
+
+        var length = ctx.sliceList.length;
+        if (length < ctx.showLength) {
+          ctx.queryData(ctx.index + length, ctx.index + ctx.showLength);
+        }
+
+        ctx.updateDistance();
+      },
+      methods: {
+        reset: function() {
+          this.list = [];
+        },
+        // 更新每个 block 节点的间距
+        updateDistance: function() {
+          var ctx = this, innerOffsetTop = ctx.$refs.inner.offsetTop;
+          var children = ctx.$refs.inner.children;
+
+          // 因为存在上下两个占位元素
+          var offset1 = children[(ctx.blockIndex + 1) * ctx.rows + 1];
+          var offset2 = children[(ctx.blockIndex + 2) * ctx.rows];
+
+          // TODO offsetTo > offset1 加载下一页， offsetTop < offset1 加载下一页
+          console.log(offset1, offset2, innerOffsetTop, ctx.$refs.inner.children.length - 2);
+        },
+        queryData: function(start, end) {
+          this.query({ start: start, end: end }, function(arr) {
+            if (arr.length) {
+              this.list.push.apply(this.list, arr);
+              this.$nextTick(function() {
+                this.updateDistance();
+              }.bind(this));
+            }
+          }.bind(this));
+        }
+      }
+    });
+
+    Vue.component('cluster', Cluster);
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        start: 0,
+        end: arr.length,
+        topHeight: 0,
+        bottomHeight: 0,
+        list: arr
+      },
+
+      mounted: function() {
+        // var ctx = this;
+        // ctx.clustery = new Clustery({
+        //   scrollElem: this.$refs.wrapper,
+        //   contentElem: this.$refs.inner,
+        //   rows_in_block: 20,
+        //   blocks_in_cluster: 4,
+        //   callbacks: {
+        //     shouldUpdate: function(_data) {
+        //       ctx.setRenderData(_data);
+        //     }
+        //   }
+        // });
+
+        // var ctx = this;
+        // setTimeout(function() {
+        //   ctx.list.push.apply(ctx.list, queryData(ctx.list.length, ctx.list.length + 30));
+        // }, 1000);
+      },
+
+      destroyed: function() {
+        if(this.clustery) {
+          this.clustery.destroy();
+        }
+      },
+
+      methods: {
+        setRenderData: function(_data) {
+          if (typeof _data === 'object') {
+            this.topHeight = _data.top_offset;
+            this.bottomHeight = _data.bottom_offset;
+            this.start = _data.start;
+            this.end = _data.end;
+          } else {
+            this.bottomHeight = _data;
+          }
+        },
+        query: function(data, insert) {
+          var start = data.start, end = data.end;
+          insert(queryData(start, end));
+        }
+      },
+
+      computed: {
+        sliceList: function() {
+          return this.list.slice(this.start, this.end);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

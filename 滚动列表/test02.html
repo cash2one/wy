@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>clusterize.js 高兴能的滚动列表</title>
+  <script src="./lib/vue.js"></script>
+  <script src="./lib/clusterize.js"></script>
+  <style>
+    * { padding: 0; margin: 0; }
+    html, body, #app { height: 100%; }
+    li { list-style: none; }
+
+    .wrapper { height: 600px; overflow: auto; }
+    .list-item { margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+  </style>
+</head>
+<body>
+  <div class="app" id="app">
+    <div ref="wrapper" class="wrapper">
+      <div>From {{ start }} to {{ end }}</div>
+      <ul ref="inner">
+        <li class="list-item" v-for="item in sliceList" :key="item.id" @click="hi(item.id)">
+          <h4>ID {{ item.id }}</h4>
+          <div class="content" v-html="item.content"></div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    var arr = [];
+    var texts = ['大吉大利', '合家安康', '生意兴隆', '一帆风顺'],
+      heights = [30, 50, 60, 70],
+      colors = ['#ebeeff', '#ebf7ff', '#9be8d7'];
+    for (var i = 0, max = 500; i < max; i++) {
+      arr.push({
+        id: i + 1,
+        content: '<p style="height: '+
+          heights[Math.floor(Math.random() * heights.length)] +'px; background: '+
+          colors[Math.floor(Math.random() * colors.length)] +';">'+
+          texts[Math.floor(Math.random() * texts.length)] +'</p>'
+      });
+    }
+    var app = new Vue({
+      el: '#app',
+      data: {
+        start: 0,
+        end: arr.length,
+        list: arr
+      },
+
+      mounted: function() {
+        var ctx = this;
+
+        // 只能走事件代理了!!!!
+        ctx.clusterize = new Clusterize({
+          // rows: this.list,
+          scrollElem: this.$refs.wrapper,
+          contentElem: this.$refs.inner,
+          // item_height: 62,
+          rows_in_block: 20,
+          blocks_in_cluster: 3,
+          callbacks: {
+            clusterChanged: function(_data) {
+              console.log('更变了');
+            }
+          }
+        });
+      },
+
+      destroyed: function() {
+        if(this.clustery) {
+          this.clustery.destroy();
+        }
+      },
+
+      methods: {
+        hi: function(msg) {
+          console.log(msg);
+        }
+      },
+
+      computed: {
+        sliceList: function() {
+          return this.list.slice(this.start, this.end);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

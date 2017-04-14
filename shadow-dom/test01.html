@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>shadow dom 测试1</title>
+  <style>
+    button {
+      color: #333;  /* 被 shadow 覆盖了 */
+      margin-top: 20px; /* 生效 */
+    }
+    .widget::shadow > button {
+      padding: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="widget">
+    <button>分布节点碉堡啦！</button>
+  </div>
+
+  <template class="widget-template">
+    <style>
+      /* ::content 代表着，规则相同时，覆盖掉复层的样式 */
+      /* :host 代表着，规则相同时，复层样式优先，用法-> :host(button) { xxx } */
+      /* :host-context(父层选择器) 修改父层的样式 */
+      ::content > button {
+        font-size: 18px;
+        color: white;
+        background: tomato;
+        border-radius: 10px;
+        border: none;
+        padding: 10px;
+      }
+    </style>
+    <div>Shadow dom 重写按钮:</div>
+    <content></content>
+  </template>
+
+  <script>
+    var widget = document.querySelector('.widget');
+    var shadow = widget.createShadowRoot();
+    var template = document.querySelector('.widget-template');
+
+    // document.importNode 将外部文档的一个节点拷贝一份,然后可以把这个拷贝的节点插入到当前文档中.
+    //   #read: https://developer.mozilla.org/zh-CN/docs/Web/API/Document/importNode
+    shadow.appendChild(document.importNode(template.content, true));
+  </script>
+</body>
+</html>
